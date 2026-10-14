@@ -16,6 +16,8 @@
 - `ios/`, `capacitor.config.json`, `package.json`, `resources/` — iOS-обёртка (Capacitor),
   `webDir: "www"`. После правки `www/index.html` для iOS — `npx cap sync ios` (на Mac).
 - `tools/` — служебные скрипты проверки (Python/Node). Создаются по мере необходимости.
+- `docs/МОССМП-2026.md` — текст МОССМП 2026 (Московская обл.), опорный источник алгоритмов.
+  Сверять дозы по нему (Grep, не читать целиком); в отчётах ссылаться на номер строки.
 - Опубликованная версия: https://claude.ai/artifact/KFCFvddCjv5Ww3wge2gbx2
   (публикую сам через claude.ai; из Claude Code не публикуется).
 - Версия — константа `VERSION`, в файле записана без пробелов: `VERSION="6.87 (09.10.2026)"`.
