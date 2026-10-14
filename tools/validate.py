@@ -411,6 +411,56 @@ def check_doses_vs_drugs(std, drugs, rep):
                  + (' …' if len(nomatch) > 8 else ''))
 
 
+
+def check_mossmp(data, rep):
+    """Сверка таблиц доз алгоритмов (STANDARDS.doses) с текстом МОССМП 2026 (docs/МОССМП-2026.md).
+    Эвристика: каждое число дозы строки должно встречаться в МОССМП в пределах ~220 символов после
+    названия препарата. Не найдено — не обязательно ошибка (другая запись, синоним), но повод сверить."""
+    rep.section('Сверка доз алгоритмов с МОССМП 2026 (эвристика)')
+    path = os.path.join(ROOT, 'docs', 'МОССМП-2026.md')
+    if not os.path.exists(path):
+        rep.info('docs/МОССМП-2026.md нет — пропущено')
+        return
+    txt = re.sub(r'\s+', ' ', open(path, encoding='utf-8').read().lower().replace('ё', 'е'))
+    norm = lambda x: x.replace('.', ',').rstrip('0').rstrip(',') if ',' in x.replace('.', ',') else x
+    cache, absent, partial, ok = {}, [], [], 0
+    for sp, arr in (data.get('STANDARDS') or {}).items():
+        for a in arr:
+            for x in a.get('doses') or []:
+                w = re.split(r'[\s,(]', str(x.get('drug', '')).lower().replace('ё', 'е'))[0]
+                stem = w[:-2] if len(w) > 6 else w
+                if len(stem) < 4:
+                    continue
+                if stem not in cache:
+                    nums = set()
+                    for m in re.finditer(re.escape(stem), txt):
+                        nums |= {norm(n) for n in re.findall(r'\d+(?:[,.]\d+)?', txt[m.start():m.start() + 220])}
+                    cache[stem] = nums
+                nums = cache[stem]
+                where = f'{sp} / {a.get("t")} — {x.get("drug")}'
+                if not nums:
+                    absent.append(where)
+                    continue
+                miss = []
+                for f in ('adultDose', 'pediatricDose'):
+                    val = str(x.get(f) or '')
+                    if 'нет в' in val or 'не прим' in val:
+                        continue
+                    miss += [f'{f}: {n}' for n in re.findall(r'\d+(?:[,.]\d+)?', val) if norm(n) not in nums]
+                if miss:
+                    partial.append(f'{where}: не найдено {", ".join(miss)}')
+                else:
+                    ok += 1
+    rep.ok(f'{ok} строк доз: все числа есть в МОССМП рядом с названием препарата')
+    if partial:
+        rep.warn(f'{len(partial)} строк: часть чисел дозы не найдена рядом с препаратом в МОССМП — сверить (-v)')
+        if rep.verbose:
+            rep.items(partial, limit=0)
+    if absent:
+        rep.info(f'{len(absent)} строк: препарата нет в тексте МОССМП (другое название или не из МОССМП)')
+        if rep.verbose:
+            rep.items(absent, limit=0)
+
 def check_ecg(ecg, rep):
     rep.section('ECG2_DATA')
     probs, ids = [], set()
@@ -600,6 +650,7 @@ def main():
     check_links(data, rep, src)
     if 'ECG2_DATA' in data:
         check_ecg(data['ECG2_DATA'], rep)
+    check_mossmp(data, rep)
     if not a.no_browser and 'DRUGS' in data:
         check_calculator(os.path.abspath(a.html), data, rep)
 
