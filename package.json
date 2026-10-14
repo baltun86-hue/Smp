@@ -1,13 +1,17 @@
 {
   "name": "smp-spravochnik",
   "version": "5.0.0",
-  "description": "СМП Справочник — iOS app wrapper (Capacitor)",
+  "description": "СМП Справочник — iOS и Android обёртки (Capacitor)",
   "private": true,
   "scripts": {
-    "sync": "cap sync ios",
-    "open:ios": "cap open ios"
+    "sync": "cap sync",
+    "sync:ios": "cap sync ios",
+    "sync:android": "cap sync android",
+    "open:ios": "cap open ios",
+    "open:android": "cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.0",
     "@capacitor/core": "^8.5.0",
     "@capacitor/ios": "^8.5.0"

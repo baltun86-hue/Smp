@@ -13,8 +13,9 @@
 
 ## Репозиторий
 - `www/index.html` (~3 МБ) — всё приложение: данные, стили, скрипты, иконки. PWA, офлайн.
-- `ios/`, `capacitor.config.json`, `package.json`, `resources/` — iOS-обёртка (Capacitor),
-  `webDir: "www"`. После правки `www/index.html` для iOS — `npx cap sync ios` (на Mac).
+- `ios/`, `android/`, `capacitor.config.json`, `package.json`, `resources/` — iOS- и Android-обёртки
+  (Capacitor), `webDir: "www"`. После правки `www/index.html` — `npx cap sync` (iOS — на Mac);
+  при выпуске поднять `versionName`/`versionCode` в `android/app/build.gradle`.
 - `tools/` — служебные скрипты проверки (Python/Node). Создаются по мере необходимости.
 - `docs/МОССМП-2026.md` — текст МОССМП 2026 (Московская обл.), опорный источник алгоритмов.
   Сверять дозы по нему (Grep, не читать целиком); в отчётах ссылаться на номер строки.

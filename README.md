@@ -1,6 +1,6 @@
-# СМП Справочник — iOS-приложение
+# СМП Справочник — iOS- и Android-приложение
 
-Веб-версия (`www/index.html`) обёрнута в нативный iOS-проект через [Capacitor](https://capacitorjs.com) — Xcode-проект уже сгенерирован в `ios/App`. Всё содержимое справочника (алгоритмы, дозировки, шкалы) работает офлайн внутри самого приложения, сеть ему не нужна.
+Веб-версия (`www/index.html`) обёрнута в нативный iOS-проект через [Capacitor](https://capacitorjs.com) — Xcode-проект уже сгенерирован в `ios/App`, Android-проект (Android Studio) — в `android/`. Всё содержимое справочника (алгоритмы, дозировки, шкалы) работает офлайн внутри самого приложения, сеть ему не нужна.
 
 ## Что нужно сделать на Mac
 
@@ -51,13 +51,50 @@ npx capacitor-assets generate --ios
 
 После загрузки сборки в App Store Connect: выбери её в карточке версии → **Submit for Review**. Модерация обычно занимает от нескольких часов до пары дней.
 
+## Android: сборка в Android Studio
+
+Нужно: [Android Studio](https://developer.android.com/studio) (ставит Android SDK и JDK 21), Node.js 20+.
+
+### 1. Подготовить проект
+
+```
+git clone https://github.com/baltun86-hue/-.git smp-spravochnik
+cd smp-spravochnik
+npm install
+npx cap sync android
+```
+
+`npx cap sync android` копирует `www/index.html` внутрь Android-проекта (`android/app/src/main/assets/public`). Без этого шага приложение откроется пустым — веб-содержимое в репозиторий не кладётся, как и у iOS.
+
+### 2. Открыть в Android Studio
+
+```
+npx cap open android
+```
+
+или в Android Studio: **File → Open** → папка `android`. Первый раз Android Studio сама скачает Gradle и недостающие компоненты SDK (Android 16 / API 36) — дождаться окончания «Gradle sync».
+
+### 3. Запустить на телефоне
+
+На телефоне: Настройки → О телефоне → 7 раз нажать «Номер сборки» → в «Для разработчиков» включить «Отладка по USB». Подключить кабелем, выбрать устройство вверху и нажать ▶ Run.
+
+### 4. Собрать APK / AAB
+
+- APK для установки «вручную» (раздать бригадам): **Build → Build App Bundle(s) / APK(s) → Build APK(s)**. Файл: `android/app/build/outputs/apk/debug/app-debug.apk`.
+- Для RuStore / Google Play — подписанный файл: **Build → Generate Signed App Bundle or APK** → создать ключ (`.jks`, хранить в надёжном месте — без него обновления выпустить нельзя) → **Android App Bundle** (Google Play) или **APK** (RuStore, ручная раздача).
+
+Параметры: `applicationId` `ru.smpspravochnik.app`, минимальная версия Android 7.0 (API 24). Номер версии — `versionName` / `versionCode` в `android/app/build.gradle`; при каждом выпуске поднимать оба (сейчас 7.00 / 700 — по `VERSION` справочника).
+
+Иконка и заставка уже сгенерированы из `resources/icon.png`; пересоздать: `npx capacitor-assets generate --android`.
+
 ## Структура репозитория
 
 - `www/index.html` — сам справочник (весь код в одном файле, адаптирован под iOS: без авто-zoom по тапу на поля, без авто-распознавания телефонов в дозировках, нативный скролл).
 - `capacitor.config.json` — конфигурация обёртки (appId, appName).
 - `ios/` — сгенерированный Xcode-проект.
+- `android/` — сгенерированный проект Android Studio (Gradle).
 - `resources/icon.png` — исходник иконки 1024×1024 для генерации иконок всех размеров.
 
 ## Обновление содержимого справочника
 
-Правишь `www/index.html` → `npx cap sync ios` → пересобираешь в Xcode. Обёртка ничего не меняет в самом справочнике, просто показывает его в нативном окне без браузерных элементов.
+Правишь `www/index.html` → `npx cap sync` (обе платформы) → пересобираешь в Xcode / Android Studio. Обёртка ничего не меняет в самом справочнике, просто показывает его в нативном окне без браузерных элементов.
