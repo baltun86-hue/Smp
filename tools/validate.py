@@ -26,6 +26,7 @@ VERSION_RE = re.compile(r'VERSION\s*=\s*"([^"]+)"')
 CONSTS = ['DRUGS', 'STANDARDS', 'SCEN', 'CARD_TEMPLATES', 'ECG2_DATA', 'ICD10_FULL',
           'SCALES', 'ORDERS', 'REFERENCE', 'INFUS_PRESETS']
 ADULT_MONTHS = 216  # 18 лет — порог взрослого в приложении
+FA_DEFAULT = None   # порог fixedAdult по умолчанию в renderDoseCalc (с 6.88 — 216), задаётся в main()
 
 
 class Report:
@@ -107,6 +108,31 @@ def js_eval_literal(text):
       }
       console.error('слишком много неизвестных имён');process.exit(1);})"""
     r = subprocess.run(['node', '-e', code], input=text, capture_output=True, text=True)
+    if r.returncode:
+        raise ValueError(r.stderr.strip().splitlines()[0] if r.stderr.strip() else 'ошибка node')
+    return json.loads(r.stdout)
+
+
+def app_eval(src, data, funcs, consts, expr):
+    """Выполнить выражение expr тем же JS-кодом, что в приложении: берём из index.html
+    функции funcs и константы consts, данные (DRUGS, STANDARDS…) — уже разобранные.
+    Если чего-то нет (старая версия файла) — None."""
+    parts = [f'const {k}={json.dumps(v, ensure_ascii=False)};' for k, v in data.items()
+             if k in ('DRUGS', 'STANDARDS')]
+    for c in consts:
+        t = extract_literal(src, c)
+        if t is None:
+            return None
+        parts.append(f'const {c}={t};')
+    for f in funcs:
+        m = re.search(r'\bfunction\s+' + f + r'\s*\(', src)
+        if not m:
+            return None
+        body = src.index('{', src.index(')', m.end()))
+        parts.append(src[m.start():literal_end(src, body)])
+    parts.append(f'process.stdout.write(JSON.stringify({expr}));')
+    # код — через stdin: DRUGS+STANDARDS больше лимита длины аргумента
+    r = subprocess.run(['node', '-'], input='\n'.join(parts), capture_output=True, text=True)
     if r.returncode:
         raise ValueError(r.stderr.strip().splitlines()[0] if r.stderr.strip() else 'ошибка node')
     return json.loads(r.stdout)
@@ -253,36 +279,51 @@ def check_drugs(drugs, rep):
         rep.warn(f'инъекционные с dose, но без conc — калькулятор не переводит в мл: {len(no_conc)}')
         rep.items(no_conc)
     if no_fa_age:
-        # renderDoseCalc показывает fixedAdult только при amCalc >= minAgeMonths; больше нигде txt не выводится
-        rep.warn(f'fixedAdult без minAgeMonths: {len(no_fa_age)} — «доза по стандарту (взрослым)» '
-                 f'нигде не показывается; при наличии dose взрослому считается доза по весу')
-        rep.items(no_fa_age)
+        # с 6.88 renderDoseCalc берёт порог 216 мес по умолчанию (faAge); до 6.88 такая доза не показывалась
+        if FA_DEFAULT is None:
+            rep.warn(f'fixedAdult без minAgeMonths: {len(no_fa_age)} — «доза по стандарту (взрослым)» '
+                     f'нигде не показывается; при наличии dose взрослому считается доза по весу')
+        else:
+            rep.info(f'fixedAdult без minAgeMonths: {len(no_fa_age)} — действует порог по умолчанию '
+                     f'{FA_DEFAULT} мес (18 лет)')
+        rep.items(no_fa_age, limit=0 if FA_DEFAULT is not None else 15)
 
 
-def check_links(data, rep):
+def check_links(data, rep, src):
     rep.section('Связность')
     drugs = data.get('DRUGS') or []
     names = {d['n'] for d in drugs if 'n' in d}
     std = data.get('STANDARDS') or {}
 
-    def hint(x):
-        # подсказка: какой препарат DRUGS начинается с того же слова
-        w = re.split(r'[ ,(]', x)[0].lower()
-        c = [n for n in names if n.lower().startswith(w)] if len(w) > 3 else []
-        return f' → похоже: {"; ".join(sorted(c)[:2])}' if c else ' → в DRUGS нет'
-
-    # kit: чип в алгоритме открывает openDrug(n) по точному совпадению — иначе нажатие ничего не делает
-    miss = {}
+    # kit: с 6.88 чип открывается через resolveDrugs (точное имя → DRUG_ALIAS → МНН/скобки);
+    # до 6.88 — openDrug по точному имени. Проверяем тем же кодом, что в приложении.
+    uses = {}
     for sp, arr in std.items():
         for a in arr:
             for k in a.get('kit') or []:
-                if k not in names:
-                    miss.setdefault(k, []).append(f'{sp} / {a.get("t")}')
-    if miss:
-        rep.warn(f'kit: {len(miss)} названий не совпадают с DRUGS.n — чип в «Препараты из укладки» не открывается')
-        rep.items([f'«{k}» ×{len(v)}{hint(k)}' for k, v in sorted(miss.items(), key=lambda x: -len(x[1]))])
+                uses.setdefault(k, []).append(f'{sp} / {a.get("t")}')
+    kits = sorted(uses)
+    res = app_eval(src, data, ['drugNameParts', 'resolveDrugs'], ['DRUG_ALIAS'],
+                   'K.map(n=>resolveDrugs(n).map(x=>x.n))'.replace('K', json.dumps(kits, ensure_ascii=False)))
+    if res is None:
+        res = [[k] if k in names else [] for k in kits]
+        how = 'по точному имени (resolveDrugs в файле нет)'
     else:
-        rep.ok('kit: все названия есть в DRUGS')
+        how = 'через resolveDrugs приложения'
+    got = dict(zip(kits, res))
+    none = [k for k in kits if not got[k]]
+    multi = [f'«{k}» → {" | ".join(got[k])}' for k in kits if len(got[k]) > 1]
+    fuzzy = [f'«{k}» → {got[k][0]}' for k in kits if len(got[k]) == 1 and got[k][0] != k]
+    if none:
+        rep.warn(f'kit: {len(none)} из {len(kits)} названий без карточки ({how}) — чип неактивен')
+        rep.items([f'«{k}» ×{len(uses[k])}' for k in sorted(none, key=lambda k: -len(uses[k]))])
+    else:
+        rep.ok(f'kit: все {len(kits)} названий находят карточку ({how})')
+    if multi or fuzzy:
+        rep.info(f'не по точному имени: {len(fuzzy)} — одна карточка, {len(multi)} — выбор формы; '
+                 f'сверить, что сопоставлено верно (-v)')
+        if rep.verbose:
+            rep.items(fuzzy + multi)
 
     # SCEN: приложение фильтрует DRUGS по n.startsWith(ключ)
     bad = [f'{sc}: «{k}»' for sc, arr in (data.get('SCEN') or {}).items()
@@ -293,18 +334,25 @@ def check_links(data, rep):
     else:
         rep.ok('SCEN: каждый ключ находит препарат в DRUGS')
 
-    # CARD_TEMPLATES[].std ↔ STANDARDS
-    bad = []
-    for grp in data.get('CARD_TEMPLATES') or []:
-        g, arr = grp[0], grp[1]
-        for t in arr:
-            s = t.get('std')
-            if s and s not in std:
-                bad.append(f'{g} / {t.get("t")}: std=«{s}»')
-    if bad:
+    # CARD_TEMPLATES[].std ↔ STANDARDS; с 6.88 приложение сводит название через stdGroupKey
+    tpl = [(grp[0], t) for grp in data.get('CARD_TEMPLATES') or [] for t in grp[1] if t.get('std')]
+    stds = sorted({t['std'] for _, t in tpl})
+    keys = app_eval(src, data, ['stdGroupKey'], ['STD_GROUP_ALIAS'],
+                    json.dumps(stds, ensure_ascii=False) + '.map(stdGroupKey)')
+    key = dict(zip(stds, keys)) if keys is not None else {s: (s if s in std else None) for s in stds}
+    raw = sum(1 for _, t in tpl if t['std'] not in std)
+    if keys is not None and raw:
+        rep.info(f'CARD_TEMPLATES: {raw} std записаны не как раздел STANDARDS — сводит stdGroupKey')
+    bad = [f'{g} / {t.get("t")}: std=«{t["std"]}»' for g, t in tpl if not key[t['std']]]
+    if bad and keys is not None:
+        rep.warn(f'CARD_TEMPLATES: {len(bad)} шаблонов — раздел не найден, «Тактика и дозы» откроет общий список')
+        rep.items(bad)
+    elif bad:
         rep.warn(f'CARD_TEMPLATES: {len(bad)} шаблонов ссылаются на несуществующую специальность — '
                  f'кнопка «Тактика и дозы» падает с ошибкой JS (stdHTML: STANDARDS[std] нет)')
         rep.items(bad)
+    elif keys is not None:
+        rep.ok(f'CARD_TEMPLATES: все {len(stds)} значений std сводятся к разделам STANDARDS')
     else:
         rep.ok('CARD_TEMPLATES: все std есть в STANDARDS')
 
@@ -435,7 +483,8 @@ def expected(d, w, am):
     if d.get('minAge') is not None and am < d['minAge']:
         return 'ban', ['Не вводить'], False
     fa = d.get('fixedAdult')
-    if fa and isinstance(fa.get('minAgeMonths'), (int, float)) and am >= fa['minAgeMonths']:
+    fa_age = fa.get('minAgeMonths', FA_DEFAULT) if fa else None
+    if fa and isinstance(fa_age, (int, float)) and am >= fa_age:
         return 'fixedAdult', [' '.join(fa['txt'].split())], False
     ds = d['dose']
     lo, hi = ds['lo'] * w, ds['hi'] * w
@@ -457,8 +506,9 @@ def scenarios(d):
     """Контрольные расчёты по CLAUDE.md: взрослый 70 кг, ребёнок 10 кг (1 год), граничный возраст."""
     sc = [('взрослый 70 кг, 35 лет', 70, 420), ('ребёнок 10 кг, 1 год', 10, 12)]
     # граничный возраст: порог запрета и порог «взрослой» фиксированной дозы
+    fa = d.get('fixedAdult')
     for lim, what in ((d.get('minAge') or 0, 'minAge'),
-                      ((d.get('fixedAdult') or {}).get('minAgeMonths') or 0, 'fixedAdult')):
+                      ((fa.get('minAgeMonths', FA_DEFAULT) or 0) if fa else 0, 'fixedAdult')):
         if 0 < lim <= 1200:
             for am in (lim - 1, lim):
                 if am >= 0:
@@ -467,7 +517,8 @@ def scenarios(d):
     return sc
 
 
-def check_calculator(html_path, drugs, rep):
+def check_calculator(html_path, data, rep):
+    drugs = data['DRUGS']
     rep.section('Калькулятор доз в браузере (контрольные расчёты)')
     calc = [d for d in drugs if d.get('dose')]
     cases = [{'n': d['n'], 'label': lbl, 'w': w, 'am': am}
@@ -476,7 +527,10 @@ def check_calculator(html_path, drugs, rep):
     if not shutil.which('node'):
         rep.warn('node не найден — пропущено')
         return
-    r = subprocess.run(['node', script, html_path], input=json.dumps(cases, ensure_ascii=False),
+    tactics = [[t['std'], t.get('t'), t.get('dx')] for grp in data.get('CARD_TEMPLATES') or []
+               for t in grp[1] if t.get('std')]
+    r = subprocess.run(['node', script, html_path],
+                       input=json.dumps({'cases': cases, 'tactics': tactics}, ensure_ascii=False),
                        capture_output=True, text=True, timeout=600)
     if r.returncode == 3:
         rep.warn('Playwright не установлен — пропущено (npm i -g playwright или --no-browser)')
@@ -489,6 +543,12 @@ def check_calculator(html_path, drugs, rep):
         rep.err(f'ошибка JS на странице: {e[:200]}')
     for u in res['requests']:
         rep.err(f'сетевой запрос: {u[:150]}')
+    tf = res.get('tacticFails', [])
+    if tf:
+        rep.err(f'«Тактика и дозы» из шаблонов карт: {len(tf)} из {len(tactics)} не открываются')
+        rep.items(tf)
+    else:
+        rep.ok(f'«Тактика и дозы»: все {len(tactics)} шаблонов карт открывают раздел алгоритмов без ошибок')
     by = {d['n']: d for d in calc}
     bad, table = [], []
     for c, text in zip(cases, res['texts']):
@@ -532,13 +592,16 @@ def main():
     check_scripts(src, rep)
     check_offline(src, rep)
     data = load_consts(src, rep)
+    global FA_DEFAULT
+    m = re.search(r'faAge\s*=.*?:\s*(\d+)\s*;', src)
+    FA_DEFAULT = int(m[1]) if m else None
     if 'DRUGS' in data:
         check_drugs(data['DRUGS'], rep)
-    check_links(data, rep)
+    check_links(data, rep, src)
     if 'ECG2_DATA' in data:
         check_ecg(data['ECG2_DATA'], rep)
     if not a.no_browser and 'DRUGS' in data:
-        check_calculator(os.path.abspath(a.html), data['DRUGS'], rep)
+        check_calculator(os.path.abspath(a.html), data, rep)
 
     print(f'\nИтог: ошибок {rep.errors}, предупреждений {rep.warns}')
     sys.exit(1 if rep.errors else 0)
