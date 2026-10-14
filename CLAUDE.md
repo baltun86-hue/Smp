@@ -13,6 +13,8 @@
 
 ## Репозиторий
 - `www/index.html` (~3 МБ) — всё приложение: данные, стили, скрипты, иконки. PWA, офлайн.
+- `ios/`, `capacitor.config.json`, `package.json`, `resources/` — iOS-обёртка (Capacitor),
+  `webDir: "www"`. После правки `www/index.html` для iOS — `npx cap sync ios` (на Mac).
 - `tools/` — служебные скрипты проверки (Python/Node). Создаются по мере необходимости.
 - Опубликованная версия: https://claude.ai/artifact/KFCFvddCjv5Ww3wge2gbx2
   (публикую сам через claude.ai; из Claude Code не публикуется).
