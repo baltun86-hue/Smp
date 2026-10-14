@@ -1767,18 +1767,7 @@ header.compact:not(.home-mode) .homebar-back::before{content:'←';font-size:24p
 /* длинные названия без пробелов («…+питофенон+фенпивериния», «Бромдигидрохлорфенилбензодиазепин») уходили за край */
 .stepn.alg-step .act,.stepn.alg-step .cond{min-width:0;overflow-wrap:anywhere}
 
-/* ══ правка 2026-10 (7.01): пациент, нижняя панель, избранное, таймер СЛР, шрифт, чипы укладки ══ */
-.srow{display:flex;align-items:center;gap:8px}
-.srow #q{flex:1;min-width:0}
-.srow .q-clear{right:60px}
-.pt-btn{flex:0 0 auto;min-width:44px;height:44px;margin-top:6px;padding:0 8px;border:0;border-radius:12px;
-  background:rgba(255,255,255,.12);color:#f5f5f7;font-size:18px;font-weight:800;cursor:pointer;white-space:nowrap}
-.pt-btn.on{background:#0071e3;color:#fff;font-size:var(--fs-14)}
-.pt-btn small{font-size:.72em;font-weight:600;opacity:.85;margin-left:1px}
-.pt-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:12px}
-.pt-grid .age-inline{display:flex;gap:8px}.pt-grid .age-inline input{flex:1;min-height:44px}.pt-grid select{min-height:44px}
-.pt-ok{width:100%;min-height:48px;margin:6px 0;border:0;border-radius:var(--r);background:#0071e3;color:#fff;font-size:var(--fs-16);font-weight:700}
-.pt-new{width:100%;min-height:48px}
+/* ══ правка 2026-10 (7.01): нижняя панель, избранное, таймер СЛР, шрифт, чипы укладки ══ */
 body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 /* последний элемент списка должен выходить из-под нижней панели целиком (прокрутка не доходит до конца на ~80 px из-за сжатия шапки) */
 #list{padding-bottom:calc(140px + env(safe-area-inset-bottom))!important}
@@ -1798,12 +1787,11 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .std-actions .btn-mini{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .inf-link{display:inline-flex;align-items:center;margin-top:4px;min-height:44px;padding:0 8px;border:1px solid var(--infoLine);border-radius:var(--r-pill);
   background:var(--info);color:var(--accent);font-size:var(--fs-11);font-weight:700;cursor:pointer;white-space:nowrap}
-.quick-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 6px}
+.quick-top{display:grid;grid-template-columns:1fr;gap:10px;margin:4px 0 6px}
 .q-big{min-height:64px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font-size:24px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;font-weight:800}
 .q-big span{font-size:var(--fs-12-5);font-weight:700;color:var(--muted)}
 .q-big.cpr-open{background:var(--banBg);border-color:var(--banLine);color:var(--ban)}.q-big.cpr-open span{color:var(--ban)}
-.q-big .q-pt-v{font-size:var(--fs-18);color:var(--accent);font-weight:800}
 .q-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
 .q-chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;max-width:100%;padding:0 12px;border:1px solid var(--line);border-radius:12px;
   background:var(--card);color:var(--ink);font-size:var(--fs-13-5);font-weight:600;text-align:left;cursor:pointer;overflow-wrap:anywhere}
@@ -1966,7 +1954,6 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
     <input id="q" placeholder="Поиск: препарат, алгоритм, код МКБ, шкала, шаблон" autocomplete="off">
     <button type="button" class="q-clear" id="qClear" aria-label="Очистить поиск">✕</button>
     <div class="ac" id="ac"></div>
-    <button type="button" class="pt-btn" id="ptBtn" aria-label="Пациент: вес и возраст">👤</button>
   </div>
   <div class="tabs">
     <button id="tabAll">Препараты</button>
@@ -2045,7 +2032,7 @@ const ICD10={"version":"МКБ-10","classes":[{"name":"I. Инфекционны
 /* правка 2026-10: развёрнутая ЭКГ — 50 мм/с (подпись 12-канальной карты и шторки карточки) */
 const ECG_PATTERNS=[{"id":"norm","label":"Норма","title":"Синусовый ритм (норма)","signs":["ЧСС 60–100 в мин, ритм правильный","Зубец P перед каждым QRS","PR 0,12–0,20 с (3–5 мм)","QRS < 0,12 с (< 3 мм)","T положительный в I, II, V4–V6"],"warn":""},{"id":"sa","label":"СА-блокада","title":"СА-блокада II степени","signs":["Выпадение целого комплекса PQRST","Пауза = 2 × нормальный R–R","При частых выпадениях — замещающие ритмы"],"warn":""},{"id":"avb1","label":"АВ-бл.I","title":"АВ-блокада I степени","signs":["P–Q > 0,20 с (более 1 большой клетки)","Все зубцы P проведены","ЧСС нормальная"],"warn":""},{"id":"avb2m","label":"АВ-бл.II Мобитц1","title":"АВ-блокада II ст. Мобитц I (Венкебах)","signs":["Прогрессивное удлинение P–Q от цикла к циклу","Затем выпадение QRS (периодика Самойлова–Венкебаха)","После паузы P–Q снова короткий"],"warn":""},{"id":"avb2m2","label":"АВ-бл.II Мобитц2","title":"АВ-блокада II ст. Мобитц II","signs":["P–Q постоянный (норма или удлинён)","Внезапное выпадение QRS (проведение 2:1, 3:1)","Высокий риск полной АВ-блокады и асистолии"],"warn":"Высокий риск асистолии, подготовка к ЭКС. ⚠ Требует проверки: по МОССМП атропин малоэффективен (допамин/адреналин)"},{"id":"avb3","label":"АВ-бл.III","title":"АВ-блокада III ст. (полная)","signs":["Полная диссоциация P и QRS","Предсердия — синусовый ритм 60–90","Желудочки — узкий ритм 40–60 или широкий ритм 25–40","ЧСС очень редкая"],"warn":"Атропин 0,5–1 мг в/в → при неэффективности ЭКС"},{"id":"rbbb","label":"БПНПГ","title":"Блокада правой ножки пучка Гиса","signs":["QRS ≥ 0,12 с","В V1–V2 — rsR' или rSR' (М-образный, «уши кролика»)","В I, aVL, V5–V6 — широкий зазубренный S","T инвертирован в V1–V2"],"warn":""},{"id":"lbbb","label":"БЛНПГ","title":"Блокада левой ножки пучка Гиса","signs":["QRS ≥ 0,12 с","В I, aVL, V5–V6 — широкий R без q","В V1–V2 — QS или rS","Дискордантный ST и T","Впервые возникшая БЛНПГ + боль = ОИМ до исключения"],"warn":"Новая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения (Мурашко; МОССМП)"},{"id":"lah","label":"БПВЛН","title":"Блокада передне-верхней ветви левой ножки","signs":["Резкое отклонение ЭОС влево (α < −30°)","В I, aVL — высокий R с небольшим q","В II, III, aVF — глубокий S","QRS не уширен или незначительно"],"warn":""},{"id":"lph","label":"БЗНЛН","title":"Блокада задне-нижней ветви левой ножки","signs":["Отклонение ЭОС вправо (α > +120°)","В I, aVL — глубокий S; в III, aVF — высокий R","QRS не уширен"],"warn":""},{"id":"wpw","label":"WPW","title":"Синдром WPW (Вольфа–Паркинсона–Уайта)","signs":["P–Q < 0,12 с","QRS уширен ≥ 0,12 с","Дельта-волна в начале QRS","При ФП — очень частый ритм, риск ФЖ"],"warn":"При WPW с ФП избегать верапамил, дилтиазем и аденозин (ESC 2019); дигоксин и лидокаин противопоказаны (Хэмптон, ответ 136). При нестабильности — электрическая кардиоверсия (ESC 2019)"},{"id":"lown","label":"CLC","title":"Синдром CLC (Клерка–Леви–Кристеско)","signs":["P–Q < 0,12 с","QRS не деформирован, дельта-волны нет","Склонность к пароксизмальным тахикардиям"],"warn":""},{"id":"stemi","label":"STEMI","title":"ОИМ с подъёмом ST","signs":["Подъём ST в ≥ 2 смежных отведениях: ≥ 2 мм у мужчин или ≥ 1,5 мм у женщин в V2–V3; ≥ 1 мм в остальных отведениях","Дугообразный (выпуклый вверх) ST","Реципрокная депрессия в оппозитных отведениях","Позже — патологический Q, отрицательный T"],"warn":"Тромболизис Фортелизином или ЧКВ — время критично"},{"id":"nstemi","label":"NSTEMI","title":"NSTEMI / Нестабильная стенокардия","signs":["Нет патологического Q","Глубокая депрессия ST и отрицательный T","Изменения сохраняются дольше, чем при стенокардии покоя"],"warn":"ОКС — двойная антиагрегантная терапия"},{"id":"peri","label":"Перикардит","title":"Острый перикардит","signs":["Диффузный подъём ST (вогнутый вверх) во многих отведениях кроме aVR и V1","Позже — отрицательный T","Нет реципрокных изменений","Нет патологического Q"],"warn":""},{"id":"brugada","label":"Бругада","title":"Синдром Бругада","signs":["Coved-подъём ST ≥ 2 мм в V1–V2 с переходом в отрицательный T (тип 1)","Элевация точки J, без динамики","БПНПГ-подобная морфология","Риск ФЖ и внезапной смерти"],"warn":"Риск ФЖ — избегать препаратов, блокирующих натриевые каналы (новокаинамид)"},{"id":"hypo","label":"Гипокалиемия","title":"Гипокалиемия на ЭКГ","signs":["Депрессия ST, сглаженность или инверсия T","Появление волны U (после T)","Удлинение QT","Может провоцировать пируэт-тахикардию (Torsades de Pointes)"],"warn":""},{"id":"dig","label":"Дигиталис","title":"Дигиталисная интоксикация / гликозиды","signs":["«Корытообразное» смещение ST вниз (выпуклостью вниз) в V4–V6","Укорочение QT","Отрицательный или двухфазный T","Различные аритмии (АВ-блокады, бигеминия)"],"warn":"Дигоксин противопоказан при ФЖ, WPW, гипертрофической кардиомиопатии"},{"id":"ajr","label":"Ритм АВ-соед.","title":"Ритм АВ-соединения (замещающий узловой ритм)","signs":["ЧСС 40–60 в мин, QRS узкий (≤ 0,10 с)","Верхняя часть соединения: отрицательный Р ПЕРЕД QRS, короткий P–Q","Средняя часть: Р не виден (наслаивается на QRS)","Нижняя часть: отрицательный Р ПОСЛЕ QRS (в начале ST)"],"warn":""},{"id":"psvt","label":"Пароксизм НЖТ","title":"Пароксизм наджелудочковой (АВ-узловой) тахикардии","signs":["Зубцы Р не видны (наслаиваются на QRS)","Интервалы R–R одинаковые, резко укорочены","ЧСЖ чаще 160–190 в мин и более","QRS обычно узкий; уширен при блокаде ножки пучка Гиса"],"warn":"ЧСЖ > 220 у молодых — заподозрить WPW: верапамил противопоказан"},{"id":"afib","label":"ФП","title":"Фибрилляция предсердий (мерцательная аритмия)","signs":["Зубцы Р отсутствуют","Волны f — постоянно меняются по амплитуде и форме","Интервалы R–R абсолютно нерегулярны («неправильно неправильный» ритм)","При ЧСЖ > 150 в мин нерегулярность может быть малозаметна"],"warn":"При ФП на фоне WPW избегать верапамил, дилтиазем, аденозин; дигоксин противопоказан (ESC 2019; Хэмптон, ответ 136)"},{"id":"aflutter","label":"ТП","title":"Трепетание предсердий","signs":["Волны F «пилообразные», одинаковой формы, частота 180–400 в мин","Согласованная форма: R–R одинаковый (фиксированная степень АВ-блокады)","Несогласованная форма: R–R разный при регулярных волнах F","Проведение 2:1 → ЧСЖ ≈ 150 в мин, 3:1 → ≈ 100 в мин"],"warn":"Верапамил абсолютно противопоказан при ТП на фоне WPW"},{"id":"vt","label":"Пароксизм ЖТ","title":"Пароксизм желудочковой тахикардии","signs":["ЧСС 140–220 в мин, чаще правильный ритм","Комплексы QRS одинаковой формы, уширены (> 0,14 с)","АВ-диссоциация, редкие «захваченные» синусовые комплексы","Практически непрерывная кривая, нет изолинии"],"warn":"Высокий риск перехода в ФЖ и клиническую смерть"},{"id":"vf","label":"ФЖ","title":"Фибрилляция желудочков","signs":["Хаотичные комплексы разной формы, амплитуды и продолжительности","Зубцы P, Q, R, S, T не идентифицируются","Изоэлектрическая линия отсутствует","Интервалы R–R разные, без кратности и регулярности"],"warn":"Немедленная дефибрилляция + СЛР — см. протокол «Остановка кровообращения»"},{"id":"extra","label":"Экстрасистолия","title":"Экстрасистолия (наджелудочковая и желудочковая)","signs":["Преждевременный комплекс относительно основного ритма","Наджелудочковая: узкий QRS, неполная компенсаторная пауза","Желудочковая: широкий QRS без предшествующего Р, полная компенсаторная пауза","Короче интервал сцепления → выше риск ЖТ/ФЖ"],"warn":""},{"id":"sgarbossa","label":"ИМ на фоне БЛНПГ","title":"Критерии Sgarbossa–Smith (ИМ на фоне БЛНПГ)","signs":["Конкордантный подъём ST ≥ 1 мм в отведении с положительным QRS — 5 баллов","Конкордантная депрессия ST ≥ 1 мм в V1–V3 — 3 балла","Дискордантный подъём ST ≥ 5 мм в отведении с отрицательным QRS — 2 балла (оригинал)","Критерий Смита (2012): подъём ST ≥ 1 мм с ST/S ≤ −0,25 (≥ 25% глубины S) в любом отведении вместо критерия ≥ 5 мм; достаточно одного критерия"],"warn":"Впервые/остро возникшая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения"}];
 const REFERENCE=[["Пожилой возраст (65+)",[["Общий принцип",["Начинать с половины обычной взрослой дозы, вводить медленнее, оценивать эффект до повторного введения","Причины: снижение клубочковой фильтрации, уменьшение объёма распределения, полипрагмазия"]],["Снизить дозу вдвое, вводить медленно",["Морфин, фентанил, трамадол — угнетение дыхания, длительная седация","Сибазон, феназепам — парадоксальное возбуждение, падения, задержка мочи","Аминазин — выраженная гипотензия, экстрапирамидные реакции","Метоклопрамид — риск экстрапирамидных расстройств выше"]],["Гипотензивные и нитраты — риск ортостаза",["Нитроспрей — контроль АД до и после, только лёжа или сидя","Каптоприл, моксонидин, нифедипин — снижать АД не более чем на 20–25% за первый час","Урапидил, эналаприлат — вводить дробно под контролем АД","Фуросемид — риск гиповолемии, гипокалиемии, ОПП; осторожно при стенозе устья аорты"]],["НПВС — осторожно или воздержаться",["Долак, анальгин — риск ОПП при обезвоживании, ЖКТ-кровотечения, декомпенсации ХСН","Механизм: при гиповолемии СКФ держится на простагландинах, расширяющих приносящую артериолу. НПВС их блокируют — фильтрация падает","«Тройной удар»: иАПФ или сартан + диуретик + НПВС. ОПП может развиться за 1–2 суток","Признаки гиповолемии: сухие слизистые, снижен тургор, тахикардия, ортостаз, капиллярное наполнение более 2 сек","При гиповолемии начинать с парацетамола; НПВС — только после восполнения объёма, однократно"]],["Особый контроль",["Атропин — задержка мочи при аденоме простаты, обострение глаукомы, спутанность","Димедрол — выраженный седативный и антихолинергический эффект; предпочесть хлоропирамин","Эуфиллин — тахиаритмии, судороги; доза ниже, введение медленное","Гепарин — выше риск кровотечения при низкой массе тела и ХБП","Инфузия — темп ниже: риск перегрузки объёмом и отёка лёгких при ХСН"]]]],["Дети",[["Жаропонижающие: когда снижать",["Здоровым детям — при температуре 38,5 °C и выше","При температуре 38 °C: дети до 3 месяцев, с отягощённым преморбидным фоном, с судорожным синдромом в анамнезе","Парацетамол 15 мг/кг внутрь или ректально — препарат выбора (макс. 60 мг/кг/сут)","Физические методы охлаждения — детям до 12 лет","ВАЖНО: физические методы охлаждения противопоказаны при бледной гипертермии"]],["Чего детям не давать",["При гриппе метамизол натрия и ацетилсалициловая кислота противопоказаны (Алгоритмы СМП)","Метамизол — риск агранулоцитоза; клинрекомендации по ОРВИ у детей его не рекомендуют","Ацетилсалициловая кислота — синдром Рея; с жаропонижающей целью не применяется","Кеторолак (Долак) — с 16 лет","Нимесулид детям не рекомендован"]],["Дыхательная недостаточность — ЧДД выше нормы",["До 1 года — более 50 в минуту","1–5 лет — более 40 в минуту","Старше 5 лет — более 30 в минуту","Также: одышка в покое или при беспокойстве, участие вспомогательной мускулатуры, втяжение уступчивых мест грудной клетки","SpO2 менее 95% — показание к оксигенотерапии"]],["Госпитализация ребёнка обязательна",["Возраст до 1 месяца с лихорадкой","Неспособность пить или сосать грудь; сонливость или отсутствие сознания","Судороги, в том числе сложные фебрильные (более 15 минут или повторные за сутки)","Центральный цианоз, симптомы респираторного дистресса, тяжёлое обезвоживание","Геморрагическая сыпь на коже, рвота, отказ от еды и питья","Лихорадка 5 суток подряд и более или отсутствие эффекта от терапии","Отягощённый преморбидный фон, тяжёлое или осложнённое течение"]],["Расчёт дозы",["Большинство препаратов — по массе тела (мг/кг)","Тиамин, пиридоксин, хлоропирамин, карбоксим, ацизол — по 0,1 мл на год жизни","Адреналин при реанимации: 0,01 мг/кг в/в; развести 1 мл в 9 мл физраствора (1:10000), расчёт 0,1 мл на год жизни","Эндотрахеально адреналин — 0,1 мг/кг (доза в 10 раз выше внутривенной)","Диазепам: разовая максимальная до 5 лет — 5 мг, старше 5 лет — 10 мг; в/в медленно не менее 2 минут"]]]],["Беременность",[["Обезболивание и жаропонижение",["Парацетамол 500–1000 мг внутрь — препарат выбора при боли и лихорадке (Алгоритмы СМП)","НПВС (Долак, анальгин) — избегать, особенно в третьем триместре: риск преждевременного закрытия артериального протока","Морфин, фентанил — только по строгим показаниям, готовность к респираторной поддержке новорождённого"]],["Судороги у беременной",["Диазепам 10 мг (2 мл) в/венно","При эклампсии — магния сульфат; экстренная госпитализация в приёмный покой гинекологического отделения","Положение на левом боку для профилактики аортокавальной компрессии"]],["С осторожностью или избегать",["иАПФ (эналаприлат, каптоприл) — противопоказаны: фетотоксичность","Нитроглицерин, урапидил — под контролем АД, риск гипотензии и снижения плацентарного кровотока","Тромболитики — относительное противопоказание, решение с врачом","Тетрациклины, фторхинолоны — противопоказаны","Беременность на любом сроке и послеродовый период — группа риска тяжёлого течения ОРВИ"]]]],["Общие правила",[["Расчёт дозы у взрослых",["При ожирении большинство препаратов считают по идеальной, а не фактической массе тела","Исключение — гидрофильные препараты и инфузионная терапия: расчёт по фактической массе","Разовая доза у ребёнка не должна превышать взрослую разовую"]],["Почечная недостаточность",["НПВС — избегать при ХБП, гиповолемии, на фоне иАПФ и диуретиков","Морфин — метаболиты накапливаются, дозу снижать, интервал увеличивать","Гепарин — выше риск кровотечения","Магния сульфат — риск передозировки, контроль сухожильных рефлексов и диуреза"]],["Печёночная недостаточность",["Парацетамол — снизить дозу, максимум ниже обычного","Бензодиазепины, морфин — удлинение эффекта, риск энцефалопатии","Лидокаин — снижен клиренс, риск токсичности"]],["Перед введением",["Сверить концентрацию с маркировкой на ампуле — фасовка у разных производителей отличается","Уточнить аллергоанамнез и препараты, принятые пациентом до приезда бригады","При в/в введении контролировать скорость: магния сульфат, эуфиллин, амиодарон, верапамил вводят медленно","Расчёт по этому приложению — ориентир, а не замена инструкции и протокола станции"]]]]];
-const VERSION="7.01 (14.10.2026)";
+const VERSION="7.02 (14.10.2026)";
 
 /* ---------- PWA: манифест и офлайн-кэш ---------- */
 /* На хостинге (http/https) используются настоящие файлы manifest.webmanifest и sw.js
@@ -3954,46 +3941,10 @@ function hlDoses(html){
 }
 
 
-/* ════════ правка 2026-10 (7.01): пациент вызова, избранное/недавние, таймер СЛР, нижняя панель, шрифт ════════ */
-/* Пациент вызова: вес/возраст вводятся один раз и подставляются во все калькуляторы.
-   Через 2 часа без изменений сбрасывается сам — чтобы вес не «переехал» на следующий вызов. */
-const PT_KEY='smp_patient', PT_TTL=2*3600e3;
-let PT=(function(){try{const o=JSON.parse(localStorage.getItem(PT_KEY)||'null');
-  if(o&&Date.now()-o.ts<PT_TTL)return o;}catch(e){}return {w:null,age:null,unit:'y',ts:0};})();
-function ptSave(){PT.ts=Date.now();try{localStorage.setItem(PT_KEY,JSON.stringify(PT));}catch(e){}ptChip();}
-function ptSet(w,age,unit){PT.w=w>0?w:null;PT.age=(age!=null&&age>=0)?age:null;PT.unit=unit||'y';ptSave();}
-function ptNc(x){return String(x).replace('.',',');}
-function ptChip(){const b=$('ptBtn');if(!b)return;const has=PT.w||PT.age!=null;b.classList.toggle('on',!!has);
-  b.innerHTML=has?`${PT.w?ptNc(PT.w)+'<small>кг</small>':''}${PT.w&&PT.age!=null?' ':''}${PT.age!=null?ptNc(PT.age)+'<small>'+(PT.unit==='m'?'мес':'г')+'</small>':''}`:'👤';}
-function ptPanel(){
-  let h=`<div class="sh-head"><div class="grab"></div><button type="button" class="sh-close" id="shClose" aria-label="Закрыть">✕</button>
-    <h2>Пациент вызова</h2><span class="lat">Вес и возраст подставятся во все калькуляторы и таблицы доз</span></div><div class="sh-body">
-    <div class="pt-grid"><div class="fld"><label>Вес, кг</label><div class="wt-stepper">
-      <button type="button" class="wt-btn" onclick="wtStep('ptW',-1)" aria-label="−1 кг">−</button>
-      <div class="wt-value"><input id="ptW" type="number" inputmode="decimal" min="0.5" max="250" step="0.1" placeholder="—" value="${PT.w??''}"><span class="wt-unit">кг</span></div>
-      <button type="button" class="wt-btn" onclick="wtStep('ptW',1)" aria-label="+1 кг">+</button></div></div>
-    <div class="fld"><label>Возраст</label><div class="age-inline"><input id="ptA" type="number" inputmode="decimal" min="0" max="120" step="1" placeholder="—" value="${PT.age??''}">
-      <select id="ptU"><option value="y"${PT.unit!=='m'?' selected':''}>лет</option><option value="m"${PT.unit==='m'?' selected':''}>мес</option></select></div></div></div>
-    <div class="box b-info" style="font-size:var(--fs-12-5)">Сбрасывается сам через 2 часа без изменений. Вес и возраст можно поменять и в любой карточке препарата.</div>
-    <button type="button" class="btn pt-ok" id="ptOk">Готово</button>
-    <button type="button" class="close pt-new" id="ptNew">🔄 Новый вызов — сбросить</button></div>`;
-  $('sheetIn').innerHTML=h;openSheet();
-  const rd=()=>{const w=parseFloat($('ptW').value),a=parseFloat($('ptA').value);ptSet(w>0?w:null,a>=0?a:null,$('ptU').value);};
-  ['ptW','ptA'].forEach(id=>$(id).addEventListener('input',rd));$('ptU').onchange=rd;
-  $('ptOk').onclick=()=>{rd();closeSheet();render();};
-  $('ptNew').onclick=()=>{ptSet(null,null,'y');closeSheet();render();};
-  $('shClose').onclick=closeSheet;
-}
-/* таблицы «Дозировки по алгоритмам»: вес/возраст вызова, правка в таблице — в пациента */
+/* ════════ правка 2026-10 (7.01): избранное/недавние, таймер СЛР, нижняя панель, шрифт ════════
+   (7.02: «пациент вызова» с автоподстановкой веса убран — риск перенести вес на следующего пациента) */
+/* кнопки в заголовках алгоритмов и таблицах доз */
 function stdWire(L){
-  const ya=PT.age==null?null:(PT.unit==='m'?Math.round(PT.age/12*10)/10:PT.age);
-  L.querySelectorAll('input[id^="doseWeight_"]').forEach(w=>{
-    const a=$(w.id.replace('doseWeight_','doseAge_'));
-    if(PT.w)w.value=PT.w; if(a&&ya!=null)a.value=ya;
-    if(PT.w||ya!=null){const m=(w.getAttribute('oninput')||'').match(/updateDoses\('(.*)'\)/);if(m)updateDoses(m[1].replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&'));}
-    const up=()=>{const wv=parseFloat(w.value),av=a?parseFloat(a.value):NaN;PT.w=wv>0?wv:null;if(a){PT.age=av>=0?av:null;PT.unit='y';}ptSave();};
-    w.addEventListener('input',up);if(a)a.addEventListener('input',up);
-  });
   L.querySelectorAll('.fav-mini').forEach(b=>b.onclick=()=>{favToggle('a',b.dataset.favG,b.dataset.favT);const on=isFav('a',b.dataset.favG,b.dataset.favT);b.classList.toggle('on',on);b.textContent=on?'★':'☆';});
   L.querySelectorAll('.cpr-open').forEach(b=>b.onclick=cprOpen);
   L.querySelectorAll('.inf-link').forEach(b=>b.onclick=()=>goToInfusCalc(b.dataset.k));
@@ -4020,8 +3971,7 @@ function quickItem(k){const [t,a,b]=k.split('|');
 function quickHTML(){
   const chips=arr=>arr.map(quickItem).filter(Boolean).map(i=>`<button type="button" class="q-chip" data-k="${esc(i.k)}"><span>${i.ic}</span>${esc(i.tx)}</button>`).join('');
   const fav=chips(lsGet(FAV_KEY)), rec=chips(lsGet(REC_KEY).filter(k=>!lsGet(FAV_KEY).includes(k)).slice(0,6));
-  let h=`<div class="quick-top"><button type="button" class="q-big cpr-open">⏱<span>Таймер СЛР</span></button>
-    <button type="button" class="q-big q-pt"><span class="q-pt-v">${PT.w||PT.age!=null?(PT.w?ptNc(PT.w)+' кг':'')+(PT.w&&PT.age!=null?' · ':'')+(PT.age!=null?ptNc(PT.age)+(PT.unit==='m'?' мес':' лет'):''):'👤'}</span><span>${PT.w||PT.age!=null?'Пациент вызова':'Вес и возраст'}</span></button></div>`;
+  let h=`<div class="quick-top"><button type="button" class="q-big cpr-open">⏱<span>Таймер СЛР</span></button></div>`;
   if(fav)h+=`<div class="sec">★ Избранное</div><div class="q-row">${fav}</div>`;
   if(rec)h+=`<div class="sec">Недавние</div><div class="q-row">${rec}</div>`;
   return h;
@@ -4030,7 +3980,6 @@ function quickWire(L){
   L.querySelectorAll('.q-chip').forEach(b=>b.onclick=()=>{const [t,a,bb]=b.dataset.k.split('|');
     if(t==='d')openDrug(a);else if(t==='a')openTactic(a,bb);else openTactic(a,null);});
   L.querySelectorAll('.cpr-open').forEach(b=>b.onclick=cprOpen);
-  L.querySelectorAll('.q-pt').forEach(b=>b.onclick=ptPanel);
 }
 /* нижняя панель разделов */
 function bnavSync(){const m={all:'tabAll',scen:'tabStd',scenList:'tabStd',stdList:'tabStd',std:'tabStd',scales:'tabScales',ecg:'tabEcg',ecgDetail:'tabEcg'};
@@ -4192,18 +4141,9 @@ function openDrug(name){
   if(sag)sag.oninput=()=>refreshDose(d.n);
   if(sau)sau.onchange=()=>refreshDose(d.n);
   if(sclr)sclr.onclick=()=>{if(sw)sw.value='';if(sag)sag.value='';refreshDose(d.n);};
-  /* правка 2026-10 (7.01): вес/возраст пациента вызова подставляются сами; правка в карточке —
-     сразу в общего пациента (видно в 👤 и в таблицах доз алгоритмов) */
-  if(sw&&PT.w)sw.value=PT.w;
-  if(sag&&PT.age!=null){sag.value=PT.age;if(sau)sau.value=PT.unit;}
-  const ptFromCard=()=>{if(sw)PT.w=parseFloat(sw.value)>0?parseFloat(sw.value):null;
-    if(sag){const a=parseFloat(sag.value);PT.age=a>=0?a:null;PT.unit=sau?sau.value:'y';}ptSave();};
-  [sw,sag].forEach(e=>e&&e.addEventListener('input',ptFromCard));
-  if(sau)sau.addEventListener('change',ptFromCard);
-  if(sclr)sclr.addEventListener('click',ptFromCard);
   const fv=$('shFav'); if(fv)fv.onclick=()=>{favToggle('d',d.n);fv.classList.toggle('on',isFav('d',d.n));fv.textContent=isFav('d',d.n)?'★':'☆';};
   recentPush('d',d.n);
-  refreshDose(d.n); // первый расчёт (с весом вызова, если он задан)
+  refreshDose(d.n); // initial render with empty inputs
 
   const cs=$('closeSheet'); if(cs)cs.onclick=closeSheet;
   const shc=$('shClose'); if(shc)shc.onclick=closeSheet;
@@ -5961,8 +5901,8 @@ window.addEventListener('popstate',function(){
 
 /* ---------- настройки (шестерёнка) ---------- */
 $('gear').onclick=()=>{settingsPanel();};
-/* правка 2026-10 (7.01): пациент, нижняя панель, мини-таймер */
-$('ptBtn').onclick=ptPanel; ptChip();
+/* правка 2026-10 (7.01): нижняя панель, мини-таймер */
+try{localStorage.removeItem('smp_patient');}catch(e){} /* «пациент вызова» убран в 7.02 — чистим сохранённое */
 document.querySelectorAll('#bnav button').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='home'){$('brandHome').click();}else{const t=$(b.dataset.tab);if(t)t.click();}window.scrollTo(0,0);});
 $('cprMini').onclick=cprOpen; setInterval(()=>{if(CPR.run)cprTick();},1000);
 $('themeToggle').onclick=cycleTheme;
@@ -6938,7 +6878,7 @@ function infusCalc(){
   if(mlH<1) a+=`<div class="box b-warn">⚠️ Менее 1 мл/час — при капельном введении такую скорость трудно выдержать. Уменьшите объём разведения или проверьте дозу.</div>`;
   al.innerHTML=a;
 }
-function infusInit(){ if(PT.w&&$('infW'))$('infW').value=PT.w; infusPreset(); } /* правка 2026-10 (7.01): вес вызова */
+function infusInit(){ infusPreset(); }
 
 /* связь карточки препарата → калькулятор инфузий (только для вазопрессоров/
    кардиотоников, которые реально титруются по мкг/кг/мин) */
@@ -6959,7 +6899,6 @@ function goToInfusCalc(key){
   setTab('scales');
   /* правка 2026-10 (6.86): infusPick, а не прямая установка select — иначе подсвечена чужая плашка препарата. */
   infusPick(key);
-  if(PT.w&&$('infW')){$('infW').value=PT.w;infusCalc();} /* правка 2026-10 (7.01): вес вызова */
 }
 
 /* ---------- GCS: разметка ---------- */
