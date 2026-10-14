@@ -4,7 +4,7 @@ android {
     namespace = "ru.smpspravochnik.app"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "ru.smpspravochnik.app"
+        applicationId "ru.smp.spravochnik" // правка 2026-10: как у ранее установленного приложения 6.60 — чтобы ставилось обновлением
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 703

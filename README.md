@@ -83,7 +83,7 @@ npx cap open android
 - APK для установки «вручную» (раздать бригадам): **Build → Build App Bundle(s) / APK(s) → Build APK(s)**. Файл: `android/app/build/outputs/apk/debug/app-debug.apk`.
 - Для RuStore / Google Play — подписанный файл: **Build → Generate Signed App Bundle or APK** → создать ключ (`.jks`, хранить в надёжном месте — без него обновления выпустить нельзя) → **Android App Bundle** (Google Play) или **APK** (RuStore, ручная раздача).
 
-Параметры: `applicationId` `ru.smpspravochnik.app`, минимальная версия Android 7.0 (API 24). Номер версии — `versionName` / `versionCode` в `android/app/build.gradle`; при каждом выпуске поднимать оба (сейчас 7.00 / 700 — по `VERSION` справочника).
+Параметры: `applicationId` `ru.smp.spravochnik` — как у ранее установленного приложения 6.60, чтобы новые версии ставились обновлением (у iOS свой Bundle ID `ru.smpspravochnik.app`; `npx cap sync` идентификатор Android не меняет). Минимальная версия Android 7.0 (API 24). Обновление поверх старого встанет, только если APK подписан тем же ключом, что и прежний; иначе старое приложение нужно один раз удалить. Номер версии — `versionName` / `versionCode` в `android/app/build.gradle`; при каждом выпуске поднимать оба (сейчас 7.00 / 700 — по `VERSION` справочника).
 
 Иконка и заставка уже сгенерированы из `resources/icon.png`; пересоздать: `npx capacitor-assets generate --android`.
 
