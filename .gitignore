@@ -3,3 +3,4 @@ node_modules/
 xcuserdata/
 DerivedData/
 *.xcworkspace/xcuserdata/
+__pycache__/
