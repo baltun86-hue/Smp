@@ -101,6 +101,6 @@ npx cap open android
 
 ## Размещение веб-версии (PWA)
 
-Всё, что нужно для публикации, лежит в `www/`: `index.html`, `sw.js`, `manifest.webmanifest`, `_headers`, `icons/`.
-В настройках хостинга (Cloudflare Pages / Netlify) укажите каталог публикации `www`.
-Тот же каталог используется Capacitor (`webDir: "www"`).
+Сайт публикуется через GitHub Pages из **корня** репозитория (Pages не умеет брать папку `www`).
+Источник правды — `www/` (его же использует Capacitor). После каждой правки `www/index.html`
+запустите `tools/sync_pages.sh`: он копирует `index.html`, `sw.js`, `manifest.webmanifest`, `_headers`, `icons/` в корень.
