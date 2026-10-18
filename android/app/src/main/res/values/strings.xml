@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">СМП Справочник</string>
+    <string name="title_activity_main">СМП Справочник</string>
+    <string name="package_name">ru.smp.spravochnik</string>
+    <string name="custom_url_scheme">ru.smp.spravochnik</string>
+</resources>
