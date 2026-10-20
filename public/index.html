@@ -1,4 +1,58 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}/* правка 2026-10 (7.64): иконки интерфейса вместо эмодзи — свои SVG-маски (рисуются цветом текста, одинаково на всех платформах) */
+.ei{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.22em;background:currentColor;-webkit-mask:center/contain no-repeat;mask:center/contain no-repeat;flex-shrink:0}
+.i-pill{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='rotate(-45 12 12)'%3E%3Crect x='2.5' y='8' width='19' height='8' rx='4'/%3E%3Cpath d='M12 8v8'/%3E%3C/g%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='rotate(-45 12 12)'%3E%3Crect x='2.5' y='8' width='19' height='8' rx='4'/%3E%3Cpath d='M12 8v8'/%3E%3C/g%3E%3C/svg%3E")}
+.i-syringe{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 3.5l6 6M17.5 6.5l-9.8 9.8-3.7.7.7-3.7 9.8-9.8M9.5 11.5l3 3M3.5 20.5l3-3'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 3.5l6 6M17.5 6.5l-9.8 9.8-3.7.7.7-3.7 9.8-9.8M9.5 11.5l3 3M3.5 20.5l3-3'/%3E%3C/svg%3E")}
+.i-ambulance{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 16V8.5A1.5 1.5 0 0 1 4.5 7H14v9M14 10h3.5l3 3v3H3'/%3E%3Ccircle cx='7.5' cy='17.5' r='1.8'/%3E%3Ccircle cx='16.5' cy='17.5' r='1.8'/%3E%3Cpath d='M8.5 9v3M7 10.5h3'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 16V8.5A1.5 1.5 0 0 1 4.5 7H14v9M14 10h3.5l3 3v3H3'/%3E%3Ccircle cx='7.5' cy='17.5' r='1.8'/%3E%3Ccircle cx='16.5' cy='17.5' r='1.8'/%3E%3Cpath d='M8.5 9v3M7 10.5h3'/%3E%3C/svg%3E")}
+.i-folder{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z'/%3E%3C/svg%3E")}
+.i-star{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z' fill='%23000'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z' fill='%23000'/%3E%3C/svg%3E")}
+.i-star-o{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z'/%3E%3C/svg%3E")}
+.i-flask{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.5 3h5M10.5 3v6L5 18.5A2 2 0 0 0 6.7 21.5h10.6A2 2 0 0 0 19 18.5L13.5 9V3M8 15h8'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.5 3h5M10.5 3v6L5 18.5A2 2 0 0 0 6.7 21.5h10.6A2 2 0 0 0 19 18.5L13.5 9V3M8 15h8'/%3E%3C/svg%3E")}
+.i-jar{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 3.5h8M8.5 3.5V6L7 8.5v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-10L15.5 6V3.5M7 12h10'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 3.5h8M8.5 3.5V6L7 8.5v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-10L15.5 6V3.5M7 12h10'/%3E%3C/svg%3E")}
+.i-lungs{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v8.5M12 9.5c-1.5 1-2 1.8-3 1.8M12 9.5c1.5 1 2 1.8 3 1.8M9.2 8C6.6 9.5 4.5 14 4 18c-.2 1.4.9 2.3 2.2 1.8L9 18.5c.9-.4 1.5-1.2 1.5-2.2V12M14.8 8c2.6 1.5 4.7 6 5.2 10 .2 1.4-.9 2.3-2.2 1.8L15 18.5c-.9-.4-1.5-1.2-1.5-2.2V12'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v8.5M12 9.5c-1.5 1-2 1.8-3 1.8M12 9.5c1.5 1 2 1.8 3 1.8M9.2 8C6.6 9.5 4.5 14 4 18c-.2 1.4.9 2.3 2.2 1.8L9 18.5c.9-.4 1.5-1.2 1.5-2.2V12M14.8 8c2.6 1.5 4.7 6 5.2 10 .2 1.4-.9 2.3-2.2 1.8L15 18.5c-.9-.4-1.5-1.2-1.5-2.2V12'/%3E%3C/svg%3E")}
+.i-heart{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20.5C5 15.5 3 12 3 8.8A4.3 4.3 0 0 1 7.3 4.5c1.9 0 3.4 1 4.7 2.9 1.3-1.9 2.8-2.9 4.7-2.9A4.3 4.3 0 0 1 21 8.8C21 12 19 15.5 12 20.5z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20.5C5 15.5 3 12 3 8.8A4.3 4.3 0 0 1 7.3 4.5c1.9 0 3.4 1 4.7 2.9 1.3-1.9 2.8-2.9 4.7-2.9A4.3 4.3 0 0 1 21 8.8C21 12 19 15.5 12 20.5z'/%3E%3C/svg%3E")}
+.i-blood{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5c3.2 4 6 6.8 6 10.4a6 6 0 0 1-12 0c0-3.6 2.8-6.4 6-10.4zM12 12v4.5M9.8 14.2h4.4'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5c3.2 4 6 6.8 6 10.4a6 6 0 0 1-12 0c0-3.6 2.8-6.4 6-10.4zM12 12v4.5M9.8 14.2h4.4'/%3E%3C/svg%3E")}
+.i-hospital{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20.5v-14L12 3l8 3.5v14M2.5 20.5h19M12 8.5v6M9 11.5h6'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20.5v-14L12 3l8 3.5v14M2.5 20.5h19M12 8.5v6M9 11.5h6'/%3E%3C/svg%3E")}
+.i-siren{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 18v-6a5 5 0 0 1 10 0v6M5 18h14v3H5zM12 3v2M4.5 6.5l1.5 1.3M19.5 6.5L18 7.8'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 18v-6a5 5 0 0 1 10 0v6M5 18h14v3H5zM12 3v2M4.5 6.5l1.5 1.3M19.5 6.5L18 7.8'/%3E%3C/svg%3E")}
+.i-bolt{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2.5L5 13.5h6l-1 8 8-11h-6z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2.5L5 13.5h6l-1 8 8-11h-6z'/%3E%3C/svg%3E")}
+.i-chart{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 20v-7M12 20V5M19 20v-10'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 20v-7M12 20V5M19 20v-10'/%3E%3C/svg%3E")}
+.i-status{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='5' width='14' height='16' rx='2.6'/%3E%3Crect x='9' y='3' width='6' height='4' rx='1.3'/%3E%3Cpath d='M8.6 13.2l2.3 2.3 4.5-4.7'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='5' width='14' height='16' rx='2.6'/%3E%3Crect x='9' y='3' width='6' height='4' rx='1.3'/%3E%3Cpath d='M8.6 13.2l2.3 2.3 4.5-4.7'/%3E%3C/svg%3E")}
+.i-cards{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z'/%3E%3Cpath d='M14 3v4h4M9 12h6M9 16h6'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z'/%3E%3Cpath d='M14 3v4h4M9 12h6M9 16h6'/%3E%3C/svg%3E")}
+.i-brain{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 4.5a3 3 0 0 0-3 3v.3A3 3 0 0 0 4.5 11a3 3 0 0 0 1 2.2 3.2 3.2 0 0 0 3.5 5.3h.5V4.6M15 4.5a3 3 0 0 1 3 3v.3a3 3 0 0 1 1.5 3.2 3 3 0 0 1-1 2.2 3.2 3.2 0 0 1-3.5 5.3h-.5V4.6M9.5 9.5H8M14.5 9.5H16M9.5 13.5H8.5M14.5 13.5h1'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 4.5a3 3 0 0 0-3 3v.3A3 3 0 0 0 4.5 11a3 3 0 0 0 1 2.2 3.2 3.2 0 0 0 3.5 5.3h.5V4.6M15 4.5a3 3 0 0 1 3 3v.3a3 3 0 0 1 1.5 3.2 3 3 0 0 1-1 2.2 3.2 3.2 0 0 1-3.5 5.3h-.5V4.6M9.5 9.5H8M14.5 9.5H16M9.5 13.5H8.5M14.5 13.5h1'/%3E%3C/svg%3E")}
+.i-pain{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 10l2 1-2 1M16 10l-2 1 2 1M8.5 16.5c1-1.4 2.2-2 3.5-2s2.5.6 3.5 2'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 10l2 1-2 1M16 10l-2 1 2 1M8.5 16.5c1-1.4 2.2-2 3.5-2s2.5.6 3.5 2'/%3E%3C/svg%3E")}
+.i-drop{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5c3.2 4 6 6.8 6 10.4a6 6 0 0 1-12 0c0-3.6 2.8-6.4 6-10.4z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5c3.2 4 6 6.8 6 10.4a6 6 0 0 1-12 0c0-3.6 2.8-6.4 6-10.4z'/%3E%3C/svg%3E")}
+.i-compass{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M15.5 8.5l-2 5-5 2 2-5z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M15.5 8.5l-2 5-5 2 2-5z'/%3E%3C/svg%3E")}
+.i-fire{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.4 2.2-4.6.2 1.4 1 2.2 1.8 2.6C11 8.5 11.2 5.5 12 3z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.4 2.2-4.6.2 1.4 1 2.2 1.8 2.6C11 8.5 11.2 5.5 12 3z'/%3E%3C/svg%3E")}
+.i-baby{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12.5' r='8'/%3E%3Cpath d='M9 11.5v.01M15 11.5v.01M9.5 15.5c1.4 1 3.6 1 5 0M12 4.5c.6-1.6 2.2-2 3.2-1.2'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12.5' r='8'/%3E%3Cpath d='M9 11.5v.01M15 11.5v.01M9.5 15.5c1.4 1 3.6 1 5 0M12 4.5c.6-1.6 2.2-2 3.2-1.2'/%3E%3C/svg%3E")}
+.i-child{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='7.5'/%3E%3Cpath d='M9 12.5v.01M15 12.5v.01M9.5 16c1.4 1 3.6 1 5 0M5.5 10C6.5 6 9 4.5 12 4.5s5.5 1.5 6.500 5.500'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='7.5'/%3E%3Cpath d='M9 12.5v.01M15 12.5v.01M9.5 16c1.4 1 3.6 1 5 0M5.5 10C6.5 6 9 4.5 12 4.5s5.5 1.5 6.500 5.500'/%3E%3C/svg%3E")}
+.i-preg{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11.5' cy='4.5' r='2'/%3E%3Cpath d='M11.5 8c-3 0-4 2.5-3.5 5 .3 1.8 1 2.7 1 4.5V21M11.5 8c3.5.5 5 3.5 3.5 7-.8 1.8-2 2-3.5 2'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11.5' cy='4.5' r='2'/%3E%3Cpath d='M11.5 8c-3 0-4 2.5-3.5 5 .3 1.8 1 2.7 1 4.5V21M11.5 8c3.5.5 5 3.5 3.5 7-.8 1.8-2 2-3.5 2'/%3E%3C/svg%3E")}
+.i-beer{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 7h9v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zM15 9h2.5a1.5 1.5 0 0 1 1.5 1.500v3a1.500 1.500 0 0 1-1.500 1.500H15M9 11v5M12 11v5'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 7h9v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zM15 9h2.5a1.5 1.5 0 0 1 1.5 1.500v3a1.500 1.500 0 0 1-1.500 1.500H15M9 11v5M12 11v5'/%3E%3C/svg%3E")}
+.i-steth{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3v6a4 4 0 0 0 8 0V3M10 13v2a4.500 4.500 0 0 0 9 0v-1.500'/%3E%3Ccircle cx='19' cy='12' r='1.800'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3v6a4 4 0 0 0 8 0V3M10 13v2a4.500 4.500 0 0 0 9 0v-1.500'/%3E%3Ccircle cx='19' cy='12' r='1.800'/%3E%3C/svg%3E")}
+.i-map{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6.500l6-2.500 6 2.500 6-2.500v13.500l-6 2.500-6-2.500-6 2.500zM9 4v13.500M15 6.500V20'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6.500l6-2.500 6 2.500 6-2.500v13.500l-6 2.500-6-2.500-6 2.500zM9 4v13.500M15 6.500V20'/%3E%3C/svg%3E")}
+.i-search{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='6.500'/%3E%3Cpath d='M16 16l4.500 4.500'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='6.500'/%3E%3Cpath d='M16 16l4.500 4.500'/%3E%3C/svg%3E")}
+.i-book{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5.500A2 2 0 0 1 6 3.500h5.500v16.500H6A2 2 0 0 0 4 22zM20 5.500a2 2 0 0 0-2-2h-5.500v16.500H18a2 2 0 0 1 2 2z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5.500A2 2 0 0 1 6 3.500h5.500v16.500H6A2 2 0 0 0 4 22zM20 5.500a2 2 0 0 0-2-2h-5.500v16.500H18a2 2 0 0 1 2 2z'/%3E%3C/svg%3E")}
+.i-timer{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13.500' r='7'/%3E%3Cpath d='M12 13.500V9.800M9.500 3h5M12 3v3.400M18.400 6.200l1.400-1.400'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13.500' r='7'/%3E%3Cpath d='M12 13.500V9.800M9.500 3h5M12 3v3.400M18.400 6.200l1.400-1.400'/%3E%3C/svg%3E")}
+.i-pause{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.500 5v14M15.500 5v14' stroke-width='3'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.500 5v14M15.500 5v14' stroke-width='3'/%3E%3C/svg%3E")}
+.i-play{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4.500l12 7.500-12 7.500z' fill='%23000'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4.500l12 7.500-12 7.500z' fill='%23000'/%3E%3C/svg%3E")}
+.i-metro{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 21l2-17h4l2 17zM12 14l4-7M7 21h10'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 21l2-17h4l2 17zM12 14l4-7M7 21h10'/%3E%3C/svg%3E")}
+.i-ban{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M5.600 5.600l12.800 12.800'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M5.600 5.600l12.800 12.800'/%3E%3C/svg%3E")}
+.i-alert{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.500l9.500 16.500h-19zM12 10v4.500M12 17.500v.01' stroke-width='2.200'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.500l9.500 16.500h-19zM12 10v4.500M12 17.500v.01' stroke-width='2.200'/%3E%3C/svg%3E")}
+.i-okc{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.300l2.800 2.800L16.200 9.300'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.300l2.800 2.800L16.200 9.300'/%3E%3C/svg%3E")}
+.i-bulb{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.7.600 1 1.300 1 2.100h5c0-.8.300-1.500 1-2.100A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.7.600 1 1.300 1 2.100h5c0-.8.300-1.500 1-2.100A6 6 0 0 0 12 3z'/%3E%3C/svg%3E")}
+.i-target{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cpath d='M12 12v.01' stroke-width='3'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cpath d='M12 12v.01' stroke-width='3'/%3E%3C/svg%3E")}
+.i-sun{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2.500v2.500M12 19v2.500M2.500 12H5M19 12h2.500M5.300 5.300l1.800 1.800M16.900 16.900l1.800 1.800M5.300 18.700l1.800-1.800M16.900 7.100l1.800-1.800'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2.500v2.500M12 19v2.500M2.500 12H5M19 12h2.500M5.300 5.300l1.800 1.800M16.900 16.900l1.800 1.800M5.300 18.700l1.800-1.800M16.900 7.100l1.800-1.800'/%3E%3C/svg%3E")}
+.i-moon{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 14.500A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 14.500A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z'/%3E%3C/svg%3E")}
+.i-head{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='5'/%3E%3Cpath d='M5 21c.8-3.500 3.500-5.500 7-5.500s6.200 2 7 5.500'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='5'/%3E%3Cpath d='M5 21c.8-3.500 3.500-5.500 7-5.500s6.200 2 7 5.500'/%3E%3C/svg%3E")}
+.i-spine{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M8.500 6.500h7M8 10.500h8M8.500 14.500h7M9.500 18.500h5'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M8.500 6.500h7M8 10.500h8M8.500 14.500h7M9.500 18.500h5'/%3E%3C/svg%3E")}
+.i-arm{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 19l7-7M12 12l6-6M16.500 5.500l2-2 2 2-2 2zM3.500 18.500l2 2'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 19l7-7M12 12l6-6M16.500 5.500l2-2 2 2-2 2zM3.500 18.500l2 2'/%3E%3C/svg%3E")}
+.i-leg{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3.500h4l1 7-3 .5 2.500 9H9.500L8.500 11z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3.500h4l1 7-3 .5 2.500 9H9.500L8.500 11z'/%3E%3C/svg%3E")}
+.i-hand{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 12V6a1.200 1.200 0 0 1 2.400 0v5M10.400 11V4.500a1.200 1.200 0 0 1 2.400 0V11M12.800 11V5.500a1.200 1.200 0 0 1 2.400 0V12M15.200 12v-4a1.200 1.200 0 0 1 2.400 0v6c0 4-2.500 7-6.600 7-3 0-4.700-1.500-6-4l-1-2.500a1.300 1.300 0 0 1 2.200-1.200L8 14'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 12V6a1.200 1.200 0 0 1 2.400 0v5M10.400 11V4.500a1.200 1.200 0 0 1 2.400 0V11M12.800 11V5.500a1.200 1.200 0 0 1 2.400 0V12M15.200 12v-4a1.200 1.200 0 0 1 2.400 0v6c0 4-2.500 7-6.600 7-3 0-4.700-1.500-6-4l-1-2.500a1.300 1.300 0 0 1 2.200-1.200L8 14'/%3E%3C/svg%3E")}
+.i-down{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v15M6.500 13.500L12 19l5.500-5.500'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v15M6.500 13.500L12 19l5.500-5.500'/%3E%3C/svg%3E")}
+.i-sos{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='3.5'/%3E%3Cpath d='M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='3.5'/%3E%3Cpath d='M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9'/%3E%3C/svg%3E")}
+.i-info{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5.500M12 7.800v.01' stroke-width='2.2'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5.500M12 7.800v.01' stroke-width='2.2'/%3E%3C/svg%3E")}
+.scl-ph-icon .ei,.scl-inf-icon .ei,.burn-zone-ic .ei{width:1.6em;height:1.6em}
+.q-chip span .ei{width:1.25em;height:1.25em}
+.btn-mini .ei,.cpr-b .ei,.ea-open .ei,.kitchip .ei{margin-right:.25em}
+</style></head><body>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -975,7 +1029,7 @@ header{box-shadow:0 4px 16px rgba(0,0,0,.18)}
   border:1px solid var(--line);border-left:4px solid var(--accent)}
 .stepn .cond{flex:0 0 auto;font-size:var(--fs-12);font-weight:700;text-transform:uppercase;
   letter-spacing:.4px;color:var(--muted);display:flex;align-items:center;gap:5px}
-.stepn .cond::before{content:'▶';font-size:9px;color:var(--accent);flex-shrink:0}
+.stepn .cond::before{content:'<i class="ei i-play"></i>';font-size:9px;color:var(--accent);flex-shrink:0}
 .stepn .act{flex:1 1 auto;font-size:var(--fs-14-5);font-weight:600;color:var(--ink);
   line-height:1.45;padding-left:14px}
 .stepn .lk{color:var(--accent);cursor:pointer;border-bottom:1px dotted var(--accent)}
@@ -1983,8 +2037,8 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 <header>
   <div class="hrow">
     <h1 id="brandHome" title="На главный экран">СМП Справочник <span class="ver" id="ver"></span></h1>
-    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему">☀️</button>
-    <button class="gear" id="gear" title="О программе">ℹ️</button>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><i class="ei i-sun"></i></button>
+    <button class="gear" id="gear" title="О программе"><i class="ei i-info"></i></button>
   </div>
   <div class="srow" style="position:relative">
     <input id="q" placeholder="Поиск: препарат, алгоритм, код МКБ, шкала, шаблон" autocomplete="off">
@@ -2013,7 +2067,7 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
   <button type="button" data-tab="tabEcg"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12.5h4.2l2.1-6.3 3.9 12.1 2.9-8 1.6 2.2H22"/></svg>ЭКГ</button>
   <button type="button" data-tab="home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></svg>Ещё</button>
 </nav>
-<button type="button" class="cpr-mini" id="cprMini" hidden>⏱ <b id="cprMiniT">00:00</b></button>
+<button type="button" class="cpr-mini" id="cprMini" hidden><i class="ei i-timer"></i> <b id="cprMiniT">00:00</b></button>
 
 <main id="list"></main>
 
@@ -2049,7 +2103,7 @@ function applyTheme(){
   document.documentElement.setAttribute('data-theme',t);
   const btn=document.getElementById('themeToggle');
   if(btn){
-    btn.textContent=t==='dark'?'🌙':'☀️';
+    btn.innerHTML=t==='dark'?'<i class="ei i-moon"></i>':'<i class="ei i-sun"></i>';
     btn.title=t==='dark'?'Тема: тёмная — нажмите для светлой':'Тема: светлая — нажмите для тёмной';
   }
 }
@@ -2072,7 +2126,7 @@ const ICD10={"version":"МКБ-10","classes":[{"name":"I. Инфекционны
 /* правка 2026-10: развёрнутая ЭКГ — 50 мм/с (подпись 12-канальной карты и шторки карточки) */
 const ECG_PATTERNS=[{"id":"norm","label":"Норма","title":"Синусовый ритм (норма)","signs":["ЧСС 60–90 в мин (Горячев; > 90 — тахикардия, в других источниках до 100), ритм правильный","Зубец P перед каждым QRS","PR 0,12–0,20 с (3–5 мм)","QRS 0,06–0,10 с (≥ 0,12 с — уширен)","T положительный в I, II, V4–V6"],"warn":""},{"id":"sa","label":"СА-блокада","title":"СА-блокада II степени","signs":["Выпадение целого комплекса PQRST","Пауза ≈ 2 × нормальный R–R (при выпадении 2–3 циклов — в 3–4 раза)","При частых выпадениях — замещающие ритмы"],"warn":""},{"id":"avb1","label":"АВ-бл.I","title":"АВ-блокада I степени","signs":["P–Q > 0,20 с (более 1 большой клетки)","Все зубцы P проведены","ЧСС нормальная"],"warn":""},{"id":"avb2m","label":"АВ-бл.II Мобитц1","title":"АВ-блокада II ст. Мобитц I (Венкебах)","signs":["Прогрессивное удлинение P–Q от цикла к циклу","Затем выпадение QRS (периодика Самойлова–Венкебаха)","После паузы P–Q снова короткий; пауза меньше удвоенного самого короткого R–R (Горячев)"],"warn":""},{"id":"avb2m2","label":"АВ-бл.II Мобитц2","title":"АВ-блокада II ст. Мобитц II","signs":["P–Q постоянный (норма или удлинён)","Внезапное выпадение QRS при сохранённом P; проведение 2:1 тип блокады не определяет, ≥ 3:1 — блокада высокой степени (Горячев, Нифонтов)","Высокий риск полной АВ-блокады и асистолии"],"warn":"Высокий риск асистолии, подготовка к ЭКС. ⚠ Требует проверки: по МОССМП атропин малоэффективен (допамин/адреналин)"},{"id":"avb3","label":"АВ-бл.III","title":"АВ-блокада III ст. (полная)","signs":["Полная диссоциация P и QRS","Предсердия — синусовый ритм 60–90","Желудочки — узкий ритм 40–60 (проксимальный блок) или широкий менее 40 (дистальный; по Горячеву 40–45)","ЧСС очень редкая"],"warn":"Атропин 0,5–1 мг в/в, повтор каждые 3–5 мин до 3 мг; при стойкой брадикардии, нестабильности или приступах МЭС — временная ЭКС (бригады АиР, вне рамок линейной бригады), при невозможности — Допамин 5–15 мкг/кг/мин (МОССМП, «Кардиология», п.9.2)"},{"id":"rbbb","label":"БПНПГ","title":"Блокада правой ножки пучка Гиса","signs":["QRS ≥ 0,12 с (неполная блокада — 0,10–0,11 с)","В V1–V2 — rsR' или rSR' (М-образный, «уши кролика»)","В I, aVL, V5–V6 — широкий зазубренный S","T инвертирован в V1–V2"],"warn":""},{"id":"lbbb","label":"БЛНПГ","title":"Блокада левой ножки пучка Гиса","signs":["QRS ≥ 0,12 с (неполная блокада — 0,10–0,11 с)","В I, aVL, V5–V6 — широкий R без q","В V1–V2 — QS или rS","Дискордантный ST и T","Впервые возникшая БЛНПГ + боль = ОИМ до исключения"],"warn":"Новая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения (Мурашко; МОССМП)"},{"id":"lah","label":"БПВЛН","title":"Блокада передне-верхней ветви левой ножки","signs":["Резкое отклонение ЭОС влево (α от −30° до −90°; по Нифонтову строже — от −45°)","В I, aVL — высокий R с небольшим q","В II, III, aVF — глубокий S","QRS не уширен или незначительно"],"warn":""},{"id":"lph","label":"БЗНЛН","title":"Блокада задне-нижней ветви левой ножки","signs":["Отклонение ЭОС вправо (α > +120°)","В I, aVL — глубокий S; в III, aVF — высокий R","QRS не уширен"],"warn":""},{"id":"wpw","label":"WPW","title":"Синдром WPW (Вольфа–Паркинсона–Уайта)","signs":["P–Q < 0,12 с","QRS уширен (> 0,10 с, часто ≥ 0,12 с) за счёт дельта-волны","Дельта-волна в начале QRS","При ФП — очень частый ритм, риск ФЖ"],"warn":"При WPW с ФП избегать верапамил, дилтиазем, β-блокаторы и дигоксин (Нифонтов: «потенциально опасны» при предвозбуждении); аденозин — по ESC 2019; дигоксин и лидокаин противопоказаны (Хэмптон, ответ 136; лидокаин в книгах Горячева и Нифонтова при WPW не упомянут). При нестабильности — электрическая кардиоверсия (ESC 2019, Нифонтов)"},{"id":"lown","label":"CLC","title":"Синдром CLC (Клерка–Леви–Кристеско)","signs":["P–Q < 0,12 с","QRS не деформирован, дельта-волны нет","Склонность к пароксизмальным тахикардиям; диагноз — только при документированных пароксизмах (Горячев)"],"warn":""},{"id":"stemi","label":"STEMI","title":"ОИМ с подъёмом ST","signs":["Подъём ST в ≥ 2 смежных отведениях: ≥ 2 мм у мужчин или ≥ 1,5 мм у женщин в V2–V3; ≥ 1 мм в остальных отведениях","Дугообразный (выпуклый вверх) ST","Реципрокная депрессия в оппозитных отведениях","Позже — патологический Q (> 0,03 с и ≥ 25% R или > 3 мм; QS при трансмуральном), отрицательный T"],"warn":"Тромболизис Фортелизином или ЧКВ — время критично"},{"id":"nstemi","label":"NSTEMI","title":"NSTEMI / Нестабильная стенокардия","signs":["Патологического Q может не быть (при нетрансмуральном ИМ возможен Qr)","Глубокая депрессия ST и отрицательный T","Изменения сохраняются дольше, чем при стенокардии покоя"],"warn":"ОКС — двойная антиагрегантная терапия"},{"id":"peri","label":"Перикардит","title":"Острый перикардит","signs":["Диффузный подъём ST (вогнутый вверх) во многих отведениях кроме aVR и V1","Позже — отрицательный T","Нет реципрокных изменений","Нет патологического Q"],"warn":""},{"id":"brugada","label":"Бругада","title":"Синдром Бругада","signs":["Coved-подъём ST ≥ 2 мм в V1–V2 с переходом в отрицательный T (тип 1)","Элевация точки J, без динамики","БПНПГ-подобная морфология","Риск ФЖ и внезапной смерти"],"warn":"Риск ФЖ — избегать препаратов, блокирующих натриевые каналы (новокаинамид)"},{"id":"hypo","label":"Гипокалиемия","title":"Гипокалиемия на ЭКГ","signs":["Депрессия ST, сглаженность или инверсия T","Появление волны U (после T)","Удлинение QT","Может провоцировать пируэт-тахикардию (Torsades de Pointes)"],"warn":""},{"id":"dig","label":"Дигиталис","title":"Дигиталисная интоксикация / гликозиды","signs":["«Корытообразное» смещение ST вниз (выпуклостью вниз) в V4–V6","Укорочение QT","Отрицательный или двухфазный T","Различные аритмии (АВ-блокады, бигеминия)"],"warn":"Дигоксин противопоказан при WPW (дополнительных путях), ЖТ и гипертрофической кардиомиопатии с обструкцией выносящего тракта (Нифонтов)"},{"id":"ajr","label":"Ритм АВ-соед.","title":"Ритм АВ-соединения (замещающий узловой ритм)","signs":["ЧСС 40–60 в мин, QRS узкий (≤ 0,10 с)","Верхняя часть соединения: отрицательный Р ПЕРЕД QRS, короткий P–Q","Средняя часть: Р не виден (наслаивается на QRS)","Нижняя часть: отрицательный Р ПОСЛЕ QRS (в начале ST)"],"warn":""},{"id":"psvt","label":"Пароксизм НЖТ","title":"Пароксизм наджелудочковой (АВ-узловой) тахикардии","signs":["Зубцы Р не видны (при типичной АВ-узловой тахикардии наслаиваются на QRS; при атипичной — отрицательный P на ST)","Интервалы R–R одинаковые, резко укорочены","ЧСЖ обычно 140–240 в мин (Горячев: чаще > 160, нередко 200–220)","QRS обычно узкий; уширен при блокаде ножки пучка Гиса"],"warn":"ЧСЖ > 220 у молодых — заподозрить WPW: верапамил, дигоксин и β-блокаторы потенциально опасны (Нифонтов), не вводить при подозрении на WPW с ФП"},{"id":"afib","label":"ФП","title":"Фибрилляция предсердий (мерцательная аритмия)","signs":["Зубцы Р отсутствуют","Волны f — постоянно меняются по амплитуде и форме","Интервалы R–R абсолютно нерегулярны («неправильно неправильный» ритм)","При ЧСЖ > 150 в мин нерегулярность может быть малозаметна"],"warn":"При ФП на фоне WPW избегать верапамил, дилтиазем, аденозин; дигоксин противопоказан (ESC 2019; Хэмптон, ответ 136)"},{"id":"aflutter","label":"ТП","title":"Трепетание предсердий","signs":["Волны F «пилообразные», одинаковой формы, частота 200–320 в мин (Горячев; Нифонтов 240–350)","Правильная (ритмичная) форма: R–R одинаковый (фиксированная степень АВ-блокады)","Неправильная форма: R–R разный при регулярных волнах F","Проведение 2:1 → ЧСЖ ≈ 150 в мин, 3:1 → ≈ 100 в мин"],"warn":"При ТП/ФП на фоне WPW верапамил, дилтиазем, β-блокаторы и дигоксин опасны — не вводить (Нифонтов: «потенциально опасны»; ESC 2019)"},{"id":"vt","label":"Пароксизм ЖТ","title":"Пароксизм желудочковой тахикардии","signs":["ЧСС чаще 130–200, до 220 в мин (Горячев: обычно до 160, редко 180–200; Нифонтов 130–220), ритм чаще правильный","Комплексы QRS одинаковой формы, уширены (> 0,14 с)","АВ-диссоциация, редкие «захваченные» синусовые комплексы","Практически непрерывная кривая, нет изолинии"],"warn":"Высокий риск перехода в ФЖ и клиническую смерть"},{"id":"vf","label":"ФЖ","title":"Фибрилляция желудочков","signs":["Хаотичные комплексы разной формы, амплитуды и продолжительности","Зубцы P, Q, R, S, T не идентифицируются","Изоэлектрическая линия отсутствует","Интервалы R–R разные, без кратности и регулярности"],"warn":"Немедленная дефибрилляция + СЛР — см. протокол «Остановка кровообращения»"},{"id":"extra","label":"Экстрасистолия","title":"Экстрасистолия (наджелудочковая и желудочковая)","signs":["Преждевременный комплекс относительно основного ритма","Наджелудочковая: узкий QRS, неполная компенсаторная пауза","Желудочковая: широкий QRS без предшествующего Р, полная компенсаторная пауза","Короче интервал сцепления → выше риск ЖТ/ФЖ"],"warn":""},{"id":"sgarbossa","label":"ИМ на фоне БЛНПГ","title":"Критерии Sgarbossa–Smith (ИМ на фоне БЛНПГ)","signs":["Конкордантный подъём ST ≥ 1 мм в отведении с положительным QRS — 5 баллов","Конкордантная депрессия ST ≥ 1 мм в V1–V3 — 3 балла","Дискордантный подъём ST ≥ 5 мм в отведении с отрицательным QRS — 2 балла (оригинал)","Критерий Смита (2012): подъём ST ≥ 1 мм с ST/S ≤ −0,25 (≥ 25% глубины S) в любом отведении вместо критерия ≥ 5 мм; достаточно одного критерия"],"warn":"Впервые/остро возникшая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения"}];
 const REFERENCE=[["Пожилой возраст (65+)",[["Общий принцип",["Начинать с половины обычной взрослой дозы, вводить медленнее, оценивать эффект до повторного введения","Причины: снижение клубочковой фильтрации, уменьшение объёма распределения, полипрагмазия"]],["Снизить дозу вдвое, вводить медленно",["Морфин, фентанил, трамадол — угнетение дыхания, длительная седация","Сибазон, феназепам — парадоксальное возбуждение, падения, задержка мочи","Аминазин — выраженная гипотензия, экстрапирамидные реакции","Метоклопрамид — риск экстрапирамидных расстройств выше"]],["Гипотензивные и нитраты — риск ортостаза",["Нитроспрей — контроль АД до и после, только лёжа или сидя","Каптоприл, моксонидин, нифедипин — снижать АД не более чем на 20–25% за первый час","Урапидил, эналаприлат — вводить дробно под контролем АД","Фуросемид — риск гиповолемии, гипокалиемии, ОПП; осторожно при стенозе устья аорты"]],["НПВС — осторожно или воздержаться",["Долак, анальгин — риск ОПП при обезвоживании, ЖКТ-кровотечения, декомпенсации ХСН","Механизм: при гиповолемии СКФ держится на простагландинах, расширяющих приносящую артериолу. НПВС их блокируют — фильтрация падает","«Тройной удар»: иАПФ или сартан + диуретик + НПВС. ОПП может развиться за 1–2 суток","Признаки гиповолемии: сухие слизистые, снижен тургор, тахикардия, ортостаз, капиллярное наполнение более 2 сек","При гиповолемии начинать с парацетамола; НПВС — только после восполнения объёма, однократно"]],["Особый контроль",["Атропин — задержка мочи при аденоме простаты, обострение глаукомы, спутанность","Димедрол — выраженный седативный и антихолинергический эффект; предпочесть хлоропирамин","Эуфиллин — тахиаритмии, судороги; доза ниже, введение медленное","Гепарин — выше риск кровотечения при низкой массе тела и ХБП","Инфузия — темп ниже: риск перегрузки объёмом и отёка лёгких при ХСН"]]]],["Дети",[["Жаропонижающие: когда снижать",["Здоровым детям — при температуре 38,5 °C и выше","При температуре 38 °C: дети до 3 месяцев, с отягощённым преморбидным фоном, с судорожным синдромом в анамнезе","Парацетамол 15 мг/кг внутрь или ректально — препарат выбора (макс. 60 мг/кг/сут)","Физические методы охлаждения — детям до 12 лет","ВАЖНО: физические методы охлаждения противопоказаны при бледной гипертермии"]],["Чего детям не давать",["При гриппе метамизол натрия и ацетилсалициловая кислота противопоказаны (Алгоритмы СМП)","Метамизол — риск агранулоцитоза; клинрекомендации по ОРВИ у детей его не рекомендуют","Ацетилсалициловая кислота — синдром Рея; с жаропонижающей целью не применяется","Кеторолак (Долак) — с 16 лет","Нимесулид детям не рекомендован"]],["Дыхательная недостаточность — ЧДД выше нормы",["До 1 года — более 50 в минуту","1–5 лет — более 40 в минуту","Старше 5 лет — более 30 в минуту","Также: одышка в покое или при беспокойстве, участие вспомогательной мускулатуры, втяжение уступчивых мест грудной клетки","SpO2 менее 95% — показание к оксигенотерапии"]],["Госпитализация ребёнка обязательна",["Возраст до 1 месяца с лихорадкой","Неспособность пить или сосать грудь; сонливость или отсутствие сознания","Судороги, в том числе сложные фебрильные (более 15 минут или повторные за сутки)","Центральный цианоз, симптомы респираторного дистресса, тяжёлое обезвоживание","Геморрагическая сыпь на коже, рвота, отказ от еды и питья","Лихорадка 5 суток подряд и более или отсутствие эффекта от терапии","Отягощённый преморбидный фон, тяжёлое или осложнённое течение"]],["Расчёт дозы",["Большинство препаратов — по массе тела (мг/кг)","Тиамин, пиридоксин, хлоропирамин, карбоксим, ацизол — по 0,1 мл на год жизни","Адреналин при реанимации: 0,01 мг/кг в/в; развести 1 мл в 9 мл физраствора (1:10000), расчёт 0,1 мл на год жизни","Эндотрахеально адреналин — 0,1 мг/кг (доза в 10 раз выше внутривенной)","Диазепам: разовая максимальная до 5 лет — 5 мг, старше 5 лет — 10 мг; в/в медленно не менее 2 минут"]]]],["Беременность",[["Обезболивание и жаропонижение",["Парацетамол 500–1000 мг внутрь — препарат выбора при боли и лихорадке (Алгоритмы СМП)","НПВС (Долак, анальгин) — избегать, особенно в третьем триместре: риск преждевременного закрытия артериального протока","Морфин, фентанил — только по строгим показаниям, готовность к респираторной поддержке новорождённого"]],["Судороги у беременной",["Диазепам 10 мг (2 мл) в/венно","При эклампсии — магния сульфат; экстренная госпитализация в приёмный покой гинекологического отделения","Положение на левом боку для профилактики аортокавальной компрессии"]],["С осторожностью или избегать",["иАПФ (эналаприлат, каптоприл) — противопоказаны: фетотоксичность","Нитроглицерин, урапидил — под контролем АД, риск гипотензии и снижения плацентарного кровотока","Тромболитики — относительное противопоказание, решение с врачом","Тетрациклины, фторхинолоны — противопоказаны","Беременность на любом сроке и послеродовый период — группа риска тяжёлого течения ОРВИ"]]]],["Общие правила",[["Расчёт дозы у взрослых",["При ожирении большинство препаратов считают по идеальной, а не фактической массе тела","Исключение — гидрофильные препараты и инфузионная терапия: расчёт по фактической массе","Разовая доза у ребёнка не должна превышать взрослую разовую"]],["Почечная недостаточность",["НПВС — избегать при ХБП, гиповолемии, на фоне иАПФ и диуретиков","Морфин — метаболиты накапливаются, дозу снижать, интервал увеличивать","Гепарин — выше риск кровотечения","Магния сульфат — риск передозировки, контроль сухожильных рефлексов и диуреза"]],["Печёночная недостаточность",["Парацетамол — снизить дозу, максимум ниже обычного","Бензодиазепины, морфин — удлинение эффекта, риск энцефалопатии","Лидокаин — снижен клиренс, риск токсичности"]],["Перед введением",["Сверить концентрацию с маркировкой на ампуле — фасовка у разных производителей отличается","Уточнить аллергоанамнез и препараты, принятые пациентом до приезда бригады","При в/в введении контролировать скорость: магния сульфат, эуфиллин, амиодарон, верапамил вводят медленно","Расчёт по этому приложению — ориентир, а не замена инструкции и протокола станции"]]]]];
-const VERSION="7.63 (20.10.2026)";
+const VERSION="7.64 (20.10.2026)";
 
 /* ---------- PWA: манифест и офлайн-кэш ---------- */
 /* На хостинге (http/https) используются настоящие файлы manifest.webmanifest и sw.js
@@ -2346,10 +2400,10 @@ function itemHTML(d,q,grouped){
   const st=ageStatus(d);
   // Собираем теги
   let tags='';
-  if(st.k==='ban')tags+='<span class="itag it-ban">⛔ Не по возрасту</span>';
-  else if(st.k==='narrow')tags+='<span class="itag it-warn">⚠ По узким показаниям</span>';
-  else if(d.det&&d.det.includes('НЕ ДО'))tags+='<span class="itag it-ban">⛔ '+esc(d.det.split(';')[0])+'</span>';
-  else if(d.narrow)tags+='<span class="itag it-warn">⚠ По узким показаниям</span>';
+  if(st.k==='ban')tags+='<span class="itag it-ban"><i class="ei i-ban"></i> Не по возрасту</span>';
+  else if(st.k==='narrow')tags+='<span class="itag it-warn"><i class="ei i-alert"></i> По узким показаниям</span>';
+  else if(d.det&&d.det.includes('НЕ ДО'))tags+='<span class="itag it-ban"><i class="ei i-ban"></i> '+esc(d.det.split(';')[0])+'</span>';
+  else if(d.narrow)tags+='<span class="itag it-warn"><i class="ei i-alert"></i> По узким показаниям</span>';
   if(d.conflict)tags+='<span class="itag it-conflict">! Расхождение в инструкции</span>';
 
   // Подсветка и подсказка об источнике совпадения
@@ -2368,9 +2422,9 @@ function itemHTML(d,q,grouped){
       while(wordStart>0 && d.lat[wordStart-1]!==' ' && d.lat[wordStart-1]!==',') wordStart--;
       while(wordEnd<d.lat.length && d.lat[wordEnd]!==' ' && d.lat[wordEnd]!==',') wordEnd++;
       const matchedWord=d.lat.slice(wordStart,wordEnd).trim();
-      matchHint=`<div class="item-match">🔍 МНН: <span>${esc(matchedWord)}</span></div>`;
+      matchHint=`<div class="item-match"><i class="ei i-search"></i> МНН: <span>${esc(matchedWord)}</span></div>`;
     } else if(norm(d.g).includes(qn)){
-      matchHint=`<div class="item-match">🔍 Группа: <span>${esc(d.g)}</span></div>`;
+      matchHint=`<div class="item-match"><i class="ei i-search"></i> Группа: <span>${esc(d.g)}</span></div>`;
     }
   }
 
@@ -2477,18 +2531,18 @@ function render(){
         h3El.insertAdjacentElement('beforebegin',txt); txt.appendChild(h3El); txt.appendChild(hint);
         hint.textContent=cap0?cap0.textContent:'Признаки, критерии, тактика — по тапу';
         const th=document.createElement('div'); th.className='ecg-c-thumb'; th.setAttribute('aria-hidden','true');
-        if(svg0)th.appendChild(svg0.cloneNode(true)); else th.textContent='🗺';
+        if(svg0)th.appendChild(svg0.cloneNode(true)); else th.innerHTML='<i class="ei i-map"></i>';
         it.insertBefore(th,txt);
         /* правка 2026-10 (7.25): кнопку ⤢ в строке убрали (отвлекала от анимации) — она в шторке; метка анимации в строке */
         /* правка 2026-10 (7.29): срочность — по решению медредактора */
         if(ECG_CRIT.has(it.dataset.ecgKey)){ const cr=document.createElement('span'); cr.className='ecg-c-crit'; cr.textContent='Критично'; txt.insertBefore(cr,h3El); it.classList.add('ecg-crit'); }
-        if(it.querySelector(':scope > .ea-open[data-ea]')){ const tg=document.createElement('span'); tg.className='ecg-c-anim'; tg.textContent='▶ анимация'; txt.insertBefore(tg,hint); }
+        if(it.querySelector(':scope > .ea-open[data-ea]')){ const tg=document.createElement('span'); tg.className='ecg-c-anim'; tg.textContent='<i class="ei i-play"></i> анимация'; txt.insertBefore(tg,hint); }
         it.classList.add('ecg-compact');
         it.onclick=(e)=>{
           if(e.target.closest('.ecg-zoom-btn'))return;
           const dup=ECG_DUP[it.dataset.ecgKey];
           openEcgItemSheet(titleText,'<button type="button" class="ea-open ecg-zoom-in">'+FS_ICON+' На весь экран</button>'
-            +(dup?'<button type="button" class="ea-open ecg-xlink2">⚡ Экспресс-карта: тактика СМП</button>':'')+visHtml+bodyHtml+algoBtn(ECG_ALGO[it.dataset.ecgKey]));
+            +(dup?'<button type="button" class="ea-open ecg-xlink2"><i class="ei i-bolt"></i> Экспресс-карта: тактика СМП</button>':'')+visHtml+bodyHtml+algoBtn(ECG_ALGO[it.dataset.ecgKey]));
           const z=$('sheetIn').querySelector('.ecg-zoom-in'); if(z)z.onclick=()=>openEcgZoom(it);
           /* правка 2026-10 (7.25): анимация — первой кнопкой в шторке, «на весь экран» — рядом */
           const an=$('sheetIn').querySelector('.sh-body > .ea-open[data-ea]');
@@ -2692,10 +2746,10 @@ function stdHTML(group){
     // в МКБ-10 и без копирования — по запросу Рината от 14.09.2026).
     // Кнопка шаблона карты вызова осталась.
     const icdLine=c.icd?`<div class="std-icd">${esc(c.icd)}</div>`:'';
-    const cardBtn=`<button type="button" class="btn-mini" onclick="goToCardTemplate('${esc(c.t)}')">📝 Карта</button>`
+    const cardBtn=`<button type="button" class="btn-mini" onclick="goToCardTemplate('${esc(c.t)}')"><i class="ei i-cards"></i> Карта</button>`
       /* правка 2026-10 (7.01): избранное и таймер СЛР прямо в заголовке алгоритма */
-      +`<button type="button" class="btn-mini fav-mini${isFav('a',group,c.t)?' on':''}" data-fav-g="${esc(group)}" data-fav-t="${esc(c.t)}" aria-label="В избранное">${isFav('a',group,c.t)?'★':'☆'}</button>`
-      +(/СЛР|остановка кровообращения/i.test(c.t)?`<button type="button" class="btn-mini cpr-open">⏱ Таймер</button>`:'');
+      +`<button type="button" class="btn-mini fav-mini${isFav('a',group,c.t)?' on':''}" data-fav-g="${esc(group)}" data-fav-t="${esc(c.t)}" aria-label="В избранное">${isFav('a',group,c.t)?'<i class="ei i-star"></i>':'<i class="ei i-star-o"></i>'}</button>`
+      +(/СЛР|остановка кровообращения/i.test(c.t)?`<button type="button" class="btn-mini cpr-open"><i class="ei i-timer"></i> Таймер</button>`:'');
     h+=`<div class="item" data-cond="${esc(c.t)}" style="cursor:default">
       <div class="std-head"><div class="std-head-main"><h3>${esc(c.t)}</h3>${icdLine}</div><div class="std-actions">${cardBtn}</div></div>
       <div class="std">`;
@@ -2706,7 +2760,7 @@ function stdHTML(group){
         const inj=/ампул|амп\.|мл|мг\/мл|%\s*\d+\s*мл|раствор/i.test(n);
         /* правка 2026-10 (6.88): чип без карточки в DRUGS — неактивный, с подсказкой */
         const none=!resolveDrugs(n).length;
-        h+=`<span class="kitchip${none?' kit-none':''}" data-n="${esc(n)}"${none?' title="Нет карточки в справочнике — доза в шагах алгоритма"':''}>${inj?'💉':'💊'} ${esc(n.split(' (')[0])}</span>`;
+        h+=`<span class="kitchip${none?' kit-none':''}" data-n="${esc(n)}"${none?' title="Нет карточки в справочнике — доза в шагах алгоритма"':''}><i class="ei i-${inj?'syringe':'pill'}"></i> ${esc(n.split(' (')[0])}</span>`;
       });
       h+='</div>';
     }
@@ -2744,7 +2798,7 @@ function stdHTML(group){
       c.doses.forEach((d,i)=>{
         const calcId = `calc_${esc(c.t).replace(/[^a-zA-Z0-9]/g,'_')}_${i}`;
         h+=`<tr data-drug="${esc(d.drug)}" data-adult="${esc(d.adultDose)}" data-ped="${esc(d.pediatricDose)}" data-calc="${d.calcByWeight}" data-route="${esc(d.route)}">
-          <td class="drug-name">${esc(d.drug)}${infusKeyFor(d)?`<button type="button" class="inf-link" data-k="${infusKeyFor(d)}">💧 кап/мин</button>`:''}</td>
+          <td class="drug-name">${esc(d.drug)}${infusKeyFor(d)?`<button type="button" class="inf-link" data-k="${infusKeyFor(d)}"><i class="ei i-drop"></i> кап/мин</button>`:''}</td>
           <td>${esc(d.adultDose)}</td>
           <td>${esc(d.pediatricDose)}</td>
           <td>${esc(d.route)} ${d.repeat?'<br><small>'+esc(d.repeat)+'</small>':''}</td>
@@ -3118,7 +3172,7 @@ const LOCAL_STATUS=[
     ['Жалобы','Боль в поясничной области <сторона>, повышение температуры тела до <значение> °C, учащённое и/или болезненное мочеиспускание — указать по факту.'],
     ['Анамнез','Аналогичные эпизоды ранее <были / не было>; хронические заболевания почек, мочекаменная болезнь, сахарный диабет, иммунодефицит, беременность, нефростома или мочеточниковый стент — указать.'],
     ['Осмотр','Состояние <удовлетворительное / средней тяжести>, t тела <значение> °C, симптом поколачивания <положительный / отрицательный>, сторона <указать>. Диурез за сутки — <значение>. Живот мягкий, болезненность при пальпации — <указать>.'],
-    ['Эвакуация','Анурия; сахарный диабет, единственная почка, урологические импланты, иммунодефицит, беременность; тошнота и рвота; некупируемая боль; температура выше порога. ⚠ Порог температуры расходится: МОССМП п.1 (по аудиту) — 37,5 °C; таблица неотложной помощи и тактика — 38 °C. Уточнить по действующему тексту.'],
+    ['Эвакуация','Анурия; сахарный диабет, единственная почка, урологические импланты, иммунодефицит, беременность; тошнота и рвота; некупируемая боль; температура выше порога. ⚠︎ Порог температуры расходится: МОССМП п.1 (по аудиту) — 37,5 °C; таблица неотложной помощи и тактика — 38 °C. Уточнить по действующему тексту.'],
   ]},
   {t:'Острый цистит у женщин',icd:'N30.0',fields:[
     ['Жалобы','Частое болезненное мочеиспускание, резь при мочеиспускании, боль внизу живота, императивные позывы — указать по факту.'],
@@ -3631,7 +3685,7 @@ function updateDoses(conditionTitle){
         let capNote = '';
         if(mx && mx[2] === unit && !per && hi > num(mx[1])){
           hi = num(mx[1]); if(lo > hi) lo = hi;
-          capNote = `<br><small class="calc-na">⚠ не более ${mx[1]} ${unit}</small>`;
+          capNote = `<br><small class="calc-na"><i class="ei i-alert"></i> не более ${mx[1]} ${unit}</small>`;
         }
         const total = lo < hi ? `${lo}–${hi}` : `${hi}`;
         const perKg = loKg < hiKg ? `${loKg}–${hiKg}` : `${hiKg}`;
@@ -3677,11 +3731,11 @@ function renderDoseCalc(d, w, am, ds, st){
       if(wSource==='exact' && aSource==='exact')
         modeHtml = '<span class="cm-ok">✓ Вес и возраст введены</span>';
       else if(wSource==='exact' && aSource==='none')
-        modeHtml = '<span class="cm-warn">⚠ Возраст не введён — возрастные ограничения не проверены</span>';
+        modeHtml = '<span class="cm-warn"><i class="ei i-alert"></i> Возраст не введён — возрастные ограничения не проверены</span>';
       else if(wSource==='none' && aSource==='exact')
-        modeHtml = '<span class="cm-warn">⚠ Вес не введён — подставлен ориентировочный ≈' + fmt(wEst) + ' кг</span>';
+        modeHtml = '<span class="cm-warn"><i class="ei i-alert"></i> Вес не введён — подставлен ориентировочный ≈' + fmt(wEst) + ' кг</span>';
       else if(wSource==='exact' && aSource==='estimated')
-        modeHtml = '<span class="cm-warn">⚠ Возраст оценён по весу: ' + (ageEst?ageEst.label:'') + '</span>';
+        modeHtml = '<span class="cm-warn"><i class="ei i-alert"></i> Возраст оценён по весу: ' + (ageEst?ageEst.label:'') + '</span>';
       else if(wSource==='none' && aSource==='none')
         modeHtml = '<span class="cm-empty">↑ Введите вес пациента</span>';
     } else if(hasSw && !hasSag){
@@ -3827,7 +3881,7 @@ function renderDoseCalc(d, w, am, ds, st){
   let boxClass = exceeded ? 'b-ban' : (estimated ? 'b-warn' : 'b-ok');
   let out = `<div class="box ${boxClass}">
     <h4>Расчётная доза
-      ${exceeded ? ' <small>⚠ превышена ВРД</small>' : (estimated ? ' <small>(вес — оценка по возрасту)</small>' : '')}
+      ${exceeded ? ' <small><i class="ei i-alert"></i> превышена ВРД</small>' : (estimated ? ' <small>(вес — оценка по возрасту)</small>' : '')}
     </h4>`;
 
   const bigStyle = exceeded ? ' style="color:var(--ban)"' : '';
@@ -3854,7 +3908,7 @@ function renderDoseCalc(d, w, am, ds, st){
     out += `<div class="chain">В 1 ампуле (${fmt(d.amp)} мл): ${fmt(d.amp*(d.conc||1))} ${d.conc?concUnit(d):'ед'}</div>`;
 
   if(exceeded)
-    out += `<div class="chain" style="font-weight:700">⚠ Превышена высшая разовая доза (ВРД): не более ${fmt(maxS.val)} ${esc(maxS.unit)} за одно введение. Сверьте расчёт и инструкцию к препарату перед введением.</div>`;
+    out += `<div class="chain" style="font-weight:700"><i class="ei i-alert"></i> Превышена высшая разовая доза (ВРД): не более ${fmt(maxS.val)} ${esc(maxS.unit)} за одно введение. Сверьте расчёт и инструкцию к препарату перед введением.</div>`;
 
   out += `</div>`;
   h += out;
@@ -4041,7 +4095,7 @@ function doseSummaryHTML(d){
   if(d.fixed)rows.push(['Доза',d.fixed.txt,d.fixed.max?'Максимум: '+d.fixed.max:'']);
   if(d.fixedAdult)rows.push(['Взрослым',d.fixedAdult.txt,'']);
   if(d.minAge!=null&&d.minAge>=216){
-    rows.push(['Детям','⛔ '+det0,'','ban']);
+    rows.push(['Детям',det0,'','ban']);
   }else{
     const ds=d.dose, rng=ds?`${nc(ds.lo)}${ds.hi>ds.lo?'–'+nc(ds.hi):''} ${ds.unit}`:'';
     if(d.a45txt)rows.push(['Детям',d.a45txt,d.a45note||'']);
@@ -4064,7 +4118,7 @@ function hlDoses(html){
    (7.02: «пациент вызова» с автоподстановкой веса убран — риск перенести вес на следующего пациента) */
 /* кнопки в заголовках алгоритмов и таблицах доз */
 function stdWire(L){
-  L.querySelectorAll('.fav-mini').forEach(b=>b.onclick=()=>{favToggle('a',b.dataset.favG,b.dataset.favT);const on=isFav('a',b.dataset.favG,b.dataset.favT);b.classList.toggle('on',on);b.textContent=on?'★':'☆';});
+  L.querySelectorAll('.fav-mini').forEach(b=>b.onclick=()=>{favToggle('a',b.dataset.favG,b.dataset.favT);const on=isFav('a',b.dataset.favG,b.dataset.favT);b.classList.toggle('on',on);b.innerHTML=on?'<i class="ei i-star"></i>':'<i class="ei i-star-o"></i>';});
   L.querySelectorAll('.cpr-open').forEach(b=>b.onclick=cprOpen);
   L.querySelectorAll('.inf-link').forEach(b=>b.onclick=()=>goToInfusCalc(b.dataset.k));
   if(curStd)recentPush('g',curStd);
@@ -4084,14 +4138,14 @@ function isFav(t,a,b){return lsGet(FAV_KEY).includes(favKey(t,a,b));}
 function favToggle(t,a,b){const k=favKey(t,a,b);let f=lsGet(FAV_KEY);f=f.includes(k)?f.filter(x=>x!==k):[k,...f].slice(0,24);lsSet(FAV_KEY,f);}
 function recentPush(t,a,b){const k=favKey(t,a,b);lsSet(REC_KEY,[k,...lsGet(REC_KEY).filter(x=>x!==k)].slice(0,8));}
 function quickItem(k){const [t,a,b]=k.split('|');
-  if(t==='d'){const d=DRUGS.find(x=>x.n===a);return d?{k,ic:'💊',tx:splitDrugName(d.n).inn}:null;}
-  if(t==='a'){return STANDARDS[a]&&STANDARDS[a].some(c=>c.t===b)?{k,ic:'🚑',tx:b}:null;}
-  if(t==='g'){return STANDARDS[a]?{k,ic:'📂',tx:a}:null;}return null;}
+  if(t==='d'){const d=DRUGS.find(x=>x.n===a);return d?{k,ic:'<i class="ei i-pill"></i>',tx:splitDrugName(d.n).inn}:null;}
+  if(t==='a'){return STANDARDS[a]&&STANDARDS[a].some(c=>c.t===b)?{k,ic:'<i class="ei i-ambulance"></i>',tx:b}:null;}
+  if(t==='g'){return STANDARDS[a]?{k,ic:'<i class="ei i-folder"></i>',tx:a}:null;}return null;}
 function quickHTML(){
   const chips=arr=>arr.map(quickItem).filter(Boolean).map(i=>`<button type="button" class="q-chip" data-k="${esc(i.k)}"><span>${i.ic}</span>${esc(i.tx)}</button>`).join('');
   const fav=chips(lsGet(FAV_KEY)), rec=chips(lsGet(REC_KEY).filter(k=>!lsGet(FAV_KEY).includes(k)).slice(0,6));
   let h=`<div class="quick-top"><button type="button" class="q-big cpr-open">${HOME_ICONS.timer}<span>Таймер СЛР</span></button></div>`;
-  if(fav)h+=`<div class="sec">★ Избранное</div><div class="q-row">${fav}</div>`;
+  if(fav)h+=`<div class="sec"><i class="ei i-star"></i> Избранное</div><div class="q-row">${fav}</div>`;
   /* правка 2026-10 (7.18): кнопка «Очистить» — сброс списка «Недавние» (избранное не трогает) */
   if(rec)h+=`<div class="sec sec-rec">Недавние<button type="button" class="rec-clear" aria-label="Очистить недавние">Очистить</button></div><div class="q-row">${rec}</div>`;
   return h;
@@ -4136,28 +4190,28 @@ function cprTick(){
   const mini=$('cprMini');if(mini){mini.hidden=!(CPR.run||CPR.acc)||$('sheet').classList.contains('on')&&!!$('cprBox');$('cprMiniT').textContent=cprFmt(now);}
   const box=$('cprBox');if(!box)return;
   const la=CPR.adr.length?now-CPR.adr[CPR.adr.length-1]:null;
-  const adrSt=la==null?(now>0?'Адреналин ещё не вводили':'—'):la>=300000?'⛔ 5 мин — ввести адреналин':la>=180000?'⚠ 3 мин — можно вводить':'введён '+cprFmt(la)+' назад';
+  const adrSt=la==null?(now>0?'Адреналин ещё не вводили':'—'):la>=300000?'5 мин — ввести адреналин':la>=180000?'3 мин — можно вводить':'введён '+cprFmt(la)+' назад';
   const adrCls=la==null?'':la>=300000?'ban':la>=180000?'warn':'ok';
   $('cprT').textContent=cprFmt(now);
   $('cprCyc').textContent=cprFmt(left);$('cprBar').style.width=(cyc/1200)+'%';
   $('cprCycN').textContent='Цикл '+(n+1)+' · до оценки ритма';
   $('cprAdrS').textContent=adrSt;$('cprAdrS').className='cpr-adr-s '+adrCls;
   $('cprAdrN').textContent=CPR.adr.length;$('cprShN').textContent=CPR.shock;
-  $('cprGo').textContent=CPR.run?'⏸ Пауза':(now?'▶ Продолжить':'▶ Старт');
+  $('cprGo').innerHTML=CPR.run?'<i class="ei i-pause"></i> Пауза':(now?'<i class="ei i-play"></i> Продолжить':'<i class="ei i-play"></i> Старт');
   $('cprLog').innerHTML=CPR.log.slice(0,12).map(x=>`<li>${esc(x)}</li>`).join('');
 }
 function cprOpen(){
   const h=`<div class="sh-head"><div class="grab"></div><button type="button" class="sh-close" id="shClose" aria-label="Закрыть">✕</button>
-    <h2>⏱ Таймер СЛР</h2><span class="lat">Цикл 2 мин · адреналин 1 мг каждые 3–5 мин · компрессии 100–120/мин</span></div>
+    <h2><i class="ei i-timer"></i> Таймер СЛР</h2><span class="lat">Цикл 2 мин · адреналин 1 мг каждые 3–5 мин · компрессии 100–120/мин</span></div>
     <div class="sh-body" id="cprBox">
       <div class="cpr-total"><span id="cprT">00:00</span><small>от начала СЛР</small></div>
       <div class="cpr-cyc"><div class="cpr-cyc-h"><span id="cprCycN">Цикл 1</span><b id="cprCyc">02:00</b></div><div class="cpr-track"><div class="cpr-bar" id="cprBar"></div></div></div>
       <div class="cpr-adr"><div class="cpr-adr-s" id="cprAdrS">—</div></div>
       <div class="cpr-grid">
-        <button type="button" class="cpr-b cpr-b-adr" onclick="cprAdr()">💉 Адреналин<small>введено: <b id="cprAdrN">0</b></small></button>
-        <button type="button" class="cpr-b cpr-b-sh" onclick="cprShock()">⚡ Разряд<small>всего: <b id="cprShN">0</b></small></button>
-        <button type="button" class="cpr-b cpr-b-go" id="cprGo" onclick="CPR.run?cprPause():cprStart()">▶ Старт</button>
-        <button type="button" class="cpr-b" id="cprMetB" onclick="cprMet()">🥁 Метроном 110</button>
+        <button type="button" class="cpr-b cpr-b-adr" onclick="cprAdr()"><i class="ei i-syringe"></i> Адреналин<small>введено: <b id="cprAdrN">0</b></small></button>
+        <button type="button" class="cpr-b cpr-b-sh" onclick="cprShock()"><i class="ei i-bolt"></i> Разряд<small>всего: <b id="cprShN">0</b></small></button>
+        <button type="button" class="cpr-b cpr-b-go" id="cprGo" onclick="CPR.run?cprPause():cprStart()"><i class="ei i-play"></i> Старт</button>
+        <button type="button" class="cpr-b" id="cprMetB" onclick="cprMet()"><i class="ei i-metro"></i> Метроном 110</button>
       </div>
       <div class="sec">Журнал</div><ul class="cpr-log" id="cprLog"></ul>
       <button type="button" class="close" onclick="if(confirm('Сбросить таймер и журнал?'))cprReset()">Сбросить</button>
@@ -4174,7 +4228,7 @@ function openDrug(name){
   const pkuCls=d.pku?' drug-pku':'';
   let h=`<div class="sh-head${pkuCls}"><div class="grab"></div>
     <button type="button" class="sh-close" id="shClose" aria-label="Закрыть" title="Закрыть">✕</button>
-    <button type="button" class="sh-fav${isFav('d',d.n)?' on':''}" id="shFav" aria-label="В избранное">${isFav('d',d.n)?'★':'☆'}</button>
+    <button type="button" class="sh-fav${isFav('d',d.n)?' on':''}" id="shFav" aria-label="В избранное">${isFav('d',d.n)?'<i class="ei i-star"></i>':'<i class="ei i-star-o"></i>'}</button>
     <h2 style="padding-right:84px">${esc(inn)}${trade?` <span class="drug-trade" style="font-size:var(--fs-14)">${esc(trade)}</span>`:''}</h2>
     <span class="lat">${esc(d.lat)}</span>
     <div class="drug-badges" style="margin-top:7px">${routeBadgesHTML(d)}</div>
@@ -4182,7 +4236,7 @@ function openDrug(name){
     </div><div class="sh-body">
     ${infusLinkHTML(d.n)}
     ${doseSummaryHTML(d)}
-    ${d.contra?`<div class="box b-ban"><h4>⛔ Противопоказания</h4>${esc(d.contra)}</div>`:''}
+    ${d.contra?`<div class="box b-ban"><h4><i class="ei i-ban"></i> Противопоказания</h4>${esc(d.contra)}</div>`:''}
     ${buildCalcUI(d)}`;
 
   if(d.narrow){
@@ -4207,9 +4261,9 @@ function openDrug(name){
     parts.forEach(p=>{
       const bad=p.toUpperCase().includes('НЕЛЬЗЯ')||p.toLowerCase().includes('несовмест');
       const ready=p.toLowerCase().startsWith('готов');
-      if(bad){diluteHtml+=`<div class="dil-row dil-ban">🚫 ${esc(p)}</div>`;}
+      if(bad){diluteHtml+=`<div class="dil-row dil-ban"><i class="ei i-ban"></i> ${esc(p)}</div>`;}
       else if(ready){diluteHtml+=`<div class="dil-row dil-ok">✓ ${esc(p)}</div>`;}
-      else{diluteHtml+=`<div class="dil-row dil-info">💧 ${esc(p)}</div>`;}
+      else{diluteHtml+=`<div class="dil-row dil-info"><i class="ei i-drop"></i> ${esc(p)}</div>`;}
     });
     h+=`<div class="dil-box"><div class="dil-title">Разведение / совместимость</div>${diluteHtml}</div>`;
   }
@@ -4262,7 +4316,7 @@ function openDrug(name){
   if(sag)sag.oninput=()=>refreshDose(d.n);
   if(sau)sau.onchange=()=>refreshDose(d.n);
   if(sclr)sclr.onclick=()=>{if(sw)sw.value='';if(sag)sag.value='';refreshDose(d.n);};
-  const fv=$('shFav'); if(fv)fv.onclick=()=>{favToggle('d',d.n);fv.classList.toggle('on',isFav('d',d.n));fv.textContent=isFav('d',d.n)?'★':'☆';};
+  const fv=$('shFav'); if(fv)fv.onclick=()=>{favToggle('d',d.n);fv.classList.toggle('on',isFav('d',d.n));fv.innerHTML=isFav('d',d.n)?'<i class="ei i-star"></i>':'<i class="ei i-star-o"></i>';};
   recentPush('d',d.n);
   refreshDose(d.n); // initial render with empty inputs
 
@@ -4622,11 +4676,11 @@ function ekgHTML(){
     ${ECG_DEFS}
     <!-- правка 2026-10 (7.20): быстрые переходы по разделам атласа; карта бассейнов свёрнута -->
     <div class="filter-scroll ecg-nav" id="ecgNav" role="navigation" aria-label="Разделы ЭКГ"></div>
-    <div class="sec sec-group sec-group-first">⚡ Калькуляторы ЧСС</div>
+    <div class="sec sec-group sec-group-first"><i class="ei i-bolt"></i> Калькуляторы ЧСС</div>
 
     <div class="calc-hr-group">
       <div class="tool-box">
-        <div class="tool-label"><span>⚡ ЧСС при регулярном ритме (по 1 интервалу R–R)</span></div>
+        <div class="tool-label"><span><i class="ei i-bolt"></i> ЧСС при регулярном ритме (по 1 интервалу R–R)</span></div>
         <div class="tool-inputs">
           <div class="fld">
             <label>Интервал R–R (маленьких клеток / мм)</label>
@@ -4647,7 +4701,7 @@ function ekgHTML(){
 
       <div class="tool-box">
         <div class="tool-label">
-          <span>📊 ЧСС при аритмии (ФП, трепетание, экстрасистолия)</span>
+          <span><i class="ei i-chart"></i> ЧСС при аритмии (ФП, трепетание, экстрасистолия)</span>
           <span style="font-size:11px;color:var(--muted);font-weight:600">50 и 25 мм/с</span>
         </div>
         <div style="display:flex;gap:6px;margin-bottom:10px">
@@ -4669,7 +4723,7 @@ function ekgHTML(){
             </div>
           </div>
           <div style="font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.4">
-            💡 <b>Экспресс-метод на вызове:</b> приложите ручку/линейку <b>15 см</b> к записи ЭКГ и сосчитайте число зубцов R. (При 50 мм/с это ровно 3 секунды, при 25 мм/с — 6 секунд).
+            <i class="ei i-bulb"></i> <b>Экспресс-метод на вызове:</b> приложите ручку/линейку <b>15 см</b> к записи ЭКГ и сосчитайте число зубцов R. (При 50 мм/с это ровно 3 секунды, при 25 мм/с — 6 секунд).
           </div>
         </div>
         <div id="arr2PanelRange" style="display:none">
@@ -4695,7 +4749,7 @@ function ekgHTML(){
       </div>
     </div>
 
-    <div class="sec sec-group">⚡ Экспресс-атлас: критические паттерны и эквиваленты ИМпST</div>
+    <div class="sec sec-group"><i class="ei i-bolt"></i> Экспресс-атлас: критические паттерны и эквиваленты ИМпST</div>
     <div class="ecg-cap" style="margin:-4px 2px 10px">Эквиваленты ИМпST (в англоязычной литературе — OMI, окклюзионный инфаркт миокарда) — паттерны, при которых возможна острая окклюзия коронарной артерии без классического подъёма ST.</div>
     <div class="search-row"><input type="search" id="ecg2Search" placeholder="Поиск: патология, синдром, зубец, отведение..."></div>
     <div class="filter-scroll" id="ecg2Chips">
@@ -4713,7 +4767,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="sinus">
       <h3>Синусовый ритм</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:norm">▶ Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="rhythm:norm"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">Признаки</div><div class="act">Зубец P положительный, одинаковой формы — лучше всего виден в II и V1 (там же удобнее всего искать P при анализе ритма); отрицательный в aVR. Интервал P–Q 0,12–0,20 с. ЧСС 60–80/мин (по одним источникам норма до 90–100/мин).</div></div>
       </div>
@@ -4743,7 +4797,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="wenckebach">
       <h3>АВ-блокада II степени, тип I (Венкебаха)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:m1">▶ Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="rhythm:m1"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Прогрессивное удлинение P–Q от цикла к циклу, затем выпадение QRS (периодика Самойлова–Венкебаха).</div></div>
       </div>
@@ -4758,7 +4812,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="mobitz2">
       <h3>АВ-блокада II степени, тип II (Мобитц II)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:m2">▶ Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="rhythm:m2"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">P–Q постоянный (норма или удлинён), регулярное выпадение QRS (чаще 3:2, 4:3…). При кратности 2:1 и реже говорят об «АВ-блокаде высокой степени» — риск перехода в полную блокаду и асистолию особенно высок.</div></div>
         <div class="stepn"><div class="cond">Лечение</div><div class="act">Готовность к ЭКС. Препараты и дозы — в алгоритме ниже.</div></div>
@@ -4774,7 +4828,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="av3">
       <h3>АВ-блокада III степени (полная)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:chb">▶ Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="rhythm:chb"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Полная диссоциация P и QRS. Предсердия – синусовый ритм (60–90), желудочки – узкий (40–60) или широкий (20–40) комплекс.</div></div>
         <div class="stepn"><div class="cond">Клиника</div><div class="act">Синдром Морганьи–Адамса–Стокса (потеря сознания, судороги) – риск смерти.</div></div>
@@ -4873,7 +4927,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="afib">
       <h3>Фибрилляция предсердий (мерцательная аритмия)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:af">▶ Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="rhythm:af"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Зубцы Р отсутствуют; между QRS — волны f, постоянно меняющиеся по амплитуде и форме (на упрощённой схеме не показаны). Интервалы R–R абсолютно нерегулярны — «неправильно неправильный» ритм, главный признак для быстрой диагностики. При тахисистолии (ЧСЖ > 150) нерегулярность может быть менее заметна на глаз.</div></div>
         <div class="stepn"><div class="cond">Феномен Ашмана</div><div class="act">Аберрантный (широкий) комплекс после короткого R–R, следующего за длинным R–R — имитирует желудочковую экстрасистолу/ЖТ, но компенсаторной паузы нет. Не путать с истинной желудочковой экстрасистолией.</div></div>
@@ -4928,7 +4982,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="vt">
       <h3>Пароксизм желудочковой тахикардии</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:vt">▶ Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="rhythm:vt"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">ЧСС 140–220 в мин, чаще правильный ритм. Комплексы QRS одинаковой формы, уширены (> 0,14 с при морфологии БПНПГ или > 0,16 с при морфологии БЛНПГ). АВ-диссоциация — независимый более редкий ритм предсердий с редкими «захваченными» синусовыми комплексами (на упрощённой схеме не показано).</div></div>
         <div class="stepn"><div class="cond">Опасность</div><div class="act">Высокий риск перехода в фибрилляцию желудочков и клиническую смерть.</div></div>
@@ -5024,7 +5078,7 @@ function ekgHTML(){
       <h3>Локализация инфаркта</h3>
     <div class="coronary-selector">
       <div class="tool-label">
-        <span>🗺 Карта бассейнов</span>
+        <span><i class="ei i-map"></i> Карта бассейнов</span>
         <span style="font-size:10.5px;color:var(--muted);text-transform:none;font-weight:500;letter-spacing:normal">Территория → отведения, или наоборот</span>
       </div>
       <div class="coronary-btns" id="cor2Btns">
@@ -5051,7 +5105,7 @@ function ekgHTML(){
       </div>
       <div class="ecg-cap">Нажмите кнопку бассейна — подсветятся его отведения (красный — подъём ST, синий — реципрокная депрессия). Или наоборот: тапните прямо по отведению на сетке (1-й тап — подъём, 2-й — депрессия, 3-й — сброс), чтобы по тому, что видите на плёнке, найти подходящий бассейн — результат появится ниже. Для правого желудочка обязательно снимайте отдельные отведения V3R–V4R — в стандартную сетку 12 отведений они не входят.</div>
       <div class="arr-result-card" id="cor2Result" style="margin-top:10px;display:none"></div>
-      <button type="button" class="ea-open" data-ea="leads:cur">▶ Анимация 12 отведений</button>
+      <button type="button" class="ea-open" data-ea="leads:cur"><i class="ei i-play"></i> Анимация 12 отведений</button>
     </div>
       <div class="std">
         <div class="stepn"><div class="cond">Передне-перегородочный</div><div class="act">V1–V3, I, aVL.</div></div>
@@ -5246,7 +5300,7 @@ function renderArr2Result(avg,hrMin,hrMax,pauseSec){
   let rangeHtml='';
   if(hrMin&&hrMax)rangeHtml=`<div style="font-size:var(--fs-13);margin-top:4px;color:var(--ink2)">Диапазон ЧСС: <b>${hrMin}–${hrMax}</b> уд/мин (разброс: ${hrMax-hrMin} уд/мин)</div>`;
   let pauseHtml='';
-  if(pauseSec&&parseFloat(pauseSec)>=2.0)pauseHtml=`<div style="margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--banBg);color:var(--ban);font-size:var(--fs-12);font-weight:700">⚠️ Пауза R–R = ${pauseSec} сек (≥ 2.0 с — риск МАС).</div>`;
+  if(pauseSec&&parseFloat(pauseSec)>=2.0)pauseHtml=`<div style="margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--banBg);color:var(--ban);font-size:var(--fs-12);font-weight:700"><i class="ei i-alert"></i> Пауза R–R = ${pauseSec} сек (≥ 2.0 с — риск МАС).</div>`;
   rb.innerHTML=`<div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px">
     <div><span class="arr-val-big" style="color:${color}">${avg}</span> <span style="font-size:13px;font-weight:600;color:var(--muted)">уд/мин (средняя)</span></div>
     <span class="arr-badge arr-b-${cls}">${form}</span>
@@ -5281,19 +5335,19 @@ function ecgLeadMap2(ste,std){
 const LOC2_PATTERNS=[
   {id:'inf', name:'Нижняя (задне-диафрагмальная)', artery:'ПКА (≈85%) или ОА (≈15%)',
     ste:['II','III','aVF'], std:['I','aVL','V1','V2','V3'],
-    note:'Реципрокно: депрессия ST и высокий T в I, aVL, V1–V3 (Мурашко, гл. 8); Волкова (стр. 83) добавляет V4–V6. Подъём ST в III > II — признак вовлечения ПЖ (Andersen 1989); для различения ПКА и ОА ненадёжен ⚠ Требует проверки: в книгах проекта не найдено. Обязательно снимите правые отведения V3R–V4R.'},
+    note:'Реципрокно: депрессия ST и высокий T в I, aVL, V1–V3 (Мурашко, гл. 8); Волкова (стр. 83) добавляет V4–V6. Подъём ST в III > II — признак вовлечения ПЖ (Andersen 1989); для различения ПКА и ОА ненадёжен ⚠︎ Требует проверки: в книгах проекта не найдено. Обязательно снимите правые отведения V3R–V4R.'},
   {id:'ant', name:'Передняя (перегородочно-верхушечная)', artery:'ПМЖВ',
     ste:['V1','V2','V3','V4'], std:['III','aVF'],
     note:'Реципрокно: депрессия ST в III и aVF при распространённом переднем ИМ (Мурашко); Волкова (стр. 83) указывает II, III, aVF. Чем проксимальнее окклюзия ПМЖВ, тем шире зона (вовлекаются и I, aVL) и выше риск блокад ножек и острой левожелудочковой недостаточности.'},
   {id:'lat', name:'Боковая', artery:'ОА (реже диагональная ветвь ПМЖВ)',
     ste:['I','aVL','V5','V6'], std:['II','III','aVF'],
-    note:'Реципрокная депрессия ST в II, III, aVF — только по Волковой (стр. 83, переднебоковой ИМ); у Мурашко для бокового ИМ не описана ⚠ Требует проверки. Изменения нередко минимальны на стандартных 12 отведениях — оценивайте вместе с клиникой и динамикой.'},
+    note:'Реципрокная депрессия ST в II, III, aVF — только по Волковой (стр. 83, переднебоковой ИМ); у Мурашко для бокового ИМ не описана ⚠︎ Требует проверки. Изменения нередко минимальны на стандартных 12 отведениях — оценивайте вместе с клиникой и динамикой.'},
   {id:'post', name:'Задняя (задне-базальная)', artery:'ОА или задняя нисходящая ветвь ПКА',
     ste:[], std:['V1','V2','V3'],
     note:'Классической элевации в стандартных 12 отведениях нет — снимите V7–V9 (там будет элевация); реципрокно в V1–V3 — депрессия ST, высокий T и увеличенный R в V1–V2 (Мурашко, Волкова).'},
   {id:'rv', name:'Правый желудочек', artery:'ПКА (проксимальная окклюзия)',
     ste:['V1'], std:['I','aVL'],
-    note:'Сопутствует нижнему ИМ. Обязательно снимите правые отведения V3R–V4R — они информативнее для ПЖ, чем стандартные 12. Нитраты, диуретики и морфин противопоказаны. ⚠ Требует проверки: Волкова — правые отведения V3R–V6R; реципрокные изменения при ИМ ПЖ в книгах проекта не описаны.'}
+    note:'Сопутствует нижнему ИМ. Обязательно снимите правые отведения V3R–V4R — они информативнее для ПЖ, чем стандартные 12. Нитраты, диуретики и морфин противопоказаны. ⚠︎ Требует проверки: Волкова — правые отведения V3R–V6R; реципрокные изменения при ИМ ПЖ в книгах проекта не описаны.'}
 ];
 function scoreLoc2(pattern,steSet,stdSet){
   const total=pattern.ste.length+pattern.std.length;
@@ -5321,7 +5375,7 @@ function renderCor2Match(){
   box.innerHTML=scored.slice(0,3).map((s,i)=>`
     <div style="padding:${i===0?'0 0 8px':'8px 0 0'};${i>0?'border-top:1px solid var(--line);margin-top:8px':''}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
-        <b style="font-size:14px">${i===0?'🎯 ':''}${esc(s.p.name)}</b>
+        <b style="font-size:14px">${i===0?'<i class="ei i-target"></i> ':''}${esc(s.p.name)}</b>
         <span style="font-size:11.5px;font-weight:700;color:${s.pct>=70?'var(--ban)':s.pct>=40?'var(--warn)':'var(--muted)'}">${s.pct}% совпадение</span>
       </div>
       <div style="font-size:12.5px;color:var(--muted);margin-top:2px">Артерия: ${esc(s.p.artery)}</div>
@@ -5548,7 +5602,7 @@ const ECG_ALGO={mobitz2:ALG_BRADY,av3:ALG_BRADY,psvt:['Кардиология','
   afib:ALG_AF,aflutter:ALG_AF,vt:ALG_VT,longqt:ALG_VT,vf:['Анестезиология и реаниматология','Остановка кровообращения (СЛР)'],
   extra:['Кардиология','Экстрасистолия (в т.ч. желудочковая, частая, парная)'],mi:ALG_CARD,sgarbossa:ALG_CARD,nstemi:ALG_NST,angina:ALG_NST,hyperk:ALG_HK};
 const ECG2_ALGO={stemi_inf2:ALG_CARD,omi_dewinter:ALG_CARD,omi_sgarbossa2:ALG_CARD,omi_wellens2:ALG_NST,hyperkalemia2:ALG_HK,vtach2:ALG_VT,tela_pattern2:['Кардиология','ТЭЛА']};
-function algoBtn(a){ return a?`<button type="button" class="ea-open algo-link" data-g="${esc(a[0])}" data-t="${esc(a[1])}">🚑 Алгоритм: ${esc(a[1])}</button>`:''; }
+function algoBtn(a){ return a?`<button type="button" class="ea-open algo-link" data-g="${esc(a[0])}" data-t="${esc(a[1])}"><i class="ei i-ambulance"></i> Алгоритм: ${esc(a[1])}</button>`:''; }
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.algo-link'); if(!b)return; closeSheet(); openTactic(b.dataset.g,b.dataset.t); });
 const ECG_CRIT=new Set(['mobitz2','av3','vt','vf','mi','nstemi','sgarbossa','hyperk','longqt']);
 const ECG_DUP={sgarbossa:'omi_sgarbossa2',hyperk:'hyperkalemia2',vt:'vtach2'};
@@ -5575,7 +5629,7 @@ function renderEcg2Cards(){
         <div class="ecg-card-title">${esc(it.title)}</div>
         <div class="ecg2-c-focus"><b>Очаг:</b> ${esc(it.affected)}</div>
       </div>
-      ${it.redFlag?`<div class="ecg2-c-flag">⚠️ ${esc(it.redFlag)}</div>`:''}
+      ${it.redFlag?`<div class="ecg2-c-flag"><i class="ei i-alert"></i> ${esc(it.redFlag)}</div>`:''}
     </div>
   `).join('');
   box.querySelectorAll('[data-ecg2]').forEach(el=>{ el.onclick=()=>openEcg2Sheet(el.dataset.ecg2); el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); el.click(); } }; });
@@ -5590,13 +5644,13 @@ function openEcg2Sheet(id){
   /* правка 2026-10 (7.22): порядок — схема, «нельзя», тактика, критерии, карта отведений */
   const H4=t=>`<h4 style="margin:14px 0 6px;font-size:var(--fs-12);letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">${t}</h4>`;
   h+=ecg2View(it,'Калибровка: 10 мм/мВ · Скорость: 50 мм/с');
-  if(it.redFlag)h+=`<div class="box b-ban"><h4>🚨 Тактический красный флаг</h4>${esc(it.redFlag)}</div>`;
-  h+=`<div class="box b-ok"><h4>🚑 Тактика СМП</h4>${esc(it.tactic)}${algoBtn(ECG2_ALGO[it.id])}</div>`;
+  if(it.redFlag)h+=`<div class="box b-ban"><h4><i class="ei i-siren"></i> Тактический красный флаг</h4>${esc(it.redFlag)}</div>`;
+  h+=`<div class="box b-ok"><h4><i class="ei i-ambulance"></i> Тактика СМП</h4>${esc(it.tactic)}${algoBtn(ECG2_ALGO[it.id])}</div>`;
   h+=H4('Диагностические критерии')+`<ul class="memo">${it.criteria.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`;
   h+=H4('Карта отведений')+ecgLeadMap2(it.leadsSte,it.leadsStd);
   if(it.extraRows)h+=H4('Классический паттерн по отведениям')+ecgRow(it.extraRows);
   const mk=Object.keys(ECG_DUP).find(k=>ECG_DUP[k]===it.id);
-  if(mk)h+=`<button type="button" class="ea-open ecg-xlink" data-key="${mk}">📖 Подробно в атласе ЭКГ</button>`;
+  if(mk)h+=`<button type="button" class="ea-open ecg-xlink" data-key="${mk}"><i class="ei i-book"></i> Подробно в атласе ЭКГ</button>`;
   h+=`<button class="close" id="closeSheet2">Закрыть</button></div>`;
   $('sheetIn').innerHTML=h; openSheet();
   const cs=$('closeSheet2'); if(cs)cs.onclick=closeSheet;
@@ -5752,7 +5806,7 @@ function open(mode,key){
     <div class="ea-strip" id="eaRB"><svg viewBox="0 0 75 40" role="img" aria-label="Полоска ЭКГ"><rect width="75" height="40" fill="url(#eaP5)"/><g id="eaTr"><path id="eaWave" class="ea-trace" fill="none" stroke-width="0.28" stroke-linejoin="round" stroke-linecap="round"/></g></svg></div>
     <div class="ea-leads ea-hide" id="eaLB"></div>
     <div class="ea-zoom-hint" id="eaZoomHint"></div>
-    <div class="ea-ctl"><button type="button" class="ea-btn" id="eaPlay">▶ Запуск</button><button type="button" class="ea-btn" id="eaS25">25 мм/с</button><button type="button" class="ea-btn" id="eaS50">50 мм/с</button></div>
+    <div class="ea-ctl"><button type="button" class="ea-btn" id="eaPlay"><i class="ei i-play"></i> Запуск</button><button type="button" class="ea-btn" id="eaS25">25 мм/с</button><button type="button" class="ea-btn" id="eaS50">50 мм/с</button></div>
     <div class="ea-ctl" id="eaRate" style="margin-top:-4px;align-items:center"><span style="font-size:var(--fs-13);color:var(--muted)">Темп:</span><button type="button" class="ea-btn" data-r="0.25">0,25×</button><button type="button" class="ea-btn" data-r="0.5">0,5×</button><button type="button" class="ea-btn" data-r="1">1×</button><button type="button" class="ea-btn" data-r="2">2×</button></div>
     <div class="ea-rates"><div class="ea-rate"><b id="eaVR">—</b><span>ЧСС желудочков (QRS)</span></div><div class="ea-rate"><b id="eaAR">—</b><span>ЧСС предсердий (P)</span></div></div>
     <div class="ea-desc" id="eaDesc"></div>
@@ -5820,7 +5874,7 @@ function open(mode,key){
     $('eaZoomHint').textContent=m==='rhythm'?'Тап по плёнке — крупнее ×2':'Тап по отведению — крупно'; }
   function tick(ts){ if(st!==S||!S.playing||!$('eaRoot')||!$('sheet').classList.contains('on')){ if(st===S)S.playing=false; return; }
     if(S.last) S.elapsed+=Math.min((ts-S.last)/1000,0.1)*S.rate; S.last=ts; render(); requestAnimationFrame(tick); }
-  function play(on){ S.playing=on; S.last=0; $('eaPlay').textContent=on?'⏸ Пауза':'▶ Запуск'; if(on)requestAnimationFrame(tick); else render(); }
+  function play(on){ S.playing=on; S.last=0; $('eaPlay').innerHTML=on?'<i class="ei i-pause"></i> Пауза':'<i class="ei i-play"></i> Запуск'; if(on)requestAnimationFrame(tick); else render(); }
   $('eaPlay').onclick=()=>play(!S.playing);
   $('eaS25').onclick=()=>{ S.speeds[S.mode]=25; rebuild(); };
   $('eaS50').onclick=()=>{ S.speeds[S.mode]=50; rebuild(); };
@@ -6694,34 +6748,34 @@ render();
 const SCL_ZONES=[
   {degree:'Норма',name:'Шока нет',info:'Гемодинамика стабильная. Нормальный диапазон ИШ у взрослых — 0,5–0,7. Признаков шока нет.',pct:'< 10%',vol:'< 500 мл',color:'#16a34a',infOk:true,inf:[]},
   {degree:'Настороженность',name:'Пограничное состояние',info:'ИШ 0,7–1,0 — пограничный диапазон. У гипертоников, пожилых, спортсменов и пациентов с β-блокаторами это значение может быть нормой или маскировать тяжёлый шок. Оценивай в контексте: механизм травмы, динамика АД и ЧСС, клиника.',pct:'10–20%',vol:'500–1000 мл',color:'#ca8a04',infOk:false,inf:[
-    {icon:'💉',lbl:'Доступ',val:'1 катетер 16–18G — установить превентивно',note:'При механизме травмы не ждать ухудшения'},
-    {icon:'🧪',lbl:'Инфузия',val:'NaCl 0,9% 500 мл при признаках гиповолемии',note:'Только кристаллоиды · при стабильной клинике — выжидательная тактика'},
-    {icon:'📊',lbl:'Мониторинг',val:'ЭКГ, SpO₂, АД каждые 3 мин',note:'Ухудшение ЧСС/АД → переходи к протоколу Шок I'},
-    {icon:'🚑',lbl:'Транспорт',val:'Срочно с непрерывным мониторингом',note:'АД, ЧСС, SpO₂ — каждые 3 мин'},
+    {icon:'<i class="ei i-syringe"></i>',lbl:'Доступ',val:'1 катетер 16–18G — установить превентивно',note:'При механизме травмы не ждать ухудшения'},
+    {icon:'<i class="ei i-flask"></i>',lbl:'Инфузия',val:'NaCl 0,9% 500 мл при признаках гиповолемии',note:'Только кристаллоиды · при стабильной клинике — выжидательная тактика'},
+    {icon:'<i class="ei i-chart"></i>',lbl:'Мониторинг',val:'ЭКГ, SpO₂, АД каждые 3 мин',note:'Ухудшение ЧСС/АД → переходи к протоколу Шок I'},
+    {icon:'<i class="ei i-ambulance"></i>',lbl:'Транспорт',val:'Срочно с непрерывным мониторингом',note:'АД, ЧСС, SpO₂ — каждые 3 мин'},
   ]},
   {degree:'Шок I степени',name:'Лёгкий шок',info:'Компенсированный шок. Тахикардия, бледность, умеренная гипотония. ИШ 1,0–1,4.',pct:'20–30%',vol:'1000–1500 мл',color:'#c2410c',infOk:false,inf:[
-    {icon:'💉',lbl:'Доступ',val:'2 катетера 14–16G',note:'При неудаче — BIG/EZ-IO немедленно'},
-    {icon:'🧪',lbl:'Инфузия',val:'NaCl 0,9% или р-р Рингера 1000–1500 мл',note:'Только кристаллоиды · болюсами по 500 мл · цель АД сист. ≥ 90 мм рт.ст. · коллоиды не показаны'},
-    {icon:'💊',lbl:'Транексам',val:'Транексамовая кислота 1 г в/в',note:'За 10 мин · только ≤ 3 ч от травмы'},
-    {icon:'🫀',lbl:'Мониторинг',val:'ЭКГ, SpO₂, АД — непрерывно',note:'O₂ 10–15 л/мин · при ухудшении → протокол Шок II'},
-    {icon:'🚨',lbl:'Транспорт',val:'Экстренная госпитализация',note:'Уведомить принимающий стационар'},
+    {icon:'<i class="ei i-syringe"></i>',lbl:'Доступ',val:'2 катетера 14–16G',note:'При неудаче — BIG/EZ-IO немедленно'},
+    {icon:'<i class="ei i-flask"></i>',lbl:'Инфузия',val:'NaCl 0,9% или р-р Рингера 1000–1500 мл',note:'Только кристаллоиды · болюсами по 500 мл · цель АД сист. ≥ 90 мм рт.ст. · коллоиды не показаны'},
+    {icon:'<i class="ei i-pill"></i>',lbl:'Транексам',val:'Транексамовая кислота 1 г в/в',note:'За 10 мин · только ≤ 3 ч от травмы'},
+    {icon:'<i class="ei i-heart"></i>',lbl:'Мониторинг',val:'ЭКГ, SpO₂, АД — непрерывно',note:'O₂ 10–15 л/мин · при ухудшении → протокол Шок II'},
+    {icon:'<i class="ei i-siren"></i>',lbl:'Транспорт',val:'Экстренная госпитализация',note:'Уведомить принимающий стационар'},
   ]},
   {degree:'Шок II степени',name:'Средний шок',info:'Субкомпенсированный шок. Выраженная тахикардия, значительная гипотония, нарушение сознания. ИШ 1,4–1,8.',pct:'30–45%',vol:'1500–2000 мл',color:'#b91c1c',infOk:false,inf:[
-    {icon:'🆘',lbl:'Доступ',val:'В/к-доступ немедленно (BIG / EZ-IO)',note:'Или ЦВК при возможности'},
-    {icon:'🧪',lbl:'Инфузия 1',val:'NaCl 0,9% / р-р Рингера 1500 мл',note:'Кристаллоиды — первая линия · болюсами 500 мл · цель АД сист. 80–90 мм рт.ст. (допустимая гипотония)'},
-    {icon:'🫙',lbl:'Инфузия 2',val:'Волювен (ГЭК 130/0,4) 6% 500 мл',note:'Только если 1500 мл кристаллоидов не дали эффекта · ГЭК в ЕС запрещён (EMA 2022) · в РФ — осторожно · макс. 30 мл/кг'},
-    {icon:'💊',lbl:'Инфузия 3',val:'Транексамовая кислота 1–2 г в/в',note:'Болюс 10 мин · при активном кровотечении'},
-    {icon:'⚡',lbl:'Вазопрессор',val:'Норэпинефрин 0,3–1,0 мкг/кг/мин',note:'В/в, при неэффективности инфузии'},
-    {icon:'🫁',lbl:'Кислород',val:'O₂ 15 л/мин маска с резервуаром',note:'Цель SpO₂ ≥ 95%'},
-    {icon:'🚨',lbl:'Транспорт',val:'Экстренно · уведомить хирурга',note:'Без промедления. СЛР при остановке'},
+    {icon:'<i class="ei i-sos"></i>',lbl:'Доступ',val:'В/к-доступ немедленно (BIG / EZ-IO)',note:'Или ЦВК при возможности'},
+    {icon:'<i class="ei i-flask"></i>',lbl:'Инфузия 1',val:'NaCl 0,9% / р-р Рингера 1500 мл',note:'Кристаллоиды — первая линия · болюсами 500 мл · цель АД сист. 80–90 мм рт.ст. (допустимая гипотония)'},
+    {icon:'<i class="ei i-jar"></i>',lbl:'Инфузия 2',val:'Волювен (ГЭК 130/0,4) 6% 500 мл',note:'Только если 1500 мл кристаллоидов не дали эффекта · ГЭК в ЕС запрещён (EMA 2022) · в РФ — осторожно · макс. 30 мл/кг'},
+    {icon:'<i class="ei i-pill"></i>',lbl:'Инфузия 3',val:'Транексамовая кислота 1–2 г в/в',note:'Болюс 10 мин · при активном кровотечении'},
+    {icon:'<i class="ei i-bolt"></i>',lbl:'Вазопрессор',val:'Норэпинефрин 0,3–1,0 мкг/кг/мин',note:'В/в, при неэффективности инфузии'},
+    {icon:'<i class="ei i-lungs"></i>',lbl:'Кислород',val:'O₂ 15 л/мин маска с резервуаром',note:'Цель SpO₂ ≥ 95%'},
+    {icon:'<i class="ei i-siren"></i>',lbl:'Транспорт',val:'Экстренно · уведомить хирурга',note:'Без промедления. СЛР при остановке'},
   ]},
   {degree:'Шок III степени',name:'Тяжёлый / критический шок',info:'Декомпенсированный шок. Нитевидный пульс или его отсутствие, резкая гипотония, нарушение сознания. ИШ > 1,8. Требует немедленного хирургического гемостаза.',pct:'> 40%',vol:'> 2000 мл',color:'#7f1d1d',infOk:false,inf:[
-    {icon:'🩸',lbl:'Гемостаз',val:'Турникет / тугая тампонада раны',note:'Немедленно — временный хирургический'},
-    {icon:'🆘',lbl:'Доступ',val:'Все доступные вены + в/к-доступ',note:'Максимальная скорость введения'},
-    {icon:'💊',lbl:'Инфузия 1',val:'Транексамовая кислота 2 г в/в',note:'Болюс немедленно'},
-    {icon:'🧪',lbl:'Инфузия 2',val:'NaCl 0,9% 500 мл — permissive hypotension',note:'Цель АД сист. 50–70 мм рт.ст. до хирургического гемостаза · избыточная инфузия ухудшает коагуляцию · Волювен только при рефрактерном шоке'},
-    {icon:'⚡',lbl:'Вазопрессор',val:'Норэпинефрин — максимальные дозы',note:'Допамин 10–20 мкг/кг/мин — резерв'},
-    {icon:'🏥',lbl:'Транспорт',val:'Операционная — без промедления',note:'Уведомить хирурга / реанимационную бригаду'},
+    {icon:'<i class="ei i-blood"></i>',lbl:'Гемостаз',val:'Турникет / тугая тампонада раны',note:'Немедленно — временный хирургический'},
+    {icon:'<i class="ei i-sos"></i>',lbl:'Доступ',val:'Все доступные вены + в/к-доступ',note:'Максимальная скорость введения'},
+    {icon:'<i class="ei i-pill"></i>',lbl:'Инфузия 1',val:'Транексамовая кислота 2 г в/в',note:'Болюс немедленно'},
+    {icon:'<i class="ei i-flask"></i>',lbl:'Инфузия 2',val:'NaCl 0,9% 500 мл — permissive hypotension',note:'Цель АД сист. 50–70 мм рт.ст. до хирургического гемостаза · избыточная инфузия ухудшает коагуляцию · Волювен только при рефрактерном шоке'},
+    {icon:'<i class="ei i-bolt"></i>',lbl:'Вазопрессор',val:'Норэпинефрин — максимальные дозы',note:'Допамин 10–20 мкг/кг/мин — резерв'},
+    {icon:'<i class="ei i-hospital"></i>',lbl:'Транспорт',val:'Операционная — без промедления',note:'Уведомить хирурга / реанимационную бригаду'},
   ]},
 ];
 function sclZone(si){return si<0.7?0:si<1.0?1:si<1.4?2:si<1.8?3:4;}
@@ -6834,24 +6888,24 @@ function sclSwitchHTML(){
   const s=sclScale;
   const btn=(k,ic,tx)=>`<button class="${s===k?'on':''}" onclick="sclSetScale('${k}')"><span class="scl-scaleseg-ic">${ic}</span><span class="scl-scaleseg-tx">${tx}</span></button>`;
   return `<div class="scl-scaleseg">
-  ${btn('algover','🩸','Альговер')}
-  ${btn('gcs','🧠','ШКГ')}
-  ${btn('pain','😣','Боль')}
-  ${btn('deh','💧','Эксикоз')}
-  ${btn('lams','🧭','LAMS')}
-  ${btn('burns','🔥','Ожоги')}
-  ${btn('norms','📋','Нормы ВФ')}
-  ${btn('apgar','👶','Апгар')}
-  ${btn('preg','🤰','Беременность')}
-  ${btn('infus','💉','Инфузии')}
-  ${btn('flacc','👶','FLACC')}
-  ${btn('ciwa','🍺','CIWA-Ar')}
-  ${btn('pstroke','🧒','Инсульт у детей')}
-  ${btn('qsofa','🩺','qSOFA')}
-  ${btn('cpss','🚑','Цинциннати')}
-  ${btn('westley','🫁','Крупа Вестли')}
-  ${btn('geneva','🫀','Женевская')}
-  ${btn('shors','🆘','ШОРС')}
+  ${btn('algover','<i class="ei i-blood"></i>','Альговер')}
+  ${btn('gcs','<i class="ei i-brain"></i>','ШКГ')}
+  ${btn('pain','<i class="ei i-pain"></i>','Боль')}
+  ${btn('deh','<i class="ei i-drop"></i>','Эксикоз')}
+  ${btn('lams','<i class="ei i-compass"></i>','LAMS')}
+  ${btn('burns','<i class="ei i-fire"></i>','Ожоги')}
+  ${btn('norms','<i class="ei i-status"></i>','Нормы ВФ')}
+  ${btn('apgar','<i class="ei i-baby"></i>','Апгар')}
+  ${btn('preg','<i class="ei i-preg"></i>','Беременность')}
+  ${btn('infus','<i class="ei i-syringe"></i>','Инфузии')}
+  ${btn('flacc','<i class="ei i-baby"></i>','FLACC')}
+  ${btn('ciwa','<i class="ei i-beer"></i>','CIWA-Ar')}
+  ${btn('pstroke','<i class="ei i-child"></i>','Инсульт у детей')}
+  ${btn('qsofa','<i class="ei i-steth"></i>','qSOFA')}
+  ${btn('cpss','<i class="ei i-ambulance"></i>','Цинциннати')}
+  ${btn('westley','<i class="ei i-lungs"></i>','Крупа Вестли')}
+  ${btn('geneva','<i class="ei i-heart"></i>','Женевская')}
+  ${btn('shors','<i class="ei i-sos"></i>','ШОРС')}
 </div>`;
 }
 
@@ -6993,7 +7047,7 @@ const GEN_SCALES=[
    defaultZero:true,
    items:[
      {key:'s_sex',label:'S — мужской пол',opts:[[0,'Нет'],[1,'Да']]},
-     {key:'s_age',label:'A — возраст 15–24 или старше 65 лет ⚠ порог уточнить по первоисточнику',opts:[[0,'Нет'],[1,'Да']]},
+     {key:'s_age',label:'A — возраст 15–24 или старше 65 лет ⚠︎ порог уточнить по первоисточнику',opts:[[0,'Нет'],[1,'Да']]},
      {key:'s_dep',label:'D — депрессия',opts:[[0,'Нет'],[1,'Да']]},
      {key:'s_prev',label:'P — предыдущие попытки суицида',opts:[[0,'Нет'],[1,'Да']]},
      {key:'s_etoh',label:'E — злоупотребление алкоголем или ПАВ',opts:[[0,'Нет'],[1,'Да']]},
@@ -7111,7 +7165,7 @@ function infusCalc(){
         dose=parseFloat($('infDose').value), drop=parseFloat($('infDrop').value), k=$('infDrug').value;
   const out=$('infOut'), al=$('infAlerts');
   if(!(conc>0)||!(mass>0)||!(vol>0)||!(w>0)||!(dose>0)){
-    out.innerHTML=`<div class="scl-ph"><div class="scl-ph-icon">💉</div><div class="scl-ph-text">${w>0?'Заполните все поля':'Введите массу пациента'}</div></div>`;
+    out.innerHTML=`<div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-syringe"></i></div><div class="scl-ph-text">${w>0?'Заполните все поля':'Введите массу пациента'}</div></div>`;
     al.innerHTML='';return;
   }
   /* правка 2026-10 (6.83): капельная система — основной результат в капли/мин, мл/час вторичный. */
@@ -7128,12 +7182,12 @@ function infusCalc(){
   let a='';
   if(k!=='custom'&&INFUS_PRESETS[k]){
     const p=INFUS_PRESETS[k], r=child?p.child:p.adult;
-    if(dose<r[0]) a+=`<div class="box b-warn">⚠️ Ниже протокольного диапазона для «${p.name}» (${child?'дети':'взрослые'}: ${infusFmt(r[0],2)}–${infusFmt(r[1],1)}).</div>`;
-    else if(dose>r[1]) a+=`<div class="box b-ban">⛔ Выше протокольного диапазона (${child?'дети':'взрослые'}: до ${infusFmt(r[1],1)}). Проверьте назначение.</div>`;
-    else a+=`<div class="box b-ok">✅ В пределах протокольного диапазона.</div>`;
+    if(dose<r[0]) a+=`<div class="box b-warn"><i class="ei i-alert"></i> Ниже протокольного диапазона для «${p.name}» (${child?'дети':'взрослые'}: ${infusFmt(r[0],2)}–${infusFmt(r[1],1)}).</div>`;
+    else if(dose>r[1]) a+=`<div class="box b-ban"><i class="ei i-ban"></i> Выше протокольного диапазона (${child?'дети':'взрослые'}: до ${infusFmt(r[1],1)}). Проверьте назначение.</div>`;
+    else a+=`<div class="box b-ok"><i class="ei i-okc"></i> В пределах протокольного диапазона.</div>`;
   }
-  if(mlH>100) a+=`<div class="box b-ban">⛔ Скорость ${infusFmt(mlH,0)} мл/час — очень высокая для капельного введения. Проверьте дозу и разведение.</div>`;
-  if(mlH<1) a+=`<div class="box b-warn">⚠️ Менее 1 мл/час — при капельном введении такую скорость трудно выдержать. Уменьшите объём разведения или проверьте дозу.</div>`;
+  if(mlH>100) a+=`<div class="box b-ban"><i class="ei i-ban"></i> Скорость ${infusFmt(mlH,0)} мл/час — очень высокая для капельного введения. Проверьте дозу и разведение.</div>`;
+  if(mlH<1) a+=`<div class="box b-warn"><i class="ei i-alert"></i> Менее 1 мл/час — при капельном введении такую скорость трудно выдержать. Уменьшите объём разведения или проверьте дозу.</div>`;
   al.innerHTML=a;
 }
 function infusInit(){ infusPreset(); }
@@ -7148,7 +7202,7 @@ const INFUS_DRUG_LINK={
 function infusLinkHTML(drugName){
   const key=INFUS_DRUG_LINK[drugName];
   if(!key)return '';
-  return `<button type="button" class="btn-mini" style="margin-bottom:10px" onclick="goToInfusCalc('${key}')">💉 Рассчитать скорость инфузии</button>`;
+  return `<button type="button" class="btn-mini" style="margin-bottom:10px" onclick="goToInfusCalc('${key}')"><i class="ei i-syringe"></i> Рассчитать скорость инфузии</button>`;
 }
 function goToInfusCalc(key){
   closeSheet();
@@ -7179,7 +7233,7 @@ function gcsHTML(){
 
 <div class="scl-card gcs-flags-card">
   <button class="gcs-flags-tgl" id="gcsFlagsTgl" onclick="gcsToggleFlags()">
-    <span>⚠️ Особые случаи оценки</span><span class="gcs-flags-chev" id="gcsFlagsChev">▾</span>
+    <span><i class="ei i-alert"></i> Особые случаи оценки</span><span class="gcs-flags-chev" id="gcsFlagsChev">▾</span>
   </button>
   <div class="gcs-flags-body" id="gcsFlagsBody" style="display:none">
     <label class="gcs-flag-row"><input type="checkbox" id="gcsFlagT" onchange="gcsCalc()"><span><b>Интубация / трахеостома</b><br><i>речевая реакция недоступна — при подсчёте суммы принимается минимальный балл с пометкой «Т»</i></span></label>
@@ -7198,7 +7252,7 @@ function gcsHTML(){
 </div>
 
 <div id="gcsResultOut">
-  <div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">🧠</div><div class="scl-ph-text">Выберите реакцию по каждому из трёх критериев<br>— отобразится глубина угнетения сознания и тактика</div></div></div>
+  <div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-brain"></i></div><div class="scl-ph-text">Выберите реакцию по каждому из трёх критериев<br>— отобразится глубина угнетения сознания и тактика</div></div></div>
 </div>
 
 <div class="scl-card">
@@ -7241,13 +7295,13 @@ function gcsRenderCols(){
 const GCS_AGE_NOTES={
   adult:'',
   child:'Критерии речевой реакции адаптированы для дошкольного возраста — здоровый ребёнок 2–5 лет также может набрать 15 баллов.',
-  infant:'Критерии речи и движений адаптированы для довербального возраста — здоровый младенец также может набрать 15 баллов. ⚠ У новорождённых (0–28 сут) ШКГ не валидирована — используйте шкалу Апгар и оценку по возрастным рефлексам.',
+  infant:'Критерии речи и движений адаптированы для довербального возраста — здоровый младенец также может набрать 15 баллов. ⚠︎ У новорождённых (0–28 сут) ШКГ не валидирована — используйте шкалу Апгар и оценку по возрастным рефлексам.',
 };
 
 function gcsUpdateAgeNote(){
   const el=$('gcsAgeNote');if(!el)return;
   const txt=GCS_AGE_NOTES[gcsAge];
-  el.innerHTML=txt?`<div class="gcs-age-note">ℹ️ ${txt}</div>`:'';
+  el.innerHTML=txt?`<div class="gcs-age-note"><i class="ei i-info"></i> ${txt}</div>`:'';
 }
 
 function gcsInit(){
@@ -7309,7 +7363,7 @@ function gcsCalc(){
 
   const bannerEl=$('gcsCogBanner');
   if(bannerEl){
-    bannerEl.innerHTML=flagCog?`<div class="gcs-banner">🧠 <b>Известны исходные когнитивные нарушения.</b> Оценивайте в <b>динамике</b> относительно привычного для пациента уровня сознания и ориентации (уточните у родственников, сопровождающих или по документам). Снижение на ≥ 2 баллов от исходного уровня — тревожный признак, даже если абсолютная сумма ШКГ не достигла пороговых значений. При афазии/деменции опирайтесь в первую очередь на выполнение команд и локализацию боли (E и M), а не только на речь (V).</div>`:'';
+    bannerEl.innerHTML=flagCog?`<div class="gcs-banner"><i class="ei i-brain"></i> <b>Известны исходные когнитивные нарушения.</b> Оценивайте в <b>динамике</b> относительно привычного для пациента уровня сознания и ориентации (уточните у родственников, сопровождающих или по документам). Снижение на ≥ 2 баллов от исходного уровня — тревожный признак, даже если абсолютная сумма ШКГ не достигла пороговых значений. При афазии/деменции опирайтесь в первую очередь на выполнение команд и локализацию боли (E и M), а не только на речь (V).</div>`:'';
   }
 
   const eVal=flagC?1:gcsSel.E;
@@ -7327,7 +7381,7 @@ function gcsCalc(){
   if(!totalEl||!outEl)return;
   if(eVal==null||vVal==null||mVal==null){
     totalEl.textContent='—';totalEl.className='gcs-total-num idle';totalEl.style.color='';
-    outEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">🧠</div><div class="scl-ph-text">Выберите реакцию по каждому из трёх критериев<br>— отобразится глубина угнетения сознания и тактика</div></div></div>';
+    outEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-brain"></i></div><div class="scl-ph-text">Выберите реакцию по каждому из трёх критериев<br>— отобразится глубина угнетения сознания и тактика</div></div></div>';
     return;
   }
 
@@ -7341,7 +7395,7 @@ function gcsCalc(){
   totalEl.className='gcs-total-num';
   totalEl.style.color=zd.color;
 
-  const severeWarn=total<=8?`<div class="gcs-alert">🚨 ШКГ ≤ 8 баллов — порог утраты защитных рефлексов дыхательных путей. Оцените проходимость ВДП, готовность к воздуховоду / интубации трахеи (вне рамок линейной бригады).</div>`:'';
+  const severeWarn=total<=8?`<div class="gcs-alert"><i class="ei i-siren"></i> ШКГ ≤ 8 баллов — порог утраты защитных рефлексов дыхательных путей. Оцените проходимость ВДП, готовность к воздуховоду / интубации трахеи (вне рамок линейной бригады).</div>`:'';
 
   outEl.innerHTML=`
     <div class="scl-result gcs-r${zi}">
@@ -7415,7 +7469,7 @@ function apgarHTML(){
 </div>
 
 <div id="apgarResultOut">
-  <div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">👶</div><div class="scl-ph-text">Оцените каждый из пяти признаков<br>— отобразится сумма баллов и тактика</div></div></div>
+  <div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-baby"></i></div><div class="scl-ph-text">Оцените каждый из пяти признаков<br>— отобразится сумма баллов и тактика</div></div></div>
 </div>
 
 <div class="scl-card">
@@ -7483,7 +7537,7 @@ function apgarCalc(){
   if(!totalEl||!outEl)return;
   if(vals.some(v=>v==null)){
     totalEl.textContent='—';totalEl.className='gcs-total-num idle';totalEl.style.color='';
-    outEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">👶</div><div class="scl-ph-text">Оцените каждый из пяти признаков<br>— отобразится сумма баллов и тактика</div></div></div>';
+    outEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-baby"></i></div><div class="scl-ph-text">Оцените каждый из пяти признаков<br>— отобразится сумма баллов и тактика</div></div></div>';
     return;
   }
   const total=vals.reduce((a,b)=>a+b,0);
@@ -7541,7 +7595,7 @@ function lamsHTML(){
 </div>
 
 <div id="lamsResultOut">
-  <div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">🧭</div><div class="scl-ph-text">Оцените три признака<br>— отобразится вероятность окклюзии крупного сосуда</div></div></div>
+  <div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-compass"></i></div><div class="scl-ph-text">Оцените три признака<br>— отобразится вероятность окклюзии крупного сосуда</div></div></div>
 </div>
 
 <div class="scl-card">
@@ -7594,7 +7648,7 @@ function lamsCalc(){
   if(!totalEl||!outEl)return;
   if(vals.some(v=>v==null)){
     totalEl.textContent='—';totalEl.className='gcs-total-num idle';totalEl.style.color='';
-    outEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">🧭</div><div class="scl-ph-text">Оцените три признака<br>— отобразится вероятность окклюзии крупного сосуда</div></div></div>';
+    outEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-compass"></i></div><div class="scl-ph-text">Оцените три признака<br>— отобразится вероятность окклюзии крупного сосуда</div></div></div>';
     return;
   }
   const total=vals.reduce((a,b)=>a+b,0);
@@ -7634,7 +7688,7 @@ function painHTML(){
     return `<button class="pain-btn${on?' on':''}" style="${on?'background:'+col+';border-color:'+col:''}" onclick="painPick(${i})">${i}</button>`;
   }).join('');
 
-  let result='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">😣</div><div class="scl-ph-text">Нажмите цифру от 0 до 10<br>— отобразится интерпретация и тактика</div></div></div>';
+  let result='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-pain"></i></div><div class="scl-ph-text">Нажмите цифру от 0 до 10<br>— отобразится интерпретация и тактика</div></div></div>';
   if(painVal!==null){
     const d=getPainDesc(painVal);
     result=`<div class="scl-result" style="background:${d.bg};border:1.5px solid ${d.bc};border-radius:var(--r);padding:14px;margin-bottom:10px">
@@ -7689,7 +7743,7 @@ function dehydrHTML(){
     </div>`;
   }).join('');
 
-  let result='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">💧</div><div class="scl-ph-text">Выберите степень обезвоживания<br>— отобразится клиническая картина и тактика</div></div></div>';
+  let result='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-drop"></i></div><div class="scl-ph-text">Выберите степень обезвоживания<br>— отобразится клиническая картина и тактика</div></div></div>';
   if(dehDeg!==null){
     const d=DEH_DEGREES[dehDeg-1];
     result=`
@@ -7715,15 +7769,15 @@ function dehReset(){dehDeg=null;render();}
    ОЖОГИ (правило девяток)
 ══════════════════════════════════════════════════════════ */
 const BURN_ZONES_META=[
-  {key:'head',  ic:'🙂',label:'Голова и шея'},
-  {key:'chest', ic:'🫁',label:'Грудь / живот'},
-  {key:'back',  ic:'🔙',label:'Спина'},
-  {key:'r_arm', ic:'💪',label:'Правая рука'},
-  {key:'l_arm', ic:'🦾',label:'Левая рука'},
-  {key:'r_leg', ic:'🦵',label:'Правая нога'},
-  {key:'l_leg', ic:'🦵',label:'Левая нога'},
-  {key:'perineum',ic:'⬇️',label:'Промежность'},
-  {key:'palms', ic:'✋',label:'Ладонь (×1%)'},
+  {key:'head',  ic:'<i class="ei i-head"></i>',label:'Голова и шея'},
+  {key:'chest', ic:'<i class="ei i-lungs"></i>',label:'Грудь / живот'},
+  {key:'back',  ic:'<i class="ei i-spine"></i>',label:'Спина'},
+  {key:'r_arm', ic:'<i class="ei i-arm"></i>',label:'Правая рука'},
+  {key:'l_arm', ic:'<i class="ei i-arm"></i>',label:'Левая рука'},
+  {key:'r_leg', ic:'<i class="ei i-leg"></i>',label:'Правая нога'},
+  {key:'l_leg', ic:'<i class="ei i-leg"></i>',label:'Левая нога'},
+  {key:'perineum',ic:'<i class="ei i-down"></i>',label:'Промежность'},
+  {key:'palms', ic:'<i class="ei i-hand"></i>',label:'Ладонь (×1%)'},
 ];
 
 function burnHTML(){
@@ -7874,7 +7928,7 @@ function pregLmpHTML(){
   const asOf=pregAsOf||todayISO();
   let out;
   if(!pregLMP){
-    out=`<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">🤰</div><div class="scl-ph-text">Укажите дату первого дня последней менструации (ПДМ)</div></div></div>`;
+    out=`<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-preg"></i></div><div class="scl-ph-text">Укажите дату первого дня последней менструации (ПДМ)</div></div></div>`;
   }else{
     const r=pregCalc();
     out=r.error?`<div class="scl-card" style="color:var(--warn)">${esc(r.error)}</div>`:`<div class="scl-card">
@@ -7975,7 +8029,7 @@ function sclHTMLAlgover(){
 
 <div id="sclDynOut">
   <div class="scl-card">
-    <div class="scl-ph"><div class="scl-ph-icon">🩺</div><div class="scl-ph-text">Введите ЧСС и АД сист.<br>— отобразится степень шока и порядок инфузии</div></div>
+    <div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-steth"></i></div><div class="scl-ph-text">Введите ЧСС и АД сист.<br>— отобразится степень шока и порядок инфузии</div></div>
   </div>
 </div>
 
@@ -7989,7 +8043,7 @@ function sclHTMLAlgover(){
 </div>
 
 <div class="scl-card" style="margin-bottom:10px">
-  <button class="scl-cav-btn" onclick="sclToggleCav()">⚠ Ограничения · особые группы <span id="sclCavArrow">▾</span></button>
+  <button class="scl-cav-btn" onclick="sclToggleCav()"><i class="ei i-alert"></i> Ограничения · особые группы <span id="sclCavArrow">▾</span></button>
   <div class="scl-cav-body" id="sclCavBody"><b>Гипертоники:</b> рабочее АД 150–180 → снижение до 110 уже критично, ИШ кажется «нормальным»<br><b>β-блокаторы / ЭКС:</b> ЧСС не успевает вырасти — ИШ занижен<br><b>Пожилые (&gt;65 лет):</b> слабый тахикардический ответ. Возрастной ИШ = ИШ × возраст — &gt; 50 = высокий риск<br><b>Спортсмены:</b> брадикардия в покое → их норма ИШ ≈ 0,4, рост до 0,7 — тревога<br><b>Беременность:</b> физиологически выше ЧСС и ниже АД → порог тревоги снижается на 0,1–0,2</div>
 </div>
 
@@ -8098,7 +8152,7 @@ function sclCalc(){
   if(!hr||!sbp||hr<20||sbp<30){
     numEl.textContent='—';numEl.className='scl-idx idle';numEl.style.color='';
     if(fmlEl)fmlEl.textContent='ИШ = ЧСС ÷ АД сист.';
-    dynEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon">🩺</div><div class="scl-ph-text">Введите ЧСС и АД сист.<br>— отобразится степень шока и порядок инфузии</div></div></div>';
+    dynEl.innerHTML='<div class="scl-card"><div class="scl-ph"><div class="scl-ph-icon"><i class="ei i-steth"></i></div><div class="scl-ph-text">Введите ЧСС и АД сист.<br>— отобразится степень шока и порядок инфузии</div></div></div>';
     return;
   }
 
