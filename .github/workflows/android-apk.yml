@@ -1,0 +1,35 @@
+# Сборка APK для проверки на телефоне (debug-подпись). Запуск: вкладка Actions → «Android APK» → Run workflow,
+# а также автоматически при пуше в ветки claude/** и main. Готовый файл — в разделе Artifacts запуска.
+name: Android APK
+on:
+  workflow_dispatch:
+  push:
+    branches: ['claude/**', 'main']
+    paths: ['www/**', 'android/**', 'package.json', 'capacitor.config.json', '.github/workflows/android-apk.yml']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '21' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: npm }
+      - run: npm ci
+      - name: Копирование www в проект Android
+        run: npx cap sync android
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Сборка debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+      - name: Имя файла с версией
+        run: |
+          V=$(grep -o 'versionName "[^"]*"' android/app/build.gradle | cut -d'"' -f2)
+          mkdir -p out && cp android/app/build/outputs/apk/debug/app-debug.apk "out/smp-spravochnik-$V-debug.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smp-spravochnik-apk
+          path: out/*.apk
+          retention-days: 30
