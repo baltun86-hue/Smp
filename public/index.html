@@ -1958,6 +1958,119 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .cpr-log{list-style:none;margin:0 0 10px;padding:0;font-variant-numeric:tabular-nums;font-size:var(--fs-13);color:var(--ink2)}
 .cpr-log li{padding:6px 0;border-bottom:1px solid var(--line)}
 </style>
+<style id="appleFluidCss">
+/* ══ правка 2026-10 (8.00): «живой» интерфейс по принципам Apple (WWDC «Designing Fluid Interfaces»)
+   Слой поверх существующего оформления. Цвета и сетка — прежние; здесь — отклик, физика, материалы,
+   типографика и доступность. Пружинная анимация шторки и жестов — в скрипте appleFluidJs в конце файла. */
+
+/* 1. Отклик без задержки: убираем 300-мс ожидание двойного тапа на всём, что нажимается */
+button,a,input,select,label,[role="button"],.item,.scen,.icd-res,.home-tile,.bucket-head,.ecg-card,.ac-item,.mkb-cls,.mkb-item,.gcs-opt,.opt-item{touch-action:manipulation}
+.sheet,#sheetIn,#list{touch-action:pan-y}
+
+/* нажатие: «вдавливание» сразу на касании (класс ставит скрипт по pointerdown, т.к. :active в iOS запаздывает) */
+.is-pressed{transform:scale(var(--press,.97))!important;transition:transform 90ms cubic-bezier(.3,0,.5,1),background-color 90ms ease,filter 90ms ease!important}
+.is-releasing{transition:transform var(--spring-dur,.42s) var(--ease-spring,cubic-bezier(.2,.8,.2,1)),background-color .25s ease,filter .25s ease!important}
+:is(.item,.scen,.icd-res,.ecg-card,.home-tile,.bucket-head,.tactic-lnk,.mkb-cls,.q-big,.cpr-b,.gcs-opt,.opt-item,.burn-zone-btn,.pick-btn,.calc-inline,.ac-item,.mkb-item,.dose-sum){--press:.982}
+:is(.btn,.big,.close,.navrow button,.seg button,.burn-seg button,.q-chip,.kitchip,.symp-chip,.f-chip,.ac-chip,.coronary-btn,.arr-tab-btn,.btn-mini,.pain-btn,.ea-chip,.ea-btn,.inf-chip,.clr-btn,.scl-reset,.homebar-back){--press:.955}
+:is(.gear,.theme-toggle,.sh-close,.sh-fav,.wt-btn,.fs-b,.bnav button,.ecg-zoom-btn){--press:.9}
+.is-pressed:is(.item,.scen,.icd-res,.ecg-card,.home-tile,.bucket-head,.q-chip,.pick-btn,.ac-item,.mkb-item,.gcs-opt,.opt-item){filter:brightness(.96)}
+:is([data-theme="dark"]) .is-pressed:is(.item,.scen,.icd-res,.ecg-card,.home-tile,.bucket-head,.q-chip,.pick-btn,.ac-item,.mkb-item,.gcs-opt,.opt-item){filter:brightness(1.18)}
+
+/* 2. Материалы: шапка и нижняя панель — стекло, под которым прокручивается контент.
+   Вместо жёсткой линии-разделителя — «край прокрутки»: тонкая тень появляется, только когда под панелью есть контент */
+header{border-bottom-color:transparent;transition:box-shadow .25s ease,border-color .25s ease}
+header.fl-scrolled{border-bottom-color:rgba(255,255,255,.06);box-shadow:0 1px 0 rgba(0,0,0,.25),0 8px 24px -12px rgba(0,0,0,.45)}
+@supports ((-webkit-backdrop-filter:none) or (backdrop-filter:none)){
+  .bnav{background:color-mix(in srgb,var(--card) 90%,transparent)}
+}
+.bnav{border-top:0;box-shadow:0 -.5px 0 var(--line)}
+/* светлый блик по верхней кромке стекла — свет «ловится» материалом */
+.bnav::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);pointer-events:none;opacity:.6}
+:root[data-theme="dark"] .bnav::before{opacity:.12}
+.bnav button{transition:color .2s ease}
+.bnav button .ico{transition:transform var(--spring-dur,.42s) var(--ease-spring,cubic-bezier(.2,.8,.2,1)),stroke-width .2s}
+.bnav button.on .ico{transform:translateY(-1px)}
+
+/* шапка шторки: тоже без постоянной линии — разделитель только при прокрутке содержимого под ней */
+.sh-head{border-bottom-color:transparent;transition:border-color .2s ease,box-shadow .2s ease}
+.sheet.fl-sh-scrolled .sh-head{border-bottom-color:var(--line);box-shadow:0 6px 16px -10px rgba(0,0,0,.25)}
+
+/* 3. Шторка и затемнение — ими управляет пружина в скрипте (можно схватить и потянуть вниз в любой момент) */
+.back{display:block!important;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .3s ease,visibility 0s linear .3s}
+.back.on{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .3s ease}
+.back.fl-vis{visibility:visible;transition:none}
+.sheet{transition:box-shadow .4s ease!important;will-change:transform;overscroll-behavior-y:contain}
+.sheet .grab{cursor:grab}
+.sheet.fl-dragging,.sheet.fl-dragging .grab{cursor:grabbing}
+.sheet.fl-dragging{user-select:none;-webkit-user-select:none}
+.grab{transition:background-color .2s ease,width .25s ease}
+.sheet.fl-dragging .grab{background:var(--muted);width:44px}
+
+/* 4. Подсказки поиска «материализуются» из поля поиска: масштаб + размытие от верхней кромки, а не простое появление */
+.ac{transform-origin:50% 0}
+.ac.on{animation:flMaterialize var(--spring-dur,.42s) var(--ease-spring,cubic-bezier(.2,.8,.2,1)) backwards}
+@keyframes flMaterialize{from{opacity:0;transform:translateY(-6px) scale(.97);filter:blur(6px)}}
+
+/* лупа ЭКГ: так же проявляется как материал */
+.ecg-zoom-back.on{animation:flFade .22s ease backwards}
+.ecg-zoom-back.on .ecg-zoom-box{animation:flMatBox var(--spring-dur,.42s) var(--ease-spring,cubic-bezier(.2,.8,.2,1)) backwards}
+@keyframes flFade{from{opacity:0}}
+@keyframes flMatBox{from{opacity:0;transform:scale(.97);filter:blur(8px)}}
+
+/* всплывающее уведомление «нажмите ещё раз для выхода» */
+.exit-toast.show{animation:flToast var(--spring-dur,.42s) var(--ease-spring,cubic-bezier(.2,.8,.2,1)) backwards}
+@keyframes flToast{from{opacity:0;transform:translate(-50%,8px) scale(.96);filter:blur(4px)}}
+
+/* аккордеоны: высоту анимирует скрипт; шеврон поворачивается пружиной */
+.bucket-chevron{transition:transform var(--spring-dur,.42s) var(--ease-spring,cubic-bezier(.2,.8,.2,1))!important}
+
+/* смена темы — мягкое перетекание (View Transitions), без резкого скачка яркости */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.35s;animation-timing-function:ease}
+
+/* 5. Типографика: трекинг зависит от кегля — крупное плотнее, мелкое свободнее (не одно значение на всё) */
+body{font-optical-sizing:auto}
+h1,.sh-head h2,.sec-group{font-feature-settings:"kern"}
+.sh-head h2{letter-spacing:-.026em;line-height:1.12}
+.sec{letter-spacing:-.022em}
+.sec-group{letter-spacing:-.026em;line-height:1.12}
+.scl-idx,.gcs-total-num,.total-num,.cpr-total span,.inf-big{letter-spacing:-.04em;line-height:1}
+/* мелкий текст (≤ 13 px): трекинг около нуля/чуть положительный — иначе буквы слипаются */
+.item-route,.item-dose,.drug-amp,.itag,.item-lat,.home-sub,.ac-item .sub,.bucket-count,.src,.note,.calc-hint,.calc-tip,
+.item-meta,.icd-res .path,.scen span,.q-big span,.cpr-b small,.cpr-total small,.opt-sub,.gcs-opt-tx i,small{letter-spacing:0}
+.bnav button{letter-spacing:.012em}
+/* цифры дозировок и расчётов — моноширинные, чтобы колонки не «прыгали» при вводе */
+.item-dose,.drug-amp,.dose-sum,.doses-table,.tbl-dose,.inf-out,.inf-big,.scl-idx,.gcs-total-num,.total-num,.wt-value,.calc-row input,.tool-out,.arr-val-big{font-variant-numeric:tabular-nums}
+
+/* 6. Доступность ───────────────────────────────────────────────── */
+/* «Уменьшение движения»: не «ничего», а мягкие замены — короткое перетекание прозрачности вместо сдвигов и пружин */
+@media (prefers-reduced-motion:reduce){
+  .ac.on{animation:flFade .2s ease backwards!important;animation-duration:.2s!important}
+  .ecg-zoom-back.on,.ecg-zoom-back.on .ecg-zoom-box,.exit-toast.show{animation:flFade .2s ease backwards!important;animation-duration:.2s!important}
+  .back,.back.on{transition-duration:.2s!important}
+  .is-pressed{transform:none!important;filter:brightness(.92)!important}
+  .bnav button.on .ico{transform:none}
+}
+/* «Понижение прозрачности»: стекло становится плотным, без размытия */
+@media (prefers-reduced-transparency:reduce){
+  header{background:#161617!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .bnav{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .bnav::before{display:none}
+  .sh-head{background:var(--paper)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .back{background:rgba(0,0,0,.55)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .exit-toast{background:#1d1d1f!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .ecg-zoom-back,.ecg-zoom-close{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+}
+/* «Увеличенный контраст»: сплошные панели и чёткие границы у карточек и полей */
+@media (prefers-contrast:more){
+  :root{--muted:#3a3a3c;--line:#8e8e93}
+  :root[data-theme="dark"]{--muted:#d1d1d6;--line:#8e8e93}
+  header{background:#000!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-bottom:1px solid #8e8e93!important}
+  .bnav{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 -1px 0 var(--ink)}
+  .item,.scen,.icd-res,.ecg-card,.scl-card,.total-card,.tool-box,.bucket-head,.home-tile,.box,.calc-inline,.q-chip{border:1px solid var(--line)!important}
+  #q{box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+}
+</style>
 <style id="splashCss">
 /* ── СПЛЭШ-ЭКРАН ЗАГРУЗКИ ──
    Цвета зашиты жёстко (не через var(--…)): сплэш всегда тёмный и не зависит от темы.
@@ -2158,7 +2271,7 @@ const ICD10={"version":"МКБ-10","classes":[{"name":"I. Инфекционны
 /* правка 2026-10: развёрнутая ЭКГ — 50 мм/с (подпись 12-канальной карты и шторки карточки) */
 const ECG_PATTERNS=[{"id":"norm","label":"Норма","title":"Синусовый ритм (норма)","signs":["ЧСС 60–90 в мин (Горячев; > 90 — тахикардия, в других источниках до 100), ритм правильный","Зубец P перед каждым QRS","PR 0,12–0,20 с (3–5 мм)","QRS 0,06–0,10 с (≥ 0,12 с — уширен)","T положительный в I, II, V4–V6"],"warn":""},{"id":"sa","label":"СА-блокада","title":"СА-блокада II степени","signs":["Выпадение целого комплекса PQRST","Пауза ≈ 2 × нормальный R–R (при выпадении 2–3 циклов — в 3–4 раза)","При частых выпадениях — замещающие ритмы"],"warn":""},{"id":"avb1","label":"АВ-бл.I","title":"АВ-блокада I степени","signs":["P–Q > 0,20 с (более 1 большой клетки)","Все зубцы P проведены","ЧСС нормальная"],"warn":""},{"id":"avb2m","label":"АВ-бл.II Мобитц1","title":"АВ-блокада II ст. Мобитц I (Венкебах)","signs":["Прогрессивное удлинение P–Q от цикла к циклу","Затем выпадение QRS (периодика Самойлова–Венкебаха)","После паузы P–Q снова короткий; пауза меньше удвоенного самого короткого R–R (Горячев)"],"warn":""},{"id":"avb2m2","label":"АВ-бл.II Мобитц2","title":"АВ-блокада II ст. Мобитц II","signs":["P–Q постоянный (норма или удлинён)","Внезапное выпадение QRS при сохранённом P; проведение 2:1 тип блокады не определяет, ≥ 3:1 — блокада высокой степени (Горячев, Нифонтов)","Высокий риск полной АВ-блокады и асистолии"],"warn":"Высокий риск асистолии, подготовка к ЭКС. ⚠ Требует проверки: по МОССМП атропин малоэффективен (допамин/адреналин)"},{"id":"avb3","label":"АВ-бл.III","title":"АВ-блокада III ст. (полная)","signs":["Полная диссоциация P и QRS","Предсердия — синусовый ритм 60–90","Желудочки — узкий ритм 40–60 (проксимальный блок) или широкий менее 40 (дистальный; по Горячеву 40–45)","ЧСС очень редкая"],"warn":"Атропин 0,5–1 мг в/в, повтор каждые 3–5 мин до 3 мг; при стойкой брадикардии, нестабильности или приступах МЭС — временная ЭКС (бригады АиР, вне рамок линейной бригады), при невозможности — Допамин 5–15 мкг/кг/мин (МОССМП, «Кардиология», п.9.2)"},{"id":"rbbb","label":"БПНПГ","title":"Блокада правой ножки пучка Гиса","signs":["QRS ≥ 0,12 с (неполная блокада — 0,10–0,11 с)","В V1–V2 — rsR' или rSR' (М-образный, «уши кролика»)","В I, aVL, V5–V6 — широкий зазубренный S","T инвертирован в V1–V2"],"warn":""},{"id":"lbbb","label":"БЛНПГ","title":"Блокада левой ножки пучка Гиса","signs":["QRS ≥ 0,12 с (неполная блокада — 0,10–0,11 с)","В I, aVL, V5–V6 — широкий R без q","В V1–V2 — QS или rS","Дискордантный ST и T","Впервые возникшая БЛНПГ + боль = ОИМ до исключения"],"warn":"Новая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения (Мурашко; МОССМП)"},{"id":"lah","label":"БПВЛН","title":"Блокада передне-верхней ветви левой ножки","signs":["Резкое отклонение ЭОС влево (α от −30° до −90°; по Нифонтову строже — от −45°)","В I, aVL — высокий R с небольшим q","В II, III, aVF — глубокий S","QRS не уширен или незначительно"],"warn":""},{"id":"lph","label":"БЗНЛН","title":"Блокада задне-нижней ветви левой ножки","signs":["Отклонение ЭОС вправо (α > +120°)","В I, aVL — глубокий S; в III, aVF — высокий R","QRS не уширен"],"warn":""},{"id":"wpw","label":"WPW","title":"Синдром WPW (Вольфа–Паркинсона–Уайта)","signs":["P–Q < 0,12 с","QRS уширен (> 0,10 с, часто ≥ 0,12 с) за счёт дельта-волны","Дельта-волна в начале QRS","При ФП — очень частый ритм, риск ФЖ"],"warn":"При WPW с ФП избегать верапамил, дилтиазем, β-блокаторы и дигоксин (Нифонтов: «потенциально опасны» при предвозбуждении); аденозин — по ESC 2019; дигоксин и лидокаин противопоказаны (Хэмптон, ответ 136; лидокаин в книгах Горячева и Нифонтова при WPW не упомянут). При нестабильности — электрическая кардиоверсия (ESC 2019, Нифонтов)"},{"id":"lown","label":"CLC","title":"Синдром CLC (Клерка–Леви–Кристеско)","signs":["P–Q < 0,12 с","QRS не деформирован, дельта-волны нет","Склонность к пароксизмальным тахикардиям; диагноз — только при документированных пароксизмах (Горячев)"],"warn":""},{"id":"stemi","label":"STEMI","title":"ОИМ с подъёмом ST","signs":["Подъём ST в ≥ 2 смежных отведениях: ≥ 2 мм у мужчин или ≥ 1,5 мм у женщин в V2–V3; ≥ 1 мм в остальных отведениях","Дугообразный (выпуклый вверх) ST","Реципрокная депрессия в оппозитных отведениях","Позже — патологический Q (> 0,03 с и ≥ 25% R или > 3 мм; QS при трансмуральном), отрицательный T"],"warn":"Тромболизис Фортелизином или ЧКВ — время критично"},{"id":"nstemi","label":"NSTEMI","title":"NSTEMI / Нестабильная стенокардия","signs":["Патологического Q может не быть (при нетрансмуральном ИМ возможен Qr)","Глубокая депрессия ST и отрицательный T","Изменения сохраняются дольше, чем при стенокардии покоя"],"warn":"ОКС — двойная антиагрегантная терапия"},{"id":"peri","label":"Перикардит","title":"Острый перикардит","signs":["Диффузный подъём ST (вогнутый вверх) во многих отведениях кроме aVR и V1","Позже — отрицательный T","Нет реципрокных изменений","Нет патологического Q"],"warn":""},{"id":"brugada","label":"Бругада","title":"Синдром Бругада","signs":["Coved-подъём ST ≥ 2 мм в V1–V2 с переходом в отрицательный T (тип 1)","Элевация точки J, без динамики","БПНПГ-подобная морфология","Риск ФЖ и внезапной смерти"],"warn":"Риск ФЖ — избегать препаратов, блокирующих натриевые каналы (новокаинамид)"},{"id":"hypo","label":"Гипокалиемия","title":"Гипокалиемия на ЭКГ","signs":["Депрессия ST, сглаженность или инверсия T","Появление волны U (после T)","Удлинение QT","Может провоцировать пируэт-тахикардию (Torsades de Pointes)"],"warn":""},{"id":"dig","label":"Дигиталис","title":"Дигиталисная интоксикация / гликозиды","signs":["«Корытообразное» смещение ST вниз (выпуклостью вниз) в V4–V6","Укорочение QT","Отрицательный или двухфазный T","Различные аритмии (АВ-блокады, бигеминия)"],"warn":"Дигоксин противопоказан при WPW (дополнительных путях), ЖТ и гипертрофической кардиомиопатии с обструкцией выносящего тракта (Нифонтов)"},{"id":"ajr","label":"Ритм АВ-соед.","title":"Ритм АВ-соединения (замещающий узловой ритм)","signs":["ЧСС 40–60 в мин, QRS узкий (≤ 0,10 с)","Верхняя часть соединения: отрицательный Р ПЕРЕД QRS, короткий P–Q","Средняя часть: Р не виден (наслаивается на QRS)","Нижняя часть: отрицательный Р ПОСЛЕ QRS (в начале ST)"],"warn":""},{"id":"psvt","label":"Пароксизм НЖТ","title":"Пароксизм наджелудочковой (АВ-узловой) тахикардии","signs":["Зубцы Р не видны (при типичной АВ-узловой тахикардии наслаиваются на QRS; при атипичной — отрицательный P на ST)","Интервалы R–R одинаковые, резко укорочены","ЧСЖ обычно 140–240 в мин (Горячев: чаще > 160, нередко 200–220)","QRS обычно узкий; уширен при блокаде ножки пучка Гиса"],"warn":"ЧСЖ > 220 у молодых — заподозрить WPW: верапамил, дигоксин и β-блокаторы потенциально опасны (Нифонтов), не вводить при подозрении на WPW с ФП"},{"id":"afib","label":"ФП","title":"Фибрилляция предсердий (мерцательная аритмия)","signs":["Зубцы Р отсутствуют","Волны f — постоянно меняются по амплитуде и форме","Интервалы R–R абсолютно нерегулярны («неправильно неправильный» ритм)","При ЧСЖ > 150 в мин нерегулярность может быть малозаметна"],"warn":"При ФП на фоне WPW избегать верапамил, дилтиазем, аденозин; дигоксин противопоказан (ESC 2019; Хэмптон, ответ 136)"},{"id":"aflutter","label":"ТП","title":"Трепетание предсердий","signs":["Волны F «пилообразные», одинаковой формы, частота 200–320 в мин (Горячев; Нифонтов 240–350)","Правильная (ритмичная) форма: R–R одинаковый (фиксированная степень АВ-блокады)","Неправильная форма: R–R разный при регулярных волнах F","Проведение 2:1 → ЧСЖ ≈ 150 в мин, 3:1 → ≈ 100 в мин"],"warn":"При ТП/ФП на фоне WPW верапамил, дилтиазем, β-блокаторы и дигоксин опасны — не вводить (Нифонтов: «потенциально опасны»; ESC 2019)"},{"id":"vt","label":"Пароксизм ЖТ","title":"Пароксизм желудочковой тахикардии","signs":["ЧСС чаще 130–200, до 220 в мин (Горячев: обычно до 160, редко 180–200; Нифонтов 130–220), ритм чаще правильный","Комплексы QRS одинаковой формы, уширены (> 0,14 с)","АВ-диссоциация, редкие «захваченные» синусовые комплексы","Практически непрерывная кривая, нет изолинии"],"warn":"Высокий риск перехода в ФЖ и клиническую смерть"},{"id":"vf","label":"ФЖ","title":"Фибрилляция желудочков","signs":["Хаотичные комплексы разной формы, амплитуды и продолжительности","Зубцы P, Q, R, S, T не идентифицируются","Изоэлектрическая линия отсутствует","Интервалы R–R разные, без кратности и регулярности"],"warn":"Немедленная дефибрилляция + СЛР — см. протокол «Остановка кровообращения»"},{"id":"extra","label":"Экстрасистолия","title":"Экстрасистолия (наджелудочковая и желудочковая)","signs":["Преждевременный комплекс относительно основного ритма","Наджелудочковая: узкий QRS, неполная компенсаторная пауза","Желудочковая: широкий QRS без предшествующего Р, полная компенсаторная пауза","Короче интервал сцепления → выше риск ЖТ/ФЖ"],"warn":""},{"id":"sgarbossa","label":"ИМ на фоне БЛНПГ","title":"Критерии Sgarbossa–Smith (ИМ на фоне БЛНПГ)","signs":["Конкордантный подъём ST ≥ 1 мм в отведении с положительным QRS — 5 баллов","Конкордантная депрессия ST ≥ 1 мм в V1–V3 — 3 балла","Дискордантный подъём ST ≥ 5 мм в отведении с отрицательным QRS — 2 балла (оригинал)","Критерий Смита (2012): подъём ST ≥ 1 мм с ST/S ≤ −0,25 (≥ 25% глубины S) в любом отведении вместо критерия ≥ 5 мм; достаточно одного критерия"],"warn":"Впервые/остро возникшая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения"}];
 const REFERENCE=[["Пожилой возраст (65+)",[["Общий принцип",["Начинать с половины обычной взрослой дозы, вводить медленнее, оценивать эффект до повторного введения","Причины: снижение клубочковой фильтрации, уменьшение объёма распределения, полипрагмазия"]],["Снизить дозу вдвое, вводить медленно",["Морфин, фентанил, трамадол — угнетение дыхания, длительная седация","Сибазон, феназепам — парадоксальное возбуждение, падения, задержка мочи","Аминазин — выраженная гипотензия, экстрапирамидные реакции","Метоклопрамид — риск экстрапирамидных расстройств выше"]],["Гипотензивные и нитраты — риск ортостаза",["Нитроспрей — контроль АД до и после, только лёжа или сидя","Каптоприл, моксонидин, нифедипин — снижать АД не более чем на 20–25% за первый час","Урапидил, эналаприлат — вводить дробно под контролем АД","Фуросемид — риск гиповолемии, гипокалиемии, ОПП; осторожно при стенозе устья аорты"]],["НПВС — осторожно или воздержаться",["Долак, анальгин — риск ОПП при обезвоживании, ЖКТ-кровотечения, декомпенсации ХСН","Механизм: при гиповолемии СКФ держится на простагландинах, расширяющих приносящую артериолу. НПВС их блокируют — фильтрация падает","«Тройной удар»: иАПФ или сартан + диуретик + НПВС. ОПП может развиться за 1–2 суток","Признаки гиповолемии: сухие слизистые, снижен тургор, тахикардия, ортостаз, капиллярное наполнение более 2 сек","При гиповолемии начинать с парацетамола; НПВС — только после восполнения объёма, однократно"]],["Особый контроль",["Атропин — задержка мочи при аденоме простаты, обострение глаукомы, спутанность","Димедрол — выраженный седативный и антихолинергический эффект; предпочесть хлоропирамин","Эуфиллин — тахиаритмии, судороги; доза ниже, введение медленное","Гепарин — выше риск кровотечения при низкой массе тела и ХБП","Инфузия — темп ниже: риск перегрузки объёмом и отёка лёгких при ХСН"]]]],["Дети",[["Жаропонижающие: когда снижать",["Здоровым детям — при температуре 38,5 °C и выше","При температуре 38 °C: дети до 3 месяцев, с отягощённым преморбидным фоном, с судорожным синдромом в анамнезе","Парацетамол 15 мг/кг внутрь или ректально — препарат выбора (макс. 60 мг/кг/сут)","Физические методы охлаждения — детям до 12 лет","ВАЖНО: физические методы охлаждения противопоказаны при бледной гипертермии"]],["Чего детям не давать",["При гриппе метамизол натрия и ацетилсалициловая кислота противопоказаны (Алгоритмы СМП)","Метамизол — риск агранулоцитоза; клинрекомендации по ОРВИ у детей его не рекомендуют","Ацетилсалициловая кислота — синдром Рея; с жаропонижающей целью не применяется","Кеторолак (Долак) — с 16 лет","Нимесулид детям не рекомендован"]],["Дыхательная недостаточность — ЧДД выше нормы",["До 1 года — более 50 в минуту","1–5 лет — более 40 в минуту","Старше 5 лет — более 30 в минуту","Также: одышка в покое или при беспокойстве, участие вспомогательной мускулатуры, втяжение уступчивых мест грудной клетки","SpO2 менее 95% — показание к оксигенотерапии"]],["Госпитализация ребёнка обязательна",["Возраст до 1 месяца с лихорадкой","Неспособность пить или сосать грудь; сонливость или отсутствие сознания","Судороги, в том числе сложные фебрильные (более 15 минут или повторные за сутки)","Центральный цианоз, симптомы респираторного дистресса, тяжёлое обезвоживание","Геморрагическая сыпь на коже, рвота, отказ от еды и питья","Лихорадка 5 суток подряд и более или отсутствие эффекта от терапии","Отягощённый преморбидный фон, тяжёлое или осложнённое течение"]],["Расчёт дозы",["Большинство препаратов — по массе тела (мг/кг)","Тиамин, пиридоксин, хлоропирамин, карбоксим, ацизол — по 0,1 мл на год жизни","Адреналин при реанимации: 0,01 мг/кг в/в; развести 1 мл в 9 мл физраствора (1:10000), расчёт 0,1 мл на год жизни","Эндотрахеально адреналин — 0,1 мг/кг (доза в 10 раз выше внутривенной)","Диазепам: разовая максимальная до 5 лет — 5 мг, старше 5 лет — 10 мг; в/в медленно не менее 2 минут"]]]],["Беременность",[["Обезболивание и жаропонижение",["Парацетамол 500–1000 мг внутрь — препарат выбора при боли и лихорадке (Алгоритмы СМП)","НПВС (Долак, анальгин) — избегать, особенно в третьем триместре: риск преждевременного закрытия артериального протока","Морфин, фентанил — только по строгим показаниям, готовность к респираторной поддержке новорождённого"]],["Судороги у беременной",["Диазепам 10 мг (2 мл) в/венно","При эклампсии — магния сульфат; экстренная госпитализация в приёмный покой гинекологического отделения","Положение на левом боку для профилактики аортокавальной компрессии"]],["С осторожностью или избегать",["иАПФ (эналаприлат, каптоприл) — противопоказаны: фетотоксичность","Нитроглицерин, урапидил — под контролем АД, риск гипотензии и снижения плацентарного кровотока","Тромболитики — относительное противопоказание, решение с врачом","Тетрациклины, фторхинолоны — противопоказаны","Беременность на любом сроке и послеродовый период — группа риска тяжёлого течения ОРВИ"]]]],["Общие правила",[["Расчёт дозы у взрослых",["При ожирении большинство препаратов считают по идеальной, а не фактической массе тела","Исключение — гидрофильные препараты и инфузионная терапия: расчёт по фактической массе","Разовая доза у ребёнка не должна превышать взрослую разовую"]],["Почечная недостаточность",["НПВС — избегать при ХБП, гиповолемии, на фоне иАПФ и диуретиков","Морфин — метаболиты накапливаются, дозу снижать, интервал увеличивать","Гепарин — выше риск кровотечения","Магния сульфат — риск передозировки, контроль сухожильных рефлексов и диуреза"]],["Печёночная недостаточность",["Парацетамол — снизить дозу, максимум ниже обычного","Бензодиазепины, морфин — удлинение эффекта, риск энцефалопатии","Лидокаин — снижен клиренс, риск токсичности"]],["Перед введением",["Сверить концентрацию с маркировкой на ампуле — фасовка у разных производителей отличается","Уточнить аллергоанамнез и препараты, принятые пациентом до приезда бригады","При в/в введении контролировать скорость: магния сульфат, эуфиллин, амиодарон, верапамил вводят медленно","Расчёт по этому приложению — ориентир, а не замена инструкции и протокола станции"]]]]];
-const VERSION="7.87 (21.10.2026)";
+const VERSION="7.88 (23.10.2026)";
 
 /* ---------- PWA: манифест и офлайн-кэш ---------- */
 /* На хостинге (http/https) используются настоящие файлы manifest.webmanifest и sw.js
@@ -8244,4 +8357,412 @@ function sclCalc(){
 </body>
 </html>
 
+<script id="appleFluidJs">
+/* ══ правка 2026-10 (8.00): физика интерфейса по принципам Apple ═══════════════════════════════
+   • Пружины вместо анимаций фиксированной длительности: любую анимацию можно перехватить пальцем,
+     новое движение стартует с текущего (видимого) положения и сохраняет скорость.
+   • Параметры пружин — как у Apple: damping (1 = без перелёта) и response (быстрота, с).
+     По умолчанию damping 1; лёгкий перелёт (0.8) — только после жеста с инерцией.
+   • Шторку можно схватить и стянуть вниз; решение «закрыть / вернуть» принимается по точке,
+     куда «долетит» шторка с текущей скоростью (проекция инерции), а не по месту отпускания.
+   • Свайпы между препаратами и разделами отслеживают палец 1:1; у края — «резиновое» сопротивление.
+   • Нажатие подсвечивается сразу на касании, а не после отпускания.
+   • prefers-reduced-motion: сдвиги и пружины заменяются коротким перетеканием прозрачности. */
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const sheet=$('sheet'), back=$('back'), sheetIn=$('sheetIn'), list=$('list');
+if(!sheet||!back) return;
+const mqRM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false};
+const RM=()=>mqRM.matches;
+const mqWide=window.matchMedia?matchMedia('(min-width:820px)'):{matches:false};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const haptic=ms=>{try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}};
+
+/* ── пружина (масса 1): stiffness=(2π/response)², damping=4π·ratio/response ── */
+function Spring(onUpdate){
+  this.x=0;this.v=0;this.target=0;this.raf=0;this.onUpdate=onUpdate;this.onRest=null;this.last=0;
+}
+Spring.prototype.set=function(x){this.stop();this.x=x;this.v=0;this.onUpdate(x);};
+Spring.prototype.stop=function(){if(this.raf)cancelAnimationFrame(this.raf);this.raf=0;};
+Spring.prototype.running=function(){return !!this.raf;};
+Spring.prototype.to=function(target,o){
+  o=o||{};
+  this.stop();
+  this.target=target;
+  if(o.velocity!==undefined)this.v=o.velocity;          // передача скорости пальца
+  const k=Math.pow(2*Math.PI/(o.response||.4),2), c=4*Math.PI*(o.damping===undefined?1:o.damping)/(o.response||.4);
+  this.onRest=o.onRest||null;
+  this.last=performance.now();
+  const step=now=>{
+    let dt=Math.min(.064,(now-this.last)/1000);this.last=now;
+    // устойчивое интегрирование мелкими шагами
+    while(dt>0){const h=Math.min(dt,1/240);const a=-k*(this.x-this.target)-c*this.v;this.v+=a*h;this.x+=this.v*h;dt-=h;}
+    if(Math.abs(this.v)<6&&Math.abs(this.x-this.target)<.4){
+      this.x=this.target;this.v=0;this.onUpdate(this.x);this.raf=0;
+      const r=this.onRest;this.onRest=null;if(r)r();return;
+    }
+    this.onUpdate(this.x);
+    this.raf=requestAnimationFrame(step);
+  };
+  this.raf=requestAnimationFrame(step);
+};
+
+/* пружина → CSS-кривая linear() для анимаций без жеста (появления, смена разделов) */
+function springEasing(damping,response){
+  const k=Math.pow(2*Math.PI/response,2),c=4*Math.PI*damping/response;
+  let x=0,v=0;const pts=[0];const h=1/240;let t=0,settled=0;
+  while(t<3){for(let i=0;i<4;i++){const a=-k*(x-1)-c*v;v+=a*h;x+=v*h;t+=h;}
+    pts.push(+x.toFixed(4));
+    if(Math.abs(1-x)<.001&&Math.abs(v)<.01){if(++settled>2)break;}else settled=0;}
+  pts[pts.length-1]=1;
+  return {easing:'linear('+pts.join(',')+')',duration:Math.round(t*1000)};
+}
+let EASE={easing:'cubic-bezier(.2,.8,.2,1)',duration:420};
+try{
+  if(window.CSS&&CSS.supports('transition-timing-function','linear(0, 1)')){
+    EASE=springEasing(1,.38);
+    document.documentElement.style.setProperty('--ease-spring',EASE.easing);
+    document.documentElement.style.setProperty('--spring-dur',(EASE.duration/1000).toFixed(3)+'s');
+  }
+}catch(e){}
+
+/* проекция инерции — та же функция, что в примерах Apple (затухание как у прокрутки) */
+function project(v,rate){rate=rate||.998;return (v/1000)*rate/(1-rate);}
+/* «резинка»: чем дальше за границу, тем слабее элемент следует за пальцем */
+function rubber(over,dim,cst){cst=cst||.55;const s=over<0?-1:1;over=Math.abs(over);return s*(over*dim*cst)/(dim+cst*over);}
+/* скорость по последним ~100 мс движения */
+function Tracker(){this.h=[];}
+Tracker.prototype.add=function(x,y){const t=performance.now();this.h.push({x,y,t});while(this.h.length>2&&t-this.h[0].t>100)this.h.shift();};
+Tracker.prototype.vel=function(){const h=this.h;if(h.length<2)return{x:0,y:0};const a=h[0],b=h[h.length-1],dt=(b.t-a.t)/1000;
+  if(dt<=0||performance.now()-b.t>80)return{x:0,y:0};return{x:(b.x-a.x)/dt,y:(b.y-a.y)/dt};};
+
+/* ══ 1. ШТОРКА ═════════════════════════════════════════════════════════ */
+const H=()=>Math.max(1,sheet.offsetHeight);
+let shown=false;            // видима ли шторка на экране (в т.ч. в процессе закрытия)
+const sp=new Spring(y=>{
+  sheet.style.transform=(mqWide.matches?'translateX(-50%) ':'')+'translate3d(0,'+y.toFixed(2)+'px,0)';
+  back.style.opacity=clamp(1-Math.max(0,y)/H(),0,1).toFixed(3);
+});
+function settleClear(){sheet.style.transform='';back.style.opacity='';back.classList.remove('fl-vis');}
+const origClose=window.closeSheet;
+
+function flOpen(){
+  const wasOn=sheet.classList.contains('on');
+  if(wasOn&&!sp.running()&&shown)return;              // уже открыта и в покое
+  back.classList.add('fl-vis');
+  if(RM()){
+    sp.stop();sp.x=0;sheet.style.transform='';back.style.opacity='';
+    back.classList.add('on');sheet.classList.add('on');back.classList.remove('fl-vis');
+    if(!wasOn){try{sheet.animate([{opacity:0},{opacity:1}],{duration:200,easing:'ease'});}catch(e){}}
+    shown=true;return;
+  }
+  if(!shown&&!sp.running())sp.set(H());               // старт из-за нижнего края
+  else if(!sp.running()&&wasOn)sp.set(0);
+  back.classList.add('on');sheet.classList.add('on');
+  shown=true;
+  // анимация без жеста — критическое демпфирование (без перелёта); перехват — с текущего положения и скорости
+  sp.to(0,{damping:1,response:.38,onRest:settleClear});
+}
+function flClose(velocity){
+  if(!sheet.classList.contains('on')&&!sp.running())return origClose&&origClose();
+  if(!sp.running())sp.set(sp.x);                      // старт с текущего (видимого) положения
+  back.classList.add('fl-vis');
+  origClose&&origClose();                              // логика приложения: снять «on», остановить анимации ЭКГ
+  if(RM()){
+    sp.stop();
+    sheet.style.transform=(mqWide.matches?'translateX(-50%) ':'')+'translate3d(0,0,0)';
+    let a;try{a=sheet.animate([{opacity:1},{opacity:0}],{duration:200,easing:'ease'});}catch(e){}
+    back.classList.remove('fl-vis');
+    const done=()=>{sheet.style.transform='';shown=false;};
+    if(a)a.onfinish=done;else done();
+    return;
+  }
+  sp.to(H()+24,{damping:1,response:.32,velocity:velocity||sp.v,onRest:()=>{settleClear();shown=false;}});
+}
+window.openSheet=flOpen;
+window.closeSheet=function(){flClose();};
+back.onclick=window.closeSheet;
+
+/* обновление «края прокрутки» у шапки шторки */
+sheet.addEventListener('scroll',()=>{sheet.classList.toggle('fl-sh-scrolled',sheet.scrollTop>2);},{passive:true});
+
+/* элемент внутри, который сам прокручивается по горизонтали (ленты ЭКГ, таблицы, чипы) — его свайп не трогаем */
+function hScrollable(t,root){
+  for(let el=t;el&&el!==root;el=el.parentElement){
+    if(el.matches&&el.matches('input,select,textarea,[type=range],.ecg-row,.ecg-strip,.ea-strip,.ea-leads,#eaLB,#eaRB'))return true;
+    if(el.scrollWidth>el.clientWidth+2){const ox=getComputedStyle(el).overflowX;if(ox==='auto'||ox==='scroll')return true;}
+  }
+  return false;
+}
+
+/* жест на шторке: вниз — стянуть (с верха содержимого или за шапку); вбок — листать препараты 1:1 */
+(function(){
+  let g=null;
+  const hx=new Spring(x=>{if(sheetIn)sheetIn.style.transform=x?'translate3d('+x.toFixed(2)+'px,0,0)':'';
+    if(sheetIn)sheetIn.style.opacity=x?String(clamp(1-Math.abs(x)/(innerWidth*.9)*.7,.3,1)):'';});
+  const canNext=()=>{const b=$('nextD');return !!(b&&!b.disabled);};
+  const canPrev=()=>{const b=$('prevD');return !!(b&&!b.disabled);};
+
+  sheet.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1||!sheet.classList.contains('on')){g=null;return;}
+    const t=e.touches[0];
+    const grabbedMidFlight=sp.running();
+    if(grabbedMidFlight)sp.stop();                       // схватили на лету — шторка замирает под пальцем
+    hx.stop();
+    g={sx:t.clientX,sy:t.clientY,lock:null,engaged:false,y0:grabbedMidFlight?sp.x:0,
+       inHead:!!e.target.closest('.sh-head'),top:sheet.scrollTop<=0,mid:grabbedMidFlight,
+       hBlock:hScrollable(e.target,sheet)||(t.clientX<28||t.clientX>innerWidth-28),
+       x0:hx.x,child:sheetIn&&sheetIn.firstElementChild,tr:new Tracker(),fadeW:0};
+    g.tr.add(t.clientX,t.clientY);
+    if(grabbedMidFlight){g.lock='v';g.engaged=true;g.base=t.clientY;sheet.classList.add('fl-dragging');back.classList.add('fl-vis');}
+  },{passive:true});
+
+  sheet.addEventListener('touchmove',e=>{
+    if(!g)return;
+    const t=e.touches[0],dx=t.clientX-g.sx,dy=t.clientY-g.sy;
+    g.tr.add(t.clientX,t.clientY);
+    const downCandidate=(g.top||g.inHead||g.mid)&&dy>0&&Math.abs(dy)>=Math.abs(dx);
+    if(!g.lock){
+      if(downCandidate&&e.cancelable)e.preventDefault();  // не даём браузеру начать прокрутку, пока решаем
+      if(Math.abs(dx)>10||Math.abs(dy)>10){            // гистерезис 10 px до выбора направления
+        g.lock=Math.abs(dx)>Math.abs(dy)*1.2?'h':'v';
+        if(g.lock==='v'&&downCandidate){g.engaged=true;g.base=t.clientY;sheet.classList.add('fl-dragging');back.classList.add('fl-vis');}
+        else if(g.lock==='h'&&!g.hBlock&&!RM()){g.engaged=true;g.baseX=t.clientX;g.fadeW=innerWidth*.9;}
+        else if(g.lock==='v'){g=null;return;}          // обычная прокрутка содержимого
+      }
+      if(!g.engaged)return;
+    }
+    if(!g.engaged)return;
+    if(g.lock==='v'){
+      if(e.cancelable)e.preventDefault();
+      let y=g.y0+(t.clientY-g.base);
+      if(y<0)y=rubber(y,H());                          // вверх за край — сопротивление
+      sp.x=y;sp.onUpdate(y);
+    }else{
+      let x=g.x0+(t.clientX-g.baseX);
+      const ok=x<0?canNext():canPrev();
+      x=ok?x:rubber(x,innerWidth,.35);                 // соседнего препарата нет — «резинка»
+      hx.x=x;hx.onUpdate(x);
+    }
+  },{passive:false});
+
+  const end=()=>{
+    if(!g||!g.engaged){g=null;return;}
+    const v=g.tr.vel();
+    if(g.lock==='v'){
+      sheet.classList.remove('fl-dragging');
+      const y=sp.x,h=H();
+      const projected=y+project(v.y);                  // куда «долетит» шторка
+      if(projected>h*.45&&y>0){haptic(8);flClose(Math.max(v.y,0));}
+      else{sp.to(0,{damping:.8,response:.3,velocity:v.y,onRest:settleClear});}   // жест с инерцией — лёгкий перелёт
+    }else{
+      // обработчик листания (makeSwipe) уже отработал раньше нашего: если карточка сменилась — новая въезжает с той стороны, куда ушла старая
+      const changed=sheetIn&&sheetIn.firstElementChild!==g.child;
+      const x=hx.x;
+      if(changed){
+        haptic(6);
+        const from=(x<0?1:-1)*innerWidth*.32;
+        hx.x=from;hx.onUpdate(from);
+        hx.to(0,{damping:1,response:.34,velocity:v.x,onRest:()=>{hx.onUpdate(0);}});
+      }else{
+        hx.to(0,{damping:.8,response:.3,velocity:v.x,onRest:()=>{if(sheetIn){sheetIn.style.transform='';sheetIn.style.opacity='';}}});
+      }
+    }
+    g=null;
+  };
+  sheet.addEventListener('touchend',end,{passive:true});
+  sheet.addEventListener('touchcancel',end,{passive:true});
+
+  /* мышь/перо: тянуть за шапку шторки (десктоп) */
+  let m=null;
+  sheet.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='touch'||e.button!==0||!e.target.closest('.sh-head')||e.target.closest('button,a,input,select'))return;
+    if(sp.running())sp.stop();
+    m={sy:e.clientY,y0:sp.running()?sp.x:(sp.x>0?sp.x:0),tr:new Tracker(),id:e.pointerId,moved:false};
+    m.tr.add(e.clientX,e.clientY);
+  });
+  window.addEventListener('pointermove',e=>{
+    if(!m||e.pointerId!==m.id)return;
+    const dy=e.clientY-m.sy;
+    if(!m.moved&&Math.abs(dy)<4)return;
+    if(!m.moved){m.moved=true;sheet.classList.add('fl-dragging');back.classList.add('fl-vis');try{sheet.setPointerCapture(e.pointerId);}catch(_){}}
+    m.tr.add(e.clientX,e.clientY);
+    let y=m.y0+dy;if(y<0)y=rubber(y,H());
+    sp.x=y;sp.onUpdate(y);
+  });
+  const mend=e=>{
+    if(!m||e.pointerId!==m.id)return;
+    if(m.moved){
+      sheet.classList.remove('fl-dragging');
+      const v=m.tr.vel(),y=sp.x;
+      if(y+project(v.y)>H()*.45&&y>0)flClose(Math.max(v.y,0));
+      else sp.to(0,{damping:.8,response:.3,velocity:v.y,onRest:settleClear});
+    }
+    m=null;
+  };
+  window.addEventListener('pointerup',mend);
+  window.addEventListener('pointercancel',mend);
+})();
+
+/* ══ 2. СВАЙП РАЗДЕЛОВ НА ГЛАВНОМ СПИСКЕ: палец ведёт контент 1:1 ═════════ */
+(function(){
+  if(!list||typeof SWIPE_TABS==='undefined')return;
+  let g=null;
+  const hx=new Spring(x=>{list.style.transform=x?'translate3d('+x.toFixed(2)+'px,0,0)':'';
+    list.style.opacity=x?String(clamp(1-Math.abs(x)/innerWidth*.6,.4,1)):'';});
+  const curIdx=()=>SWIPE_TABS.findIndex(id=>{const b=$(id);return b&&b.classList.contains('on');});
+  list.addEventListener('touchstart',e=>{
+    const t=e.touches[0];
+    if(e.touches.length!==1||sheet.classList.contains('on')||curIdx()<0||RM()||hScrollable(e.target,list)||
+       t.clientX<28||t.clientX>innerWidth-28){g=null;return;}
+    hx.stop();
+    g={sx:t.clientX,sy:t.clientY,lock:null,x0:hx.x,view:typeof view!=='undefined'?view:null,child:list.firstElementChild,tr:new Tracker()};
+    g.tr.add(t.clientX,t.clientY);
+  },{passive:true});
+  list.addEventListener('touchmove',e=>{
+    if(!g)return;
+    const t=e.touches[0],dx=t.clientX-g.sx,dy=t.clientY-g.sy;
+    g.tr.add(t.clientX,t.clientY);
+    if(!g.lock){
+      if(Math.abs(dx)>10||Math.abs(dy)>10){g.lock=Math.abs(dx)>Math.abs(dy)*1.2?'h':'v';if(g.lock==='v'){g=null;return;}g.base=t.clientX;window.__flSwiped=true;}
+      else return;
+    }
+    const i=curIdx();let x=g.x0+(t.clientX-g.base);
+    const ok=x<0?i<SWIPE_TABS.length-1:i>0;
+    // у края — сопротивление; в обычном случае тоже чуть «тяжелее» пальца, чтобы было видно, что это переход
+    x=ok?x*.55:rubber(x,innerWidth,.3);
+    hx.x=x;hx.onUpdate(x);
+  },{passive:true});
+  const end=()=>{
+    if(!g||g.lock!=='h'){g=null;window.__flSwiped=false;return;}
+    const v=g.tr.vel(),x=hx.x;
+    const changed=(typeof view!=='undefined'&&view!==g.view)||list.firstElementChild!==g.child;
+    window.__flSwiped=false;
+    if(changed){
+      const from=(x<0?1:-1)*innerWidth*.28;
+      hx.x=from;hx.onUpdate(from);
+      hx.to(0,{damping:1,response:.36,velocity:v.x*.55,onRest:()=>hx.onUpdate(0)});
+    }else hx.to(0,{damping:.8,response:.3,velocity:v.x*.55,onRest:()=>hx.onUpdate(0)});
+    g=null;
+  };
+  list.addEventListener('touchend',end,{passive:true});
+  list.addEventListener('touchcancel',end,{passive:true});
+})();
+
+/* ══ 3. СМЕНА РАЗДЕЛА ПО НАЖАТИЮ: контент приходит с той стороны, где раздел стоит в нижней панели ══ */
+(function(){
+  if(typeof window.setTab!=='function'||!list)return;
+  const ORDER=['home','all','stdList','scales','ecg','mkb','status','cards','orders'];
+  const orig=window.setTab;
+  window.setTab=function(v){
+    const prev=typeof view!=='undefined'?view:null;
+    const r=orig.apply(this,arguments);
+    if(window.__flSwiped){window.__flSwiped=false;return r;}   // после свайпа анимацию уже сделал жест
+    if(prev===v)return r;
+    try{
+      if(RM()){list.animate([{opacity:0},{opacity:1}],{duration:180,easing:'ease'});return r;}
+      const a=ORDER.indexOf(prev),b=ORDER.indexOf(v);
+      const dir=(a<0||b<0)?0:(b>a?1:-1);
+      list.animate([{opacity:0,transform:'translate3d('+(dir*24)+'px,'+(dir?0:8)+'px,0)'},{opacity:1,transform:'none'}],
+        {duration:EASE.duration,easing:EASE.easing});
+    }catch(e){}
+    return r;
+  };
+  // кнопки шапки и нижней панели вызывают setTab по имени через обёртки — они уже получат новую функцию
+})();
+
+/* ══ 4. НАЖАТИЕ: отклик сразу на касании, гистерезис 10 px (палец «уехал» — подсветка снимается) ══ */
+(function(){
+  const SEL='button,.item,.scen,.icd-res,.ecg-card,.home-tile,.tactic-lnk,.mkb-cls,.mkb-item,.pick-btn,.ac-item,.q-chip,.kitchip,.symp-chip,.gcs-opt,.opt-item,.burn-zone-btn,.calc-inline[role="button"],[role="button"]';
+  let cur=null,sx=0,sy=0;
+  const release=()=>{
+    if(!cur)return;const el=cur;cur=null;
+    el.classList.add('is-releasing');el.classList.remove('is-pressed');
+    setTimeout(()=>el.classList.remove('is-releasing'),460);
+  };
+  document.addEventListener('pointerdown',e=>{
+    if(e.button>0)return;
+    const el=e.target.closest(SEL);
+    if(!el||el.disabled||el.closest('.sheet.fl-dragging')||el.id==='back')return;
+    // элементы, которые уже чем-то сдвинуты/повёрнуты (позиционирование через transform), не трогаем
+    if(!el.classList.contains('is-releasing')&&getComputedStyle(el).transform!=='none')return;
+    release();
+    cur=el;sx=e.clientX;sy=e.clientY;
+    el.classList.remove('is-releasing');el.classList.add('is-pressed');
+  },{passive:true,capture:true});
+  document.addEventListener('pointermove',e=>{if(cur&&Math.hypot(e.clientX-sx,e.clientY-sy)>10)release();},{passive:true,capture:true});
+  ['pointerup','pointercancel','dragstart'].forEach(t=>document.addEventListener(t,release,{passive:true,capture:true}));
+  window.addEventListener('blur',release);
+  window.addEventListener('scroll',release,{passive:true,capture:true});
+  document.addEventListener('touchstart',()=>{},{passive:true});   // включает :active в iOS Safari
+})();
+
+/* ══ 5. АККОРДЕОНЫ: плавное раскрытие/сворачивание по высоте; повторное нажатие разворачивает с текущей высоты ══ */
+(function(){
+  const anims=new WeakMap();
+  const curH=b=>b.getBoundingClientRect().height;
+  function run(body,from,to,done){
+    const prev=anims.get(body);if(prev){prev.onfinish=null;prev.cancel();}
+    body.style.overflow='hidden';
+    let a;
+    try{a=body.animate([{height:from+'px',opacity:to>from?.35:1},{height:to+'px',opacity:to>from?1:.2}],
+      {duration:Math.round(EASE.duration*.9),easing:EASE.easing,fill:'forwards'});}catch(e){}
+    const fin=()=>{anims.delete(body);body.style.overflow='';if(done)done();if(a)a.cancel();};
+    if(!a){fin();return;}
+    anims.set(body,a);a.onfinish=fin;
+  }
+  // сворачивание: перехватываем до штатного обработчика, сначала анимация, потом штатная логика
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('.bucket-head');if(!btn||RM())return;
+    const body=btn.nextElementSibling;if(!body)return;
+    const running=anims.get(body);
+    if(btn.classList.contains('open')&&!running){
+      e.stopPropagation();
+      const chev=btn.querySelector('.bucket-chevron');if(chev)chev.style.transform='rotate(0deg)';
+      body.dataset.flClosing='1';
+      run(body,curH(body),0,()=>{delete body.dataset.flClosing;if(chev)chev.style.transform='';
+        if(typeof btn.onclick==='function')btn.onclick.call(btn,e);else body.style.display='none';});
+      return;
+    }
+    if(running&&body.dataset.flClosing){            // передумали сворачивать — разворачиваем с текущей высоты
+      e.stopPropagation();
+      delete body.dataset.flClosing;
+      const chev=btn.querySelector('.bucket-chevron');if(chev)chev.style.transform='';
+      const h=curH(body);running.onfinish=null;running.cancel();anims.delete(body);
+      body.style.height='';run(body,h,body.scrollHeight);
+      return;
+    }
+    btn.dataset.flWasClosed=btn.classList.contains('open')?'':'1';
+  },true);
+  // раскрытие: после штатного обработчика (он уже показал содержимое) — анимируем высоту от нуля
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('.bucket-head');if(!btn||RM())return;
+    const body=btn.nextElementSibling;
+    if(btn.dataset.flWasClosed==='1'&&btn.classList.contains('open')&&body&&body.isConnected){
+      run(body,0,body.scrollHeight);
+    }
+    delete btn.dataset.flWasClosed;
+  });
+})();
+
+/* ══ 6. «Край прокрутки» у шапки: тень появляется, только когда под шапкой есть контент ══ */
+(function(){
+  const header=document.querySelector('header');if(!header)return;
+  let tick=false;
+  const upd=()=>{header.classList.toggle('fl-scrolled',window.scrollY>4);tick=false;};
+  window.addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(upd);}},{passive:true});
+  upd();
+})();
+
+/* ══ 7. Смена темы — плавное перетекание вместо резкого скачка яркости ══ */
+(function(){
+  const btn=$('themeToggle');if(!btn||typeof window.cycleTheme!=='function')return;
+  btn.onclick=function(){
+    if(document.startViewTransition){document.startViewTransition(()=>window.cycleTheme());}
+    else window.cycleTheme();
+  };
+})();
+})();
+</script>
 </body></html>
