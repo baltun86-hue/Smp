@@ -16,7 +16,7 @@ for bad in ('cloudtips', 'Альметьев', 'АССМП', '8553', 'Татне
     if bad in s2:
         sys.exit('build_rustore: в версии для RuStore осталось «%s»' % bad)
 # своя нумерация RuStore: VERSION в файле = versionName из android/rustore.properties, дата — как у исходной версии;
-# в «О программе» добавляется строка «данные справочника: версия N» (связь с рабочей нумерацией)
+# (из какой сборки справочника сделана версия — видно в выводе скрипта и в коммите)
 props = dict(l.split('=', 1) for l in (ROOT / 'android' / 'rustore.properties').read_text(encoding='utf-8').splitlines()
              if l and not l.startswith('#') and '=' in l)
 rv = props['versionName'].strip()
@@ -25,9 +25,6 @@ if not m:
     sys.exit('build_rustore: VERSION не найдена')
 base, date = m.group(1), m.group(2)
 s2 = s2.replace(m.group(0), 'VERSION="%s (%s)"' % (rv, date), 1)
-s2, k = re.subn(r"(СМП Справочник, версия \$\{esc\(VERSION\)\}\.)", r"\1<br><span style=\"font-size:12px;color:var(--muted)\">Данные справочника: сборка %s</span>" % base, s2, count=1)
-if k != 1:
-    sys.exit('build_rustore: строка версии в «О программе» не найдена')
 s2 = s2.replace("textContent='v'+VERSION+' · общая';", "textContent='v'+VERSION;", 1)  # в RuStore пометка «общая» не нужна
 dst.parent.mkdir(parents=True, exist_ok=True)
 dst.write_text(s2, encoding='utf-8')

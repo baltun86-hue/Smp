@@ -135,6 +135,6 @@ keyAlias=smp
 keyPassword=…
 ```
 
-Нумерация RuStore своя, начинается с 1.00: `android/rustore.properties` (versionName, versionCode). Перед каждой загрузкой в RuStore увеличить versionCode на 1 и при необходимости versionName; в «О программе» видно, из какой сборки справочника собрана версия.
+Нумерация RuStore своя, начинается с 1.00: `android/rustore.properties` (versionName, versionCode). Перед каждой загрузкой в RuStore увеличить versionCode на 1 и при необходимости versionName.
 
 Ключ и пароли в git не попадают (`.gitignore`). Храните их в двух местах: каждое обновление в RuStore должно быть подписано тем же ключом.
