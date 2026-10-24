@@ -471,6 +471,42 @@ header.compact .tabs{max-height:0;opacity:0;margin:0;pointer-events:none}
 .ea-desc{margin:6px 0;white-space:pre-line;font-size:var(--fs-14-5);line-height:1.5}
 .ea-trace{stroke:var(--ink)}
 .ea-g1{stroke:var(--ecgLine2);opacity:.45} .ea-g5{stroke:var(--ecgLine2)}
+/* правка 2026-10 (8.04): живая лента ЭКГ в карточках атласа — canvas, ползунки, измерения */
+.es-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 0 8px;padding-bottom:2px}
+.es-chips::-webkit-scrollbar{display:none}
+.es-chips .ea-chip{flex:0 0 auto;white-space:nowrap}
+.es-view{cursor:default}
+.es-view canvas{display:block;width:100%}
+.es-meas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.35fr);gap:4px;margin-top:6px}
+.es-meas>div{border:1px solid var(--line);border-radius:var(--r-sm);padding:3px 2px;background:var(--card);text-align:center;min-width:0}
+.es-meas b{display:block;font-size:var(--fs-14);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.es-meas span{display:block;color:var(--muted);font-size:var(--fs-10-5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.es-meas .es-bad{border-color:var(--ban);background:var(--banBg)} .es-meas .es-bad b{color:var(--ban)}
+.es-top{align-items:center;margin:8px 0}
+.es-seg{display:flex}
+.es-seg .ea-btn{border-radius:0;padding:8px 10px}
+.es-seg .ea-btn:first-child{border-radius:var(--r) 0 0 var(--r)}
+.es-seg .ea-btn:last-child{border-radius:0 var(--r) var(--r) 0;margin-left:-1px}
+.es-dx{border-left:3px solid var(--accent);padding:6px 10px;background:var(--card);border-radius:0 var(--r-sm) var(--r-sm) 0}
+.es-sl{margin:8px 0 12px}
+.es-slh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:var(--fs-14)}
+.es-slh b{font-variant-numeric:tabular-nums}
+.es-slr{display:flex;align-items:center;gap:6px}
+.es-slr input{flex:1 1 auto;min-width:0;height:44px;accent-color:var(--accent)}
+.es-ticks{position:relative;height:calc(15px * var(--fs-scale));margin:0 50px;font-size:var(--fs-10-5);color:var(--muted)}
+.es-ticks span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+.es-ticks .w{color:var(--warn);font-weight:700}
+.es-badge{font-size:var(--fs-12);padding:1px 8px;border-radius:var(--r-pill);border:1px solid var(--line)}
+.es-badge.es-ok{color:var(--ok);background:var(--okBg);border-color:var(--okLine)}
+.es-badge.es-warn{color:var(--warn);background:var(--warnBg);border-color:var(--warnLine)}
+.es-badge.es-ban{color:var(--ban);background:var(--banBg);border-color:var(--banLine)}
+.es-row{margin:8px 0 4px}
+.es-lbl{display:block;font-size:var(--fs-13);color:var(--muted);margin-bottom:4px}
+.es-row .ea-chips{margin-bottom:0}
+.el-live{margin:2px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.el-note{font-size:var(--fs-12);color:var(--muted);margin:6px 0 0;line-height:1.4}
+.el-rate{margin-top:-2px}
+.el-rate .es-lbl{display:inline;margin:0 4px 0 0}
 /* правка 2026-10 (7.27): подписи зубцов, скобки интервалов, калибровка 1 мВ на плёнках */
 html:root .ecg-trace.ecg-annot path.ecg-cal{stroke:#16324f!important}
 html:root .ecg-trace.ecg-annot .ecg-ann-b path{stroke:#64748b!important}
@@ -2298,7 +2334,7 @@ const ICD10={"version":"МКБ-10","classes":[{"name":"I. Инфекционны
 /* правка 2026-10: развёрнутая ЭКГ — 50 мм/с (подпись 12-канальной карты и шторки карточки) */
 const ECG_PATTERNS=[{"id":"norm","label":"Норма","title":"Синусовый ритм (норма)","signs":["ЧСС 60–90 в мин (Горячев; > 90 — тахикардия, в других источниках до 100), ритм правильный","Зубец P перед каждым QRS","PR 0,12–0,20 с (3–5 мм)","QRS 0,06–0,10 с (≥ 0,12 с — уширен)","T положительный в I, II, V4–V6"],"warn":""},{"id":"sa","label":"СА-блокада","title":"СА-блокада II степени","signs":["Выпадение целого комплекса PQRST","Пауза ≈ 2 × нормальный R–R (при выпадении 2–3 циклов — в 3–4 раза)","При частых выпадениях — замещающие ритмы"],"warn":""},{"id":"avb1","label":"АВ-бл.I","title":"АВ-блокада I степени","signs":["P–Q > 0,20 с (более 1 большой клетки)","Все зубцы P проведены","ЧСС нормальная"],"warn":""},{"id":"avb2m","label":"АВ-бл.II Мобитц1","title":"АВ-блокада II ст. Мобитц I (Венкебах)","signs":["Прогрессивное удлинение P–Q от цикла к циклу","Затем выпадение QRS (периодика Самойлова–Венкебаха)","После паузы P–Q снова короткий; пауза меньше удвоенного самого короткого R–R (Горячев)"],"warn":""},{"id":"avb2m2","label":"АВ-бл.II Мобитц2","title":"АВ-блокада II ст. Мобитц II","signs":["P–Q постоянный (норма или удлинён)","Внезапное выпадение QRS при сохранённом P; проведение 2:1 тип блокады не определяет, ≥ 3:1 — блокада высокой степени (Горячев, Нифонтов)","Высокий риск полной АВ-блокады и асистолии"],"warn":"Высокий риск асистолии, подготовка к ЭКС. ⚠ Требует проверки: по МОССМП атропин малоэффективен (допамин/адреналин)"},{"id":"avb3","label":"АВ-бл.III","title":"АВ-блокада III ст. (полная)","signs":["Полная диссоциация P и QRS","Предсердия — синусовый ритм 60–90","Желудочки — узкий ритм 40–60 (проксимальный блок) или широкий менее 40 (дистальный; по Горячеву 40–45)","ЧСС очень редкая"],"warn":"Атропин 0,5–1 мг в/в, повтор каждые 3–5 мин до 3 мг; при стойкой брадикардии, нестабильности или приступах МЭС — временная ЭКС (бригады АиР, вне рамок линейной бригады), при невозможности — Допамин 5–15 мкг/кг/мин (МОССМП, «Кардиология», п.9.2)"},{"id":"rbbb","label":"БПНПГ","title":"Блокада правой ножки пучка Гиса","signs":["QRS ≥ 0,12 с (неполная блокада — 0,10–0,11 с)","В V1–V2 — rsR' или rSR' (М-образный, «уши кролика»)","В I, aVL, V5–V6 — широкий зазубренный S","T инвертирован в V1–V2"],"warn":""},{"id":"lbbb","label":"БЛНПГ","title":"Блокада левой ножки пучка Гиса","signs":["QRS ≥ 0,12 с (неполная блокада — 0,10–0,11 с)","В I, aVL, V5–V6 — широкий R без q","В V1–V2 — QS или rS","Дискордантный ST и T","Впервые возникшая БЛНПГ + боль = ОИМ до исключения"],"warn":"Новая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения (Мурашко; МОССМП)"},{"id":"lah","label":"БПВЛН","title":"Блокада передне-верхней ветви левой ножки","signs":["Резкое отклонение ЭОС влево (α от −30° до −90°; по Нифонтову строже — от −45°)","В I, aVL — высокий R с небольшим q","В II, III, aVF — глубокий S","QRS не уширен или незначительно"],"warn":""},{"id":"lph","label":"БЗНЛН","title":"Блокада задне-нижней ветви левой ножки","signs":["Отклонение ЭОС вправо (α > +120°)","В I, aVL — глубокий S; в III, aVF — высокий R","QRS не уширен"],"warn":""},{"id":"wpw","label":"WPW","title":"Синдром WPW (Вольфа–Паркинсона–Уайта)","signs":["P–Q < 0,12 с","QRS уширен (> 0,10 с, часто ≥ 0,12 с) за счёт дельта-волны","Дельта-волна в начале QRS","При ФП — очень частый ритм, риск ФЖ"],"warn":"При WPW с ФП избегать верапамил, дилтиазем, β-блокаторы и дигоксин (Нифонтов: «потенциально опасны» при предвозбуждении); аденозин — по ESC 2019; дигоксин и лидокаин противопоказаны (Хэмптон, ответ 136; лидокаин в книгах Горячева и Нифонтова при WPW не упомянут). При нестабильности — электрическая кардиоверсия (ESC 2019, Нифонтов)"},{"id":"lown","label":"CLC","title":"Синдром CLC (Клерка–Леви–Кристеско)","signs":["P–Q < 0,12 с","QRS не деформирован, дельта-волны нет","Склонность к пароксизмальным тахикардиям; диагноз — только при документированных пароксизмах (Горячев)"],"warn":""},{"id":"stemi","label":"STEMI","title":"ОИМ с подъёмом ST","signs":["Подъём ST в ≥ 2 смежных отведениях: ≥ 2 мм у мужчин или ≥ 1,5 мм у женщин в V2–V3; ≥ 1 мм в остальных отведениях","Дугообразный (выпуклый вверх) ST","Реципрокная депрессия в оппозитных отведениях","Позже — патологический Q (> 0,03 с и ≥ 25% R или > 3 мм; QS при трансмуральном), отрицательный T"],"warn":"Тромболизис Фортелизином или ЧКВ — время критично"},{"id":"nstemi","label":"NSTEMI","title":"NSTEMI / Нестабильная стенокардия","signs":["Патологического Q может не быть (при нетрансмуральном ИМ возможен Qr)","Глубокая депрессия ST и отрицательный T","Изменения сохраняются дольше, чем при стенокардии покоя"],"warn":"ОКС — двойная антиагрегантная терапия"},{"id":"peri","label":"Перикардит","title":"Острый перикардит","signs":["Диффузный подъём ST (вогнутый вверх) во многих отведениях кроме aVR и V1","Позже — отрицательный T","Нет реципрокных изменений","Нет патологического Q"],"warn":""},{"id":"brugada","label":"Бругада","title":"Синдром Бругада","signs":["Coved-подъём ST ≥ 2 мм в V1–V2 с переходом в отрицательный T (тип 1)","Элевация точки J, без динамики","БПНПГ-подобная морфология","Риск ФЖ и внезапной смерти"],"warn":"Риск ФЖ — избегать препаратов, блокирующих натриевые каналы (новокаинамид)"},{"id":"hypo","label":"Гипокалиемия","title":"Гипокалиемия на ЭКГ","signs":["Депрессия ST, сглаженность или инверсия T","Появление волны U (после T)","Удлинение QT","Может провоцировать пируэт-тахикардию (Torsades de Pointes)"],"warn":""},{"id":"dig","label":"Дигиталис","title":"Дигиталисная интоксикация / гликозиды","signs":["«Корытообразное» смещение ST вниз (выпуклостью вниз) в V4–V6","Укорочение QT","Отрицательный или двухфазный T","Различные аритмии (АВ-блокады, бигеминия)"],"warn":"Дигоксин противопоказан при WPW (дополнительных путях), ЖТ и гипертрофической кардиомиопатии с обструкцией выносящего тракта (Нифонтов)"},{"id":"ajr","label":"Ритм АВ-соед.","title":"Ритм АВ-соединения (замещающий узловой ритм)","signs":["ЧСС 40–60 в мин, QRS узкий (≤ 0,10 с)","Верхняя часть соединения: отрицательный Р ПЕРЕД QRS, короткий P–Q","Средняя часть: Р не виден (наслаивается на QRS)","Нижняя часть: отрицательный Р ПОСЛЕ QRS (в начале ST)"],"warn":""},{"id":"psvt","label":"Пароксизм НЖТ","title":"Пароксизм наджелудочковой (АВ-узловой) тахикардии","signs":["Зубцы Р не видны (при типичной АВ-узловой тахикардии наслаиваются на QRS; при атипичной — отрицательный P на ST)","Интервалы R–R одинаковые, резко укорочены","ЧСЖ обычно 140–240 в мин (Горячев: чаще > 160, нередко 200–220)","QRS обычно узкий; уширен при блокаде ножки пучка Гиса"],"warn":"ЧСЖ > 220 у молодых — заподозрить WPW: верапамил, дигоксин и β-блокаторы потенциально опасны (Нифонтов), не вводить при подозрении на WPW с ФП"},{"id":"afib","label":"ФП","title":"Фибрилляция предсердий (мерцательная аритмия)","signs":["Зубцы Р отсутствуют","Волны f — постоянно меняются по амплитуде и форме","Интервалы R–R абсолютно нерегулярны («неправильно неправильный» ритм)","При ЧСЖ > 150 в мин нерегулярность может быть малозаметна"],"warn":"При ФП на фоне WPW избегать верапамил, дилтиазем, аденозин; дигоксин противопоказан (ESC 2019; Хэмптон, ответ 136)"},{"id":"aflutter","label":"ТП","title":"Трепетание предсердий","signs":["Волны F «пилообразные», одинаковой формы, частота 200–320 в мин (Горячев; Нифонтов 240–350)","Правильная (ритмичная) форма: R–R одинаковый (фиксированная степень АВ-блокады)","Неправильная форма: R–R разный при регулярных волнах F","Проведение 2:1 → ЧСЖ ≈ 150 в мин, 3:1 → ≈ 100 в мин"],"warn":"При ТП/ФП на фоне WPW верапамил, дилтиазем, β-блокаторы и дигоксин опасны — не вводить (Нифонтов: «потенциально опасны»; ESC 2019)"},{"id":"vt","label":"Пароксизм ЖТ","title":"Пароксизм желудочковой тахикардии","signs":["ЧСС чаще 130–200, до 220 в мин (Горячев: обычно до 160, редко 180–200; Нифонтов 130–220), ритм чаще правильный","Комплексы QRS одинаковой формы, уширены (> 0,14 с)","АВ-диссоциация, редкие «захваченные» синусовые комплексы","Практически непрерывная кривая, нет изолинии"],"warn":"Высокий риск перехода в ФЖ и клиническую смерть"},{"id":"vf","label":"ФЖ","title":"Фибрилляция желудочков","signs":["Хаотичные комплексы разной формы, амплитуды и продолжительности","Зубцы P, Q, R, S, T не идентифицируются","Изоэлектрическая линия отсутствует","Интервалы R–R разные, без кратности и регулярности"],"warn":"Немедленная дефибрилляция + СЛР — см. протокол «Остановка кровообращения»"},{"id":"extra","label":"Экстрасистолия","title":"Экстрасистолия (наджелудочковая и желудочковая)","signs":["Преждевременный комплекс относительно основного ритма","Наджелудочковая: узкий QRS, неполная компенсаторная пауза","Желудочковая: широкий QRS без предшествующего Р, полная компенсаторная пауза","Короче интервал сцепления → выше риск ЖТ/ФЖ"],"warn":""},{"id":"sgarbossa","label":"ИМ на фоне БЛНПГ","title":"Критерии Sgarbossa–Smith (ИМ на фоне БЛНПГ)","signs":["Конкордантный подъём ST ≥ 1 мм в отведении с положительным QRS — 5 баллов","Конкордантная депрессия ST ≥ 1 мм в V1–V3 — 3 балла","Дискордантный подъём ST ≥ 5 мм в отведении с отрицательным QRS — 2 балла (оригинал)","Критерий Смита (2012): подъём ST ≥ 1 мм с ST/S ≤ −0,25 (≥ 25% глубины S) в любом отведении вместо критерия ≥ 5 мм; достаточно одного критерия"],"warn":"Впервые/остро возникшая БЛНПГ + боль в груди = ОКС с подъёмом ST до исключения"}];
 const REFERENCE=[["Пожилой возраст (65+)",[["Общий принцип",["Начинать с половины обычной взрослой дозы, вводить медленнее, оценивать эффект до повторного введения","Причины: снижение клубочковой фильтрации, уменьшение объёма распределения, полипрагмазия"]],["Снизить дозу вдвое, вводить медленно",["Морфин, фентанил, трамадол — угнетение дыхания, длительная седация","Сибазон, феназепам — парадоксальное возбуждение, падения, задержка мочи","Аминазин — выраженная гипотензия, экстрапирамидные реакции","Метоклопрамид — риск экстрапирамидных расстройств выше"]],["Гипотензивные и нитраты — риск ортостаза",["Нитроспрей — контроль АД до и после, только лёжа или сидя","Каптоприл, моксонидин, нифедипин — снижать АД не более чем на 20–25% за первый час","Урапидил, эналаприлат — вводить дробно под контролем АД","Фуросемид — риск гиповолемии, гипокалиемии, ОПП; осторожно при стенозе устья аорты"]],["НПВС — осторожно или воздержаться",["Долак, анальгин — риск ОПП при обезвоживании, ЖКТ-кровотечения, декомпенсации ХСН","Механизм: при гиповолемии СКФ держится на простагландинах, расширяющих приносящую артериолу. НПВС их блокируют — фильтрация падает","«Тройной удар»: иАПФ или сартан + диуретик + НПВС. ОПП может развиться за 1–2 суток","Признаки гиповолемии: сухие слизистые, снижен тургор, тахикардия, ортостаз, капиллярное наполнение более 2 сек","При гиповолемии начинать с парацетамола; НПВС — только после восполнения объёма, однократно"]],["Особый контроль",["Атропин — задержка мочи при аденоме простаты, обострение глаукомы, спутанность","Димедрол — выраженный седативный и антихолинергический эффект; предпочесть хлоропирамин","Эуфиллин — тахиаритмии, судороги; доза ниже, введение медленное","Гепарин — выше риск кровотечения при низкой массе тела и ХБП","Инфузия — темп ниже: риск перегрузки объёмом и отёка лёгких при ХСН"]]]],["Дети",[["Жаропонижающие: когда снижать",["Здоровым детям — при температуре 38,5 °C и выше","При температуре 38 °C: дети до 3 месяцев, с отягощённым преморбидным фоном, с судорожным синдромом в анамнезе","Парацетамол 15 мг/кг внутрь или ректально — препарат выбора (макс. 60 мг/кг/сут)","Физические методы охлаждения — детям до 12 лет","ВАЖНО: физические методы охлаждения противопоказаны при бледной гипертермии"]],["Чего детям не давать",["При гриппе метамизол натрия и ацетилсалициловая кислота противопоказаны (Алгоритмы СМП)","Метамизол — риск агранулоцитоза; клинрекомендации по ОРВИ у детей его не рекомендуют","Ацетилсалициловая кислота — синдром Рея; с жаропонижающей целью не применяется","Кеторолак (Долак) — с 16 лет","Нимесулид детям не рекомендован"]],["Дыхательная недостаточность — ЧДД выше нормы",["До 1 года — более 50 в минуту","1–5 лет — более 40 в минуту","Старше 5 лет — более 30 в минуту","Также: одышка в покое или при беспокойстве, участие вспомогательной мускулатуры, втяжение уступчивых мест грудной клетки","SpO2 менее 95% — показание к оксигенотерапии"]],["Госпитализация ребёнка обязательна",["Возраст до 1 месяца с лихорадкой","Неспособность пить или сосать грудь; сонливость или отсутствие сознания","Судороги, в том числе сложные фебрильные (более 15 минут или повторные за сутки)","Центральный цианоз, симптомы респираторного дистресса, тяжёлое обезвоживание","Геморрагическая сыпь на коже, рвота, отказ от еды и питья","Лихорадка 5 суток подряд и более или отсутствие эффекта от терапии","Отягощённый преморбидный фон, тяжёлое или осложнённое течение"]],["Расчёт дозы",["Большинство препаратов — по массе тела (мг/кг)","Тиамин, пиридоксин, хлоропирамин, карбоксим, ацизол — по 0,1 мл на год жизни","Адреналин при реанимации: 0,01 мг/кг в/в; развести 1 мл в 9 мл физраствора (1:10000), расчёт 0,1 мл на год жизни","Эндотрахеально адреналин — 0,1 мг/кг (доза в 10 раз выше внутривенной)","Диазепам: разовая максимальная до 5 лет — 5 мг, старше 5 лет — 10 мг; в/в медленно не менее 2 минут"]]]],["Беременность",[["Обезболивание и жаропонижение",["Парацетамол 500–1000 мг внутрь — препарат выбора при боли и лихорадке (Алгоритмы СМП)","НПВС (Долак, анальгин) — избегать, особенно в третьем триместре: риск преждевременного закрытия артериального протока","Морфин, фентанил — только по строгим показаниям, готовность к респираторной поддержке новорождённого"]],["Судороги у беременной",["Диазепам 10 мг (2 мл) в/венно","При эклампсии — магния сульфат; экстренная госпитализация в приёмный покой гинекологического отделения","Положение на левом боку для профилактики аортокавальной компрессии"]],["С осторожностью или избегать",["иАПФ (эналаприлат, каптоприл) — противопоказаны: фетотоксичность","Нитроглицерин, урапидил — под контролем АД, риск гипотензии и снижения плацентарного кровотока","Тромболитики — относительное противопоказание, решение с врачом","Тетрациклины, фторхинолоны — противопоказаны","Беременность на любом сроке и послеродовый период — группа риска тяжёлого течения ОРВИ"]]]],["Общие правила",[["Расчёт дозы у взрослых",["При ожирении большинство препаратов считают по идеальной, а не фактической массе тела","Исключение — гидрофильные препараты и инфузионная терапия: расчёт по фактической массе","Разовая доза у ребёнка не должна превышать взрослую разовую"]],["Почечная недостаточность",["НПВС — избегать при ХБП, гиповолемии, на фоне иАПФ и диуретиков","Морфин — метаболиты накапливаются, дозу снижать, интервал увеличивать","Гепарин — выше риск кровотечения","Магния сульфат — риск передозировки, контроль сухожильных рефлексов и диуреза"]],["Печёночная недостаточность",["Парацетамол — снизить дозу, максимум ниже обычного","Бензодиазепины, морфин — удлинение эффекта, риск энцефалопатии","Лидокаин — снижен клиренс, риск токсичности"]],["Перед введением",["Сверить концентрацию с маркировкой на ампуле — фасовка у разных производителей отличается","Уточнить аллергоанамнез и препараты, принятые пациентом до приезда бригады","При в/в введении контролировать скорость: магния сульфат, эуфиллин, амиодарон, верапамил вводят медленно","Расчёт по этому приложению — ориентир, а не замена инструкции и протокола станции"]]]]];
-const VERSION="8.03 (24.10.2026)";
+const VERSION="8.06 (24.10.2026)";
 
 /* ---------- PWA: манифест и офлайн-кэш ---------- */
 /* На хостинге (http/https) используются настоящие файлы manifest.webmanifest и sw.js
@@ -2728,7 +2764,11 @@ function render(){
           const z=$('sheetIn').querySelector('.ecg-zoom-in'); if(z)z.onclick=()=>openEcgZoom(it);
           /* правка 2026-10 (7.25): анимация — первой кнопкой в шторке, «на весь экран» — рядом */
           const an=$('sheetIn').querySelector('.sh-body > .ea-open[data-ea]');
-          if(an&&z){ const row=document.createElement('div'); row.className='ecg-sh-acts'; z.parentNode.insertBefore(row,z);
+          /* правка 2026-10 (8.04): живая лента ЭКГ с ползунками — сразу под кнопкой «на весь экран», без отдельной шторки */
+          if(an&&an.dataset.ea.indexOf('live:')===0&&window.mountEcgLive){ const lb=document.createElement('div'); an.remove();
+            if(z) z.insertAdjacentElement('afterend',lb); else $('sheetIn').querySelector('.sh-body').prepend(lb);
+            window.mountEcgLive(lb,an.dataset.ea.slice(5)); }
+          else if(an&&z){ const row=document.createElement('div'); row.className='ecg-sh-acts'; z.parentNode.insertBefore(row,z);
             row.appendChild(an); row.appendChild(z); an.classList.add('ea-primary');
             z.innerHTML=FS_ICON; z.setAttribute('aria-label','На весь экран'); z.title='На весь экран'; z.classList.add('ecg-zoom-ic'); }
           const x2=$('sheetIn').querySelector('.ecg-xlink2'); if(x2)x2.onclick=()=>openEcg2Sheet(dup);
@@ -5139,7 +5179,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="sinus">
       <h3>Синусовый ритм</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:norm"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:sinus"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">Признаки</div><div class="act">Зубец P положительный, одинаковой формы — лучше всего виден в II и V1 (там же удобнее всего искать P при анализе ритма); отрицательный в aVR. Интервал P–Q 0,12–0,20 с. ЧСС 60–80/мин (по одним источникам норма до 90–100/мин).</div></div>
       </div>
@@ -5148,7 +5188,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="sablock">
       <h3>Синоаурикулярная блокада</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:sab"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:sablock"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Выпадение целого комплекса PQRST; пауза = 2 × (нормальный R–R). При частых выпадениях — замещающие ритмы.</div></div>
       </div>
@@ -5162,7 +5202,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="av1">
       <h3>АВ-блокада I степени</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:av1"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:av1"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Интервал P–Q > 0,20 с (более 2 больших клеток при 50 мм/с, либо более 1 большой клетки при 25 мм/с). Все зубцы P проведены.</div></div>
       </div>
@@ -5171,7 +5211,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="wenckebach">
       <h3>АВ-блокада II степени, тип I (Венкебаха)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:m1"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:wenckebach"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Прогрессивное удлинение P–Q от цикла к циклу, затем выпадение QRS (периодика Самойлова–Венкебаха).</div></div>
       </div>
@@ -5186,7 +5226,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="mobitz2">
       <h3>АВ-блокада II степени, тип II (Мобитц II)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:m2"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:mobitz2"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">P–Q постоянный (норма или удлинён), регулярное выпадение QRS (чаще 3:2, 4:3…). При кратности 2:1 и реже говорят об «АВ-блокаде высокой степени» — риск перехода в полную блокаду и асистолию особенно высок.</div></div>
         <div class="stepn"><div class="cond">Лечение</div><div class="act">Готовность к ЭКС. Препараты и дозы — в алгоритме ниже.</div></div>
@@ -5202,7 +5242,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="av3">
       <h3>АВ-блокада III степени (полная)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:chb"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:av3"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Полная диссоциация P и QRS. Предсердия – синусовый ритм (60–90), желудочки – узкий (40–60) или широкий (20–40) комплекс.</div></div>
         <div class="stepn"><div class="cond">Клиника</div><div class="act">Синдром Морганьи–Адамса–Стокса (потеря сознания, судороги) – риск смерти.</div></div>
@@ -5216,7 +5256,6 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="rbbb">
       <h3>Блокада правой ножки пучка Гиса (ПБПНПГ)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:rbbb"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">QRS ≥ 0,12 с. В V1–V2 – rsR' или rSR' (М-образный). В I, aVL, V5–V6 – широкий зазубренный S.</div></div>
         <div class="stepn"><div class="cond">Неполная</div><div class="act">QRS 0,09–0,11 с, остальные признаки те же.</div></div>
@@ -5225,11 +5264,11 @@ function ekgHTML(){
         {lead:'V1–V2',svg:ecgSvg({cal:true,ann:['QRS', 'QRSi'],hl:['QRS'],w:150,beats:rep(2,{q:{w:4,amp:-12},r:{w:5,amp:16},rp:{dipW:0,dipAmp:16,w:6,amp:-25},s:{w:5,amp:9},st:{len:9},t:{w:14,shape:'inverted',amp:9}})}),cap:'rSR′ — М-образный широкий QRS'},
         {lead:'I, V5–V6',svg:ecgSvg({cal:true,ann:['QRS', 'QRSi'],hl:['QRS'],w:150,beats:rep(2,{q:{w:3,amp:5},r:{w:8,amp:-38},s:{w:11,amp:18},st:{len:9},t:{w:14}})}),cap:'широкий зазубренный конечный S'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:rbbb"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="lbbb">
       <h3>Блокада левой ножки пучка Гиса (ПБЛНПГ)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:lbbb"><i class="ei i-play"></i> Анимация ритма</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">QRS ≥ 0,12 с. В I, aVL, V5–V6 – широкий R без q. В V1–V2, III, aVF – QS или rS. Впервые/остро возникшая на фоне ишемии – расценивается как эквивалент ОКС с подъёмом ST!</div></div>
       </div>
@@ -5237,6 +5276,7 @@ function ekgHTML(){
         {lead:'I, V5–V6',svg:ecgSvg({cal:true,ann:['QRS', 'QRSi'],hl:['QRS'],w:150,beats:rep(2,{q:{w:0,amp:0},r:{w:9,amp:-30},rp:{dipW:4,dipAmp:-22,w:9,amp:-38},st:{len:9,shift:6,shape:'down'},t:{w:14,shape:'inverted',amp:9}})}),cap:'широкий монофазный R без q, дискордантные ST–T'},
         {lead:'V1–V2',svg:ecgSvg({cal:true,ann:['QRS', 'QRSi'],hl:['QRS'],w:150,beats:rep(2,{r:{w:5,amp:10},s:{w:10,amp:32},st:{len:9,shift:-4},t:{w:14,amp:-10}})}),cap:'QS или rS — глубокий широкий отрицательный комплекс'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:lbbb"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="lafb">
@@ -5248,6 +5288,7 @@ function ekgHTML(){
         {lead:'I, aVL',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,beats:rep(3,{q:{w:3,amp:4},r:{w:5,amp:-36},st:{len:9},t:{w:14}})}),cap:'qR — высокий R, QRS узкий'},
         {lead:'II, III, aVF',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,beats:rep(3,{r:{w:4,amp:-9},s:{w:6,amp:30},st:{len:9},t:{w:14}})}),cap:'rS — глубокий S больше R'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:lafb"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="lpfb">
@@ -5259,11 +5300,12 @@ function ekgHTML(){
         {lead:'I, aVL',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,beats:rep(3,{r:{w:4,amp:-9},s:{w:6,amp:30},st:{len:9},t:{w:14}})}),cap:'rS — глубокий S'},
         {lead:'II, III, aVF',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,beats:rep(3,{q:{w:3,amp:4},r:{w:5,amp:-36},st:{len:9},t:{w:14}})}),cap:'qR — высокий R, QRS узкий'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:lpfb"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="wpw">
       <h3>WPW-синдром (преждевременное возбуждение)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:wpw"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:wpw"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">P–Q < 0,12 с, QRS уширен (≥ 0,12 с), дельта-волна в начале QRS. Вторичные изменения ST–T дискордантно.</div></div>
       </div>
@@ -5276,6 +5318,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">P–Q < 0,12 с, QRS не деформирован, дельта-волны нет.</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['P', 'QRS', 'T', 'PQ'],hl:['PQ'],w:222,beats:rep(3,{pr:3,q:{w:3,amp:5},r:{w:5,amp:-42},s:{w:4,amp:13}})}),'P–Q укорочен, но QRS обычной формы и ширины — дельта-волны нет (в отличие от WPW).')}
+      <button type="button" class="ea-open" data-ea="live:clc"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
 
@@ -5289,11 +5332,12 @@ function ekgHTML(){
         {lead:'Верхняя часть',svg:ecgSvg({cal:true,w:150,beats:rep(2,{pInv:{w:7,amp:5},pr:4,q:{w:2,amp:3},r:{w:5,amp:-34},s:{w:3,amp:8},st:{len:9},t:{w:14},tail:26})}),cap:'Отрицательный Р перед QRS, короткий P–Q'},
         {lead:'Средняя часть',svg:ecgSvg({cal:true,w:150,beats:rep(2,{p:null,pr:5,q:{w:2,amp:3},r:{w:5,amp:-34},s:{w:3,amp:8},st:{len:9},t:{w:14},tail:26})}),cap:'Р не виден — наслаивается на QRS (ритм из нижней части выглядит схоже, но Р появляется сразу после QRS)'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:ajr"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="psvt">
       <h3>Пароксизм наджелудочковой (АВ-узловой) тахикардии</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:psvt"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:psvt"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Зубцы Р не видны (наслаиваются на QRS). Интервалы R–R одинаковые, резко укорочены. ЧСЖ чаще 160–190 в мин и более. QRS обычной (узкой) формы; уширен при сопутствующей блокаде ножки пучка Гиса.</div></div>
         <div class="stepn"><div class="cond">Купирование</div><div class="act">Вагусные пробы (проба Вальсальвы эффективна в 20–50% случаев); при неэффективности — медикаментозное купирование по алгоритму ниже.</div></div>
@@ -5304,7 +5348,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="afib">
       <h3>Фибрилляция предсердий (мерцательная аритмия)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:af"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:afib"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Зубцы Р отсутствуют; между QRS — волны f, постоянно меняющиеся по амплитуде и форме (на упрощённой схеме не показаны). Интервалы R–R абсолютно нерегулярны — «неправильно неправильный» ритм, главный признак для быстрой диагностики. При тахисистолии (ЧСЖ > 150) нерегулярность может быть менее заметна на глаз.</div></div>
         <div class="stepn"><div class="cond">Феномен Ашмана</div><div class="act">Аберрантный (широкий) комплекс после короткого R–R, следующего за длинным R–R — имитирует желудочковую экстрасистолу/ЖТ, но компенсаторной паузы нет. Не путать с истинной желудочковой экстрасистолией.</div></div>
@@ -5321,7 +5365,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="aflutter">
       <h3>Трепетание предсердий</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:afl"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:aflutter"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">Согласованная форма</div><div class="act">Зубцы Р отсутствуют; волны F одинаковой ширины, высоты (2–5 мм) и формы («пилообразные»), частота 180–400 в мин. Интервал R–R одинаковый (фиксированная степень АВ-блокады). При проведении 2:1 ЧСЖ около 150 в мин, при 3:1 — около 100 в мин.</div></div>
         <div class="stepn"><div class="cond">Несогласованная форма</div><div class="act">Волны F ритмичны и одинаковы, но степень АВ-блокады меняется от цикла к циклу → интервалы R–R разные.</div></div>
@@ -5360,7 +5404,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="vt">
       <h3>Пароксизм желудочковой тахикардии</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:vt"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:vt"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">ЧСС 140–220 в мин, чаще правильный ритм. Комплексы QRS одинаковой формы, уширены (> 0,14 с при морфологии БПНПГ или > 0,16 с при морфологии БЛНПГ). АВ-диссоциация — независимый более редкий ритм предсердий с редкими «захваченными» синусовыми комплексами (на упрощённой схеме не показано).</div></div>
         <div class="stepn"><div class="cond">Опасность</div><div class="act">Высокий риск перехода в фибрилляцию желудочков и клиническую смерть.</div></div>
@@ -5370,7 +5414,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="vf">
       <h3>Фибрилляция желудочков</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:vf"><i class="ei i-play"></i> Анимация ритма</button>
+      <button type="button" class="ea-open" data-ea="live:vf"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Хаотичные комплексы разной формы, амплитуды и продолжительности; зубцы P, Q, R, S, T не идентифицируются. Изоэлектрическая линия отсутствует. Интервалы R–R разные, без кратности и регулярности.</div></div>
         <div class="stepn"><div class="cond">Действие</div><div class="act">Немедленная дефибрилляция и СЛР — по алгоритму ниже.</div></div>
@@ -5380,9 +5424,7 @@ function ekgHTML(){
 
     <div class="item" style="cursor:default" data-ecg-key="extra">
       <h3>Экстрасистолия (наджелудочковая и желудочковая)</h3>
-      <button type="button" class="ea-open" data-ea="rhythm:pvc1"><i class="ei i-play"></i> Анимация: единичная ЖЭС</button>
-      <button type="button" class="ea-open" data-ea="rhythm:pvc2"><i class="ei i-play"></i> Анимация: бигеминия</button>
-      <button type="button" class="ea-open" data-ea="rhythm:pvc3"><i class="ei i-play"></i> Анимация: тригеминия</button>
+      <button type="button" class="ea-open" data-ea="live:extra"><i class="ei i-play"></i> Живая ЭКГ</button>
       <div class="std">
         <div class="stepn"><div class="cond">Наджелудочковая</div><div class="act">Преждевременный комплекс с узким QRS, зубец Р экстрасистолы отличается по форме от синусового (или наслаивается на предшествующий Т). Компенсаторная пауза НЕПОЛНАЯ — сумма интервалов до и после короче двух нормальных циклов.</div></div>
         <div class="stepn"><div class="cond">Желудочковая</div><div class="act">Преждевременный широкий (≥ 0,12 с) деформированный QRS БЕЗ предшествующего связанного зубца Р, дискордантные ST–T. Компенсаторная пауза ПОЛНАЯ — сумма интервалов до и после равна двум нормальным циклам.</div></div>
@@ -5415,6 +5457,7 @@ function ekgHTML(){
         {lead:'V5–V6',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,h:140,y0:68,beats:rep(2,{p:{w:13,amp:-4,shape:'mitrale'},q:{w:3,amp:5},r:{w:6,amp:-55},s:{w:3,amp:6},st:{len:10,shift:6,shape:'down'},t:{w:16,shape:'inverted',amp:11}})}),cap:'очень высокий R, депрессия ST и (-) Т — «перегрузка»; P нередко широкий/двугорбый (P-mitrale)'},
         {lead:'V1',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,h:140,y0:68,beats:rep(2,{r:{w:4,amp:-8},s:{w:8,amp:38},st:{len:9},t:{w:14}})}),cap:'глубокий S'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:lvh"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="rvh">
@@ -5427,6 +5470,7 @@ function ekgHTML(){
         {lead:'V1',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,beats:rep(2,{p:{w:8,amp:-6,shape:'pulmonale'},q:{w:3,amp:4},r:{w:6,amp:-40},s:{w:3,amp:6},st:{len:9,shift:5,shape:'down'},t:{w:14,shape:'inverted',amp:9}})}),cap:'высокий R, R/S ≥ 1, депрессия ST и (-) Т; P часто высокий/остроконечный (P-pulmonale)'},
         {lead:'V5–V6',svg:ecgSvg({cal:true,ann:['QRS'],hl:['QRS'],w:150,beats:rep(2,{r:{w:4,amp:-10},s:{w:8,amp:32},st:{len:9},t:{w:14}})}),cap:'глубокий S'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:rvh"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="sec">3. Ишемическая болезнь сердца</div>
@@ -5437,6 +5481,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Депрессия ST ≥ 1 мм — значима именно горизонтальная или косонисходящая (косовосходящая депрессия неспецифична), инверсия или сглаженность Т. Изменения исчезают после купирования боли.</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:226,beats:rep(3,{q:{w:3,amp:5},r:{w:5,amp:-40},s:{w:4,amp:12},st:{len:11,shift:7,shape:'flat'},t:{w:16,shape:'inverted',amp:7}})}),'Горизонтальная депрессия ST ≥ 1 мм и сглаженный/отрицательный Т на фоне боли; после купирования картина возвращается к норме.')}
+      <button type="button" class="ea-open" data-ea="live:angina"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="mi">
@@ -5453,6 +5498,7 @@ function ekgHTML(){
         {lead:'Подострая',svg:ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:120,h:132,y0:66,beats:rep(2,{q:{w:4,amp:8},r:{w:4,amp:-28},st:{len:11,shift:-2},t:{w:16,shape:'inverted',amp:14}})}),cap:'ST у изолинии, глубокий (-) коронарный Т'},
         {lead:'Рубцовая',svg:ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:120,h:132,y0:66,beats:rep(2,{q:{w:4,amp:8},r:{w:4,amp:-26},st:{len:11},t:{w:14,amp:-7}})}),cap:'стойкий патологич. Q, Т сглажен/+'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:mi"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="nstemi">
@@ -5461,6 +5507,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Нет патологического Q. Глубокая депрессия ST и отрицательный Т. Сохраняется дольше, чем при стенокардии.</div></div>
       </div>
       ${ecgWrap(ecgSvg({w:226,cal:true,ann:['QRS','ST','T'],hl:['ST'],beats:rep(3,{q:{w:3,amp:5},r:{w:5,amp:-40},s:{w:4,amp:12},st:{len:11,shift:11,shape:'down'},t:{w:16,shape:'inverted',amp:12}})}),'Q не формируется (комплекс как в норме), но глубокая косонисходящая депрессия ST и отрицательный Т сохраняются надолго — в отличие от преходящих изменений при стенокардии.')}
+      <button type="button" class="ea-open" data-ea="live:nstemi"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="sgarbossa">
@@ -5476,6 +5523,7 @@ function ekgHTML(){
         {lead:'I, V5–V6 (конкорд. подъём)',svg:ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:150,beats:rep(2,{q:{w:0,amp:0},r:{w:9,amp:-30},rp:{dipW:4,dipAmp:-22,w:9,amp:-38},st:{len:9,shift:-9,shape:'convex'},t:{w:14,amp:-9}})}),cap:'Подъём ST в ту же сторону, что и основной (+) зубец QRS — критерий 1'},
         {lead:'V1–V2 (конкорд. депрессия)',svg:ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:150,beats:rep(2,{r:{w:5,amp:10},s:{w:10,amp:32},st:{len:9,shift:10,shape:'down'},t:{w:14,amp:8}})}),cap:'Депрессия ST в ту же сторону, что и основной (–) зубец QRS — критерий 2'}
       ])}
+      <button type="button" class="ea-open" data-ea="live:sgarbossa"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="sec">4. Другие состояния</div>
@@ -5486,6 +5534,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Диффузный подъём ST (вогнутый вверх) во многих отведениях (кроме aVR, V1). Позже – отрицательный Т.</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['P', 'QRS', 'ST', 'PQ'],hl:['ST', 'PQ'],w:226,beats:rep(3,{prDepress:5,q:{w:3,amp:5},r:{w:5,amp:-40},s:{w:4,amp:10},st:{len:12,shift:-8,shape:'concave'},t:{w:16,amp:-9}})}),'Вогнутый («улыбающийся») подъём ST одновременно во многих отведениях, часто с депрессией сегмента PR; без реципрокной депрессии и без патологического Q. Т становится отрицательным лишь позже.')}
+      <button type="button" class="ea-open" data-ea="live:pericarditis"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="er">
@@ -5494,6 +5543,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Псевдокоронарный подъём ST (≥ 1 мм) в грудных отведениях, элевация точки J, без динамики. Вариант нормы у молодых.</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:226,beats:rep(3,{q:{w:3,amp:5},r:{w:5,amp:-42},s:{w:4,amp:8},st:{len:11,shift:-6,shape:'concave'},t:{w:18,amp:-15}})}),'Элевация точки J и вогнутый подъём ST с высоким T — похоже на инфаркт, но форма стабильна от записи к записи (без динамики) и обычно у молодых без боли.')}
+      <button type="button" class="ea-open" data-ea="live:er"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="hyperk">
@@ -5502,6 +5552,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Высокие, заострённые, симметричные Т («готические») в V2–V4, укорочение QT, расширение QRS.</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['QRS', 'T'],hl:['T'],w:226,h:132,y0:66,beats:rep(4,{p:null,q:{w:4,amp:5},r:{w:8,amp:-40},s:{w:6,amp:11},st:{len:6},t:{w:11,amp:-34}})}),'Узкие, высокие, остроконечные симметричные («готические») Т; QRS постепенно расширяется, зубец P на этой стадии уже уплощён и не виден — характерно для выраженной гиперкалиемии.')}
+      <button type="button" class="ea-open" data-ea="live:hyperk"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="hypok">
@@ -5510,6 +5561,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">Депрессия ST, сглаженность или инверсия Т, появление волны U, удлинение QT (может провоцировать пируэт).</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['QRS', 'T'],hl:['T'],w:236,beats:rep(3,{q:{w:3,amp:5},r:{w:5,amp:-40},s:{w:4,amp:11},st:{len:10,shift:5,shape:'flat'},t:{w:12,shape:'flat'},u:{w:9,amp:-6}})}),'Депрессия ST, низкий/сглаженный Т и заметная волна U после него (U ≥ Т) — на фоне удлинённого QT.')}
+      <button type="button" class="ea-open" data-ea="live:hypok"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="digoxin">
@@ -5518,6 +5570,7 @@ function ekgHTML(){
         <div class="stepn"><div class="cond">ЭКГ</div><div class="act">«Корытообразное» смещение ST вниз (выпуклостью вниз) в V4–V6, укорочение QT, отрицательный или двухфазный Т.</div></div>
       </div>
       ${ecgWrap(ecgSvg({cal:true,ann:['QRS', 'ST', 'T'],hl:['ST'],w:216,beats:rep(3,{q:{w:3,amp:5},r:{w:5,amp:-40},s:{w:4,amp:11},st:{len:12,shift:9,shape:'scoop'},t:{w:11,shape:'biphasic'}})}),'«Корытообразная» (провисающая) депрессия ST, коротким QT и сглаженный/двухфазный Т — типичный вид «насыщения» гликозидами, не путать с ишемией.')}
+      <button type="button" class="ea-open" data-ea="live:digoxin"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
 
     <div class="item" style="cursor:default" data-ecg-key="longqt">
@@ -5533,6 +5586,7 @@ function ekgHTML(){
         {q:{w:3,amp:5},r:{w:5,amp:-40},s:{w:4,amp:11},st:{len:22},t:{w:24,amp:-9},tail:4},
         {torsades:{n:16,w:6},tail:4}
       ]}),'Интервал Q–T заметно удлинён (Т отстоит далеко от QRS); на этом фоне может запуститься полиморфная ЖТ «пируэт» — веретенообразные комплексы меняющейся амплитуды вокруг изолинии (справа).')}
+      <button type="button" class="ea-open" data-ea="live:longqt"><i class="ei i-play"></i> Живая ЭКГ</button>
     </div>
   `;
 }
@@ -5967,6 +6021,7 @@ function openEcg2Sheet(id){
   /* правка 2026-10 (7.22): порядок — схема, «нельзя», тактика, критерии, карта отведений */
   const H4=t=>`<h4 style="margin:14px 0 6px;font-size:var(--fs-12);letter-spacing:.6px;text-transform:uppercase;color:var(--muted)">${t}</h4>`;
   h+=ecg2View(it,'Калибровка: 10 мм/мВ · Скорость: 50 мм/с');
+  if(window.ECG2_LIVE&&ECG2_LIVE[id]) h+='<div id="ecg2Live"></div>';   /* правка 2026-10 (8.04): живая лента с ползунком */
   if(it.redFlag)h+=`<div class="box b-ban"><h4><i class="ei i-siren"></i> Тактический красный флаг</h4>${esc(it.redFlag)}</div>`;
   h+=`<div class="box b-ok"><h4><i class="ei i-ambulance"></i> Тактика СМП</h4>${esc(it.tactic)}${algoBtn(ECG2_ALGO[it.id])}</div>`;
   h+=H4('Диагностические критерии')+`<ul class="memo">${it.criteria.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`;
@@ -5976,6 +6031,7 @@ function openEcg2Sheet(id){
   if(mk)h+=`<button type="button" class="ea-open ecg-xlink" data-key="${mk}"><i class="ei i-book"></i> Подробно в атласе ЭКГ</button>`;
   h+=`<button class="close" id="closeSheet2">Закрыть</button></div>`;
   $('sheetIn').innerHTML=h; openSheet();
+  if($('ecg2Live')&&window.mountEcgLive) window.mountEcgLive($('ecg2Live'),ECG2_LIVE[id]);
   const cs=$('closeSheet2'); if(cs)cs.onclick=closeSheet;
   const shc=$('shClose2'); if(shc)shc.onclick=closeSheet;
   $('sheetIn').querySelectorAll('.lk').forEach(el=>el.onclick=()=>openDrug(el.dataset.n));
@@ -6011,9 +6067,6 @@ const PAT=[
  {id:'afl',name:'Трепетание предсердий',L:1.2,flutter:5,arate:300,beats:[{p:null,q:0.13,qa:1.4,qw:SIG_Q,ta:0.25},{p:null,q:0.53,qa:1.4,qw:SIG_Q,ta:0.25},{p:null,q:0.93,qa:1.4,qw:SIG_Q,ta:0.25}],desc:'Вместо P — одинаковые «пилообразные» волны F около 300/мин без изолинии между ними (по Волковой 180–400). Проведение 2:1: на две волны F — один QRS, ЧСЖ около 150/мин, R–R одинаковые. QRS узкие.'},
  {id:'vf',name:'Фибрилляция желудочков',L:6,norate:true,beats:genVF(),desc:'Хаотичные волны разной формы, амплитуды и продолжительности; зубцы P, QRS, T не различимы, изолинии нет, интервалы полностью нерегулярные. Немедленная дефибрилляция и СЛР.'},
  {id:'wpw',name:'WPW',L:0.8,beats:[cond(0.12,0.10,{d:0.4,ta:-0.25})],desc:'Синусовый ритм. P–Q укорочен (< 0,12 с), QRS начинается пологой «дельта-волной» и уширен; вторичные изменения ST–T направлены против основного зубца.'},
- /* правка 2026-10 (8.03): блокады ножек — полоска одного отведения: БПНПГ в V1 (rSR′), БЛНПГ в V6 (широкий зазубренный R без q) */
- {id:'rbbb',name:'БПНПГ (V1)',L:0.8,beats:[cond(0.12,0.16,{qa:0.45,qw:0.012,k:[[0.035,-0.55,0.013],[0.08,1.15,0.02]],ta:-0.3})],desc:'Отведение V1. QRS уширен ≥ 0,12 с, комплекс rSR′ («М-образный»): маленький r, S и высокий поздний R′; ST–T направлены против R′. В I, aVL, V5–V6 — широкий зазубренный S. При неполной блокаде QRS 0,09–0,11 с.'},
- {id:'lbbb',name:'БЛНПГ (V6)',L:0.8,beats:[cond(0.12,0.16,{qa:1.1,qw:0.024,k:[[0.05,1.0,0.024]],ta:-0.45})],desc:'Отведение V6. QRS уширен ≥ 0,12 с, широкий зазубренный R без q; ST–T направлены против QRS (дискордантно). В V1–V2, III, aVF — QS или rS. Впервые возникшая БЛНПГ на фоне ишемии — эквивалент ОКС с подъёмом ST.'},
  /* правка 2026-10 (7.81): желудочковая экстрасистолия. Синус 80/мин (R–R 0,75 с), интервал сцепления 0,48–0,50 с,
     пауза полная компенсаторная (R–R до + R–R после = 2 × 0,75 с), синусовый Р продолжается и скрыт в ST–T экстрасистолы */
  {id:'pvc1',name:'Единичная ЖЭС',L:3.0,beats:[cond(0.12,0.16),cond(0.87,0.16),cond(1.62,0.16),{p:2.37,q:null,pa:0.25},{p:null,q:2.26,qa:1.8,qw:0.034,ta:-0.55}],desc:'Синусовый ритм, затем преждевременный широкий (≥ 0,12 с) деформированный QRS без предшествующего Р, ST–T дискордантны. Пауза после неё полная компенсаторная: интервал до + интервал после = два нормальных R–R. Синусовый Р не сбивается и «прячется» в ST–T экстрасистолы.'},
@@ -6027,7 +6080,6 @@ function sampleV(P,t){
     const off=k*L;
     if(b.p!=null){ const d=t-(b.p+off); v+=(b.pa??0.2)*Math.exp(-d*d/(2*SIG_P*SIG_P)); }
     if(b.q!=null){ const sg=b.qw??SIG_Q, qa=b.qa??1; const d=t-(b.q+off); v+=qa*Math.exp(-d*d/(2*sg*sg));
-      if(b.k) for(const [o,a,w] of b.k){ const dk=t-(b.q+off+o); v+=a*Math.exp(-dk*dk/(2*w*w)); } /* доп. зубцы QRS (r–S–R′, зазубрина) */
       if(b.d){ const dd=t-(b.q+off-0.03); v+=b.d*Math.exp(-dd*dd/(2*0.024*0.024)); } /* дельта-волна (WPW) */
       const ds=t-(b.q+off+sg*1.5); v+=-0.25*qa*Math.exp(-ds*ds/(2*sg*sg));
       const dt=t-(b.q+off+T_OFF); v+=(b.ta??0.25)*Math.exp(-dt*dt/(2*SIG_T*SIG_T)); }
@@ -6041,7 +6093,7 @@ function buildPath(P,sp){ const dt=0.004, T=WIN/sp+2*P.L; let d='',i=0;
   for(let t=0;t<=T;t+=dt,i++) d+=(i?'L':'M')+(t*sp).toFixed(2)+' '+(BASE-GAIN*sampleV(P,t%P.L)).toFixed(2)+' ';
   return d; }
 /* правка 2026-10 (7.82): изменение ЧСС — интервалы между комплексами масштабируются, ширина зубцов и PQ остаются */
-const HR_RANGE={norm:[40,200],m1:[30,100],m2:[30,100],af:[40,200],vt:[100,250],tdp:[150,300],pvc1:[40,150],pvc2:[40,150],pvc3:[40,150],av1:[40,120],sab:[40,100],rbbb:[50,130],lbbb:[50,130],psvt:[150,250],wpw:[50,150]};
+const HR_RANGE={norm:[40,200],m1:[30,100],m2:[30,100],af:[40,200],vt:[100,250],tdp:[150,300],pvc1:[40,150],pvc2:[40,150],pvc3:[40,150],av1:[40,120],sab:[40,100],psvt:[150,250],wpw:[50,150]};
 function baseHR(P){ return Math.round(stats(P).v); }
 const _sc=new Map();
 function scaled(P,hr){ if(!hr)return P; const k=hr/baseHR(P), key=P.id+'@'+hr; if(_sc.has(key))return _sc.get(key);
@@ -6271,9 +6323,663 @@ window.openEcgAnim=open;
 /* правка 2026-10 (7.22): только кнопки анимации (с data-ea) — у «⤢ На весь экран» и ссылок атласов data-ea нет */
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.ea-open'); if(!b||!b.dataset.ea)return;
   const [m,k]=b.dataset.ea.split(':');
+  if(m==='live') return;   /* правка 2026-10 (8.04): живая лента встраивается в шторку карточки, отдельной шторки нет */
   let key=k;
   if(m==='leads'&&k==='cur'){ const a=document.querySelector('#cor2Btns .coronary-btn.active'); key=a?a.dataset.wall:'custom'; }
   open(m,key); });
+})();
+
+/* ---------- Симулятор ЭКГ: модель (правка 2026-10, 8.03–8.04) ----------
+   Учебная модель, не запись пациента. Сердце — источник электрического вектора (x — влево, y — вниз, z — вперёд);
+   каждый зубец — гауссов «импульс» вектора, отведение = скалярная проекция (I, II, III, aVR, aVL, aVF — по Эйнтховену,
+   V1–V6 — эффективные векторы, подобранные по нормальным амплитудам Мурашко/Волковой).
+   Проведение — событийная модель: синусовый узел → предсердия (P–A) → АВ-узел (A–H, кривая восстановления
+   с эффективным рефрактерным периодом) → Гис–Пуркинье (H–V) → желудочки. Ионы и препараты меняют параметры:
+   K⁺ → потенциал покоя по Нернсту → доступность Na-каналов → скорость проведения (ширина P, PQ, QRS);
+   K⁺ → скорость реполяризации (форма T, U); Ca²⁺ → длительность ST; новокаинамид — блок Na/K; дигиталис — ваготония
+   АВ-узла, «корытообразный» ST, эктопия при интоксикации. Константы — по Кушаковскому (1981): табл. 1 (интервалы
+   выскальзывания), гл. 1 (P–A, A–H, H–V), гл. 3, 5, 7; ступени K⁺ — по карточке «Гиперкалиемия» (⚠). */
+const ECGSIM=(function(){
+'use strict';
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+
+/* векторы отведений: [x,y,z] */
+const LEADS=['I','II','III','aVR','aVL','aVF','V1','V2','V3','V4','V5','V6'];
+const LV=(function(){ const I=[1,0,0], II=[0.5,0.8660,0], III=[-0.5,0.8660,0];
+  return { I, II, III, aVR:[-0.75,-0.4330,0], aVL:[0.75,-0.4330,0], aVF:[0,0.8660,0],
+    V1:[-0.453,-0.147,0.678], V2:[-0.118,-0.284,1.194], V3:[0.613,0.47,1.007], V4:[1.017,0.587,0.245], V5:[1.076,0.281,-0.055], V6:[0.904,0.12,-0.138] }; })();
+/* нормальные диполи (мВ): E — перегородка, M — основная масса ЛЖ, S — базальные отделы, T, P, U */
+const DIP={ E:[-0.10,0.012,0.30], M:[0.871,1.064,-0.55], S:[-0.125,-0.163,-0.45], T:[0.291,0.284,0.30],
+  P1:[0.10,0.17,0.12], P2:[0.17,0.08,-0.10], U:[0.06,0.06,0.14], Pr:[-0.08,-0.20,0.03], F:[0.02,-0.30,0.16] };
+/* эктопические очаги (направление деполяризации желудочков), по Кушаковскому гл. 3 */
+const FOCI={
+  rvot:{v:[0.45,0.85,-0.55],name:'ПЖ, путь оттока'},      // QS в V1, нижняя ось (рис. 155)
+  lvap:{v:[-0.40,-0.75,0.55],name:'верхушка ЛЖ'},          // R в V1, ось вверх (рис. 221)
+  lvlat:{v:[-0.75,0.45,0.35],name:'боковая стенка ЛЖ'},
+  rvap:{v:[0.55,-0.70,-0.45],name:'верхушка ПЖ'},
+  esc:{v:[-0.30,0.85,0.50],name:'дистальные отделы (выскальзывающий)'} };
+/* направление «тока повреждения» для стенки ИМ (к зоне); реципрокные изменения получаются проекцией сами */
+const WALL={inf:[-0.15,1,-0.45],ant:[0.14,-0.25,0.96],lat:[0.91,-0.41,-0.05],post:[0,0.15,-0.99],rv:[-0.55,0.45,0.70],infrv:[-0.30,0.85,0.40]};
+const norm=v=>{ const m=Math.hypot(v[0],v[1],v[2])||1; return [v[0]/m,v[1]/m,v[2]/m]; };
+const sc=(v,k)=>[v[0]*k,v[1]*k,v[2]*k];
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+
+/* ---- производные параметры из ползунков ---- */
+const NERNST=K=>61.5*Math.log10(K/140);                    // мВ, 37 °C, K⁺внутр 140 ммоль/л
+function avail(Vr,half,k){ return 1/(1+Math.exp((Vr-half)/k)); }
+const HV0=avail(NERNST(4.2),-72,4), HA0=avail(NERNST(4.2),-78,3);
+/* степень нарушения АВ-узла (0–100 %) → параметр d; откалибровано: 0–30 норма/PQ↑, 30–55 I ст., 55–70 Венкебах,
+   70–90 2:1 и выше, > 90 — полная */
+function nodeD(s){ s=clamp(s,0,100);
+  const pts=[[0,0],[30,0.18],[55,0.36],[70,0.47],[90,0.80],[95,0.97],[100,1]];
+  for(let i=1;i<pts.length;i++) if(s<=pts[i][0]){ const [a,b]=pts[i-1],[c,e]=pts[i]; return b+(e-b)*(s-a)/(c-a); } return 1; }
+
+function derive(P){
+  const K=clamp(P.K,1.5,10), Ca=clamp(P.Ca,1.2,4), pr=clamp(P.proc,0,100)/100, g=clamp(P.dig,0,100)/100;
+  const Vr=NERNST(K), caSh=6*(Ca-2.35);                      // Ca²⁺ «стабилизирует мембрану»: сдвиг порога инактивации (⚠ модель)
+  const hv=avail(Vr,-72+caSh,4), ha=avail(Vr,-78+caSh,3);
+  const nav=hv*(1-0.45*pr), naa=ha*(1-0.35*pr);
+  const wQ=Math.pow(Math.max(nav/HV0,0.12),-1.54);           // расширение QRS
+  const aRel=clamp(naa/HA0,0,1), wP=Math.pow(Math.max(aRel,0.15),-1);
+  const hyper=K>4.5?Math.tanh((K-4.5)/1.8):0, hypo=clamp((4.0-K)/1.5,0,1.4);
+  const gtox=g*(1+0.6*Math.min(hypo,1));                     // токсичность гликозидов растёт при гипокалиемии
+  const D={K,Ca,Vr,hv,ha,wQ,wP,hyper,hypo,pr,g,gtox,
+    pAmp:Math.pow(aRel,3),                                   // P исчезает при тяжёлой гиперкалиемии (Кушаковский стр. 156)
+    tAmp:(1+2.2*hyper)*(1-0.72*Math.min(hypo,1))*(1-0.55*g)*(1-0.15*pr),
+    tSig:(1+0.3*hypo)/(1+0.45*hyper)*(1+0.9*Math.max(0,wQ-1.35)),
+    uAmp:1+6.5*Math.pow(hypo,1.3)+1.2*pr,
+    stUp:0.05*Math.max(0,wQ-1.1),                            // подъём ST при выраженной гиперкалиемии (Горячев)
+    stDn:0.09*Math.min(hypo,1.2),                            // депрессия ST при гипокалиемии
+    scoop:0.40*g,                                            // «корытообразный» ST дигиталиса
+    stLen:clamp(1+1.1*(2.35-Ca),0.04,2.4)*(1-0.45*g)*Math.max(0.0,1-1.6*Math.max(0,wQ-1.15))*(1+0.45*pr),
+    qtK:1+0.18*pr-0.06*g,
+    pa:0.035*wP, hvT:0.040*Math.pow(wQ,0.8)*(1+0.5*pr),
+    flCL:0.20*(1+0.45*pr),                                   // F–F 0,20 → ~0,29 с (новокаинамид, рис. 435, 479)
+    fAmp:0.055*(1+0.9*g)*Math.pow(aRel,2)*(1-0.3*pr),        // волны f: ↑ гликозиды, ↓ гиперкалиемия (Кушаковский гл. 7)
+    autoEct:clamp(0.45*Math.pow(Math.max(0,(3.0-K)/1.0),1.5)+(gtox>0.55?1.1*(gtox-0.55):0),0,0.75),
+    escJ:1.5*(1+0.35*Math.max(0,K-5.5)/3)/(1+0.15*hypo),       // АВ-соединение 1200–1500 мс (табл. 1)
+    escV:1.9*(1+0.35*Math.max(0,K-5.5)/3)/(1+0.15*hypo)        // идиовентрикулярный 1500–2400 мс
+  };
+  /* АВ-узел */
+  let d=P.avLevel==='node'?nodeD(P.avDeg):0; d=clamp(d+0.30*g-0.06*pr,0,1);
+  D.dNode=d;
+  /* ЭРП АВ-узла: при синусовой тахикардии укорачивается (симпатический тонус) */
+  const erp0=(P.rhythm==='sinus'?0.20+0.05*clamp(75/clamp(P.hr,30,250),0.3,2):0.25)-0.03*pr;
+  D.nodeERP=d>=0.965?Infinity:(erp0+0.75*d+8*Math.max(0,d-0.7)*Math.max(0,d-0.7));
+  D.AHmin=0.085+0.20*d; D.beta=0.07+0.05*d; D.tau=0.11+0.05*d;
+  const dh=P.avLevel==='infra'?clamp(P.avDeg,0,100)/100:0;
+  /* ниже пучка Гиса: 0–35 % — проведение 1:1 (H–V удлинён), 35–80 % — Мобитц II (внезапные выпадения при постоянном PQ),
+     80–93 % — 2:1, > 93 % — полная дистальная блокада (табл. 2–3 Кушаковского) */
+  /* морфология комплекса (правка 8.05): ось, гипертрофия, ишемия, ИМ, перикардит, СРР, Бругада, ТЭЛА, Велленс, де Винтер */
+  D.m={axis:P.axis||null, lvh:clamp(P.lvh||0,0,100)/100, rvh:clamp(P.rvh||0,0,100)/100, pe:clamp(P.pe||0,0,100)/100,
+    isch:clamp(P.isch||0,0,100)/100, tinv:P.tinv?1:0, mi:P.miWall&&P.miWall!=='none'?P.miWall:null, stg:P.miStage||0,
+    peri:P.peri||0, er:clamp(P.er||0,0,100)/100*clamp(1-(clamp(P.hr,30,250)-60)/150,0.2,1), brug:P.brug||0, dw:!!P.dewinter, wel:P.wellens||null};
+  if(P.clc) D.AHmin=0.035;                                      // CLC: укороченный PQ без дельта-волны (Кушаковский гл. 4)
+  D.dInfra=dh; D.hpERP=dh>=0.93?Infinity:(dh<0.8?0.28:0.9+0.5*(dh-0.8));
+  D.pDrop=dh>=0.35&&dh<0.8?0.08+0.37*(dh-0.35)/0.45:0;
+  D.hvT+=P.avLevel==='infra'?0.03*dh:0;
+  return D;
+}
+
+/* ---- генераторы комплексов (компоненты для отрисовки) ---- */
+/* g: гаусс {t,s,s2,v}; w: плато ST {t1,t2,e,v}; saw: волна F {t,cl,v} */
+function G(t,s,v,s2){ return {k:'g',t,s,s2:s2||s,v,a:t-5*s,b:t+5*(s2||s)}; }
+function addP(S,t,D,retro){
+  if(retro){ S.comps.push(G(t+0.035,0.022,sc(DIP.Pr,1))); return; }
+  const a=D.pAmp; if(a<0.02) return;
+  const w=D.wP;
+  S.comps.push(G(t+0.030*w,0.017*w,sc(DIP.P1,a)));
+  S.comps.push(G(t+0.062*w,0.018*w,sc(DIP.P2,a)));
+}
+/* реполяризация: QT по Базетту (QTc 0,40) от предыдущего R–R, ST — по Ca²⁺/дигиталису/K⁺ */
+function repol(S,t0,qrsDur,D,rr,tv,stScale,mv){
+  const rrC=clamp(rr||0.8,0.3,2.2), qtB=0.40*Math.sqrt(rrC)*D.qtK;
+  let su=0.048*D.tSig*Math.pow(rrC/0.8,0.2), sd=0.034*D.tSig*Math.pow(rrC/0.8,0.2);
+  let st=Math.max(0,(qtB-0.08-2.3*(0.048+0.034)*Math.pow(rrC/0.8,0.2))*D.stLen*(stScale??1));
+  if(qtB<0.24){ const k=qtB/0.24; su*=k; sd*=k; }
+  const J=t0+qrsDur, m=(stScale==null||stScale===1)&&D.m?D.m:{};
+  let T=sc(tv,D.tAmp), extra=0;
+  const Mn=norm(mv||DIP.M), W=m.mi?WALL[m.mi]:null;
+  if(m.er){ T=sc(T,1+0.3*m.er); }
+  if(m.peri===2){ T=sc(T,0.5); } else if(m.peri===3){ T=sc(T,-0.6); }
+  if(m.lvh>0.45){ const s=(m.lvh-0.45)/0.55; T=add(T,sc(Mn,-0.75*s)); }          // «перегрузка» ЛЖ: T против QRS в V5–V6
+  if(m.rvh) T=add(T,sc([0.25,0,-0.5],0.6*m.rvh));
+  if(m.pe) T=add(T,sc([0.15,-0.35,-0.45],0.7*m.pe));                             // T↓ в III, V1–V3
+  if(W) T=add(T,sc(W,[0.32,-0.12,-0.45,-0.18][m.stg]));                         // сверхострый T → инверсия «коронарного» T
+  if(m.tinv) T=add(T,sc([-0.05,0.10,1],-0.55));                                 // NSTEMI: отрицательные T в V2–V4
+  if(m.wel==='B') { T=add(T,sc([-0.05,0,1],-0.75)); su*=1.15; sd*=1.15; }      // Велленс B: глубокий симметричный T
+  if(m.dw) T=add(T,sc([0.10,0.0,0.85],0.55));                                   // де Винтер: высокий симметричный T
+  if(m.lvh>0.45||m.rvh>0.45) extra=1;
+  const tp=J+st+2.3*su;
+  const Tn=norm(tv);
+  const win=(a,b,e1,v,e2)=>S.comps.push({k:'w',t1:a,t2:b,e:e1,v,a:a-0.1,b:b+0.15});
+  if(W){ const inj=[0.30,0.21,0.03,0][m.stg]; if(inj) S.comps.push({k:'w',t1:J-0.004,t2:tp+0.6*sd,e:0.008,v:sc(W,inj),a:J-0.06,b:tp+sd+0.1}); }   // ток повреждения: подъём ST над зоной, депрессия напротив
+  if(m.isch) win(J+0.012,tp,0.018,sc(Mn,-0.22*m.isch));                         // субэндокардиальная ишемия: депрессия ST, подъём в aVR
+  if(m.lvh>0.45) win(J+0.01,tp,0.02,sc(Mn,-0.16*(m.lvh-0.45)/0.55));
+  if(m.peri===1){ win(J+0.012,tp+sd,0.03,sc([0.55,0.6,0.5],0.27)); S.comps.push({k:'w',t1:t0-0.075,t2:t0-0.004,e:0.01,v:sc([0.14,0.16,0.04],-0.8),a:t0-0.2,b:t0+0.05}); } // вогнутый диффузный подъём ST + депрессия PR
+  if(m.er){ const v=[0.35,0.45,0.75]; S.comps.push(G(J+0.004,0.011,sc(v,0.32*m.er))); win(J+0.015,tp,0.03,sc(v,0.2*m.er)); }   // волна J и вогнутый подъём ST
+  if(m.brug){ const L={V1:1,V2:0.85,V3:0.15}, kp=1+1.5*D.pr;                   // Бругада: местный феномен выносящего тракта ПЖ — только V1–V2 (не диполь)
+    if(m.brug===1){ const g=G(J+0.01,0.018,null,0.075); g.L=L; g.amp=0.34*kp; S.comps.push(g);   // тип 1 «coved»: подъём ≥ 2 мм, переходит в отрицательный T
+      const g2=G(tp,su,null,sd); g2.L=L; g2.amp=-0.42; S.comps.push(g2); }
+    else { const g=G(J+0.004,0.011,null); g.L=L; g.amp=0.22*kp; S.comps.push(g);                // тип 2 «седло»: J-волна, провисание ST, положительный T
+      const w2={k:'w',t1:J+0.04,t2:tp,e:0.03,L,amp:0.08*kp,a:J-0.1,b:tp+0.15}; S.comps.push(w2); } }
+  if(m.dw){ S.comps.push(G(J+0.03,0.035,sc([-0.15,-0.12,-0.95],0.20),0.06)); }  // де Винтер: косовосходящая депрессия от точки J
+  if(m.wel==='A'){ S.comps.push(G(tp+0.075,0.04,sc([-0.05,0,1],-0.38))); }     // Велленс A: двухфазный T (+/−) в V2–V3
+  S.comps.push(G(tp,su,T,sd));
+  if(D.stUp>0.002) S.comps.push({k:'w',t1:J,t2:tp,e:0.012,v:sc(Tn,D.stUp),a:J-0.06,b:tp+0.06});
+  if(D.stDn>0.002) S.comps.push({k:'w',t1:J+0.01,t2:tp+su,e:0.02,v:sc(Tn,-D.stDn),a:J-0.1,b:tp+su+0.1});
+  if(D.scoop>0.002){ const mid=J+0.45*(tp-J); S.comps.push(G(mid,Math.max(0.045,(tp-J)*0.5),sc(norm(DIP.M),-D.scoop))); }   /* «корыто» направлено против основного вектора QRS — видно в V4–V6 */
+  /* волна U: через ~0,20 с после вершины T; растёт при гипокалиемии (Кушаковский рис. 422, 470) */
+  const uT=tp+0.20+0.05*D.hypo;
+  S.comps.push(G(uT,0.045*(1+0.25*D.hypo),sc(DIP.U,0.35*D.uAmp)));
+  const qt=(tp+2.3*sd)-t0;
+  return {qt,tEnd:tp+2.3*sd,uEnd:uT+0.1};
+}
+/* нормальный (наджелудочковый) QRS; bbb — блокада ножки, f — доля предвозбуждения (WPW) */
+function addQRSn(S,t0,D,o){
+  o=o||{}; const w=D.wQ, f=o.f||0, bbb=o.bbb||'none', amp=Math.pow(w,-0.7);
+  let dur=0.085*w, tv=DIP.T;
+  if(f>0){ /* дельта-волна: вектор тип A (вперёд, вниз, влево) — Кушаковский гл. 4; при полном предвозбуждении QRS = сплошная Δ */
+    S.comps.push(G(t0+0.035*w*(1+0.8*f),0.026*w*(1+0.7*f),sc([0.45,0.55,0.70],0.75+0.75*f)));
+  }
+  const k=f>=0.99?0.08:1-0.55*f, dt=0.03*f*w;                              // нормальная часть QRS начинается позже на величину предвозбуждения
+  const m=D.m||{}; let E=DIP.E, M=DIP.M, Sd=DIP.S;
+  const rotF=(v,deg)=>{ const r=Math.hypot(v[0],v[1]), a=deg*Math.PI/180; return [r*Math.cos(a),r*Math.sin(a),v[2]]; };
+  if(m.axis==='lafb'){ M=rotF(M,-55); E=[-0.06,0.22,0.22]; Sd=[0.05,-0.15,-0.40]; dur+=0.01*w; }   // q в I, aVL; rS в II, III, aVF; ось ≤ −30°
+  if(m.axis==='lpfb'){ M=rotF(M,122); E=[0.18,-0.18,0.22]; Sd=[-0.05,0.10,-0.40]; dur+=0.01*w; }   // rS в I, aVL; qR в III, aVF; ось ≥ +120°
+  if(m.lvh){ M=sc(add(M,[0.10,-0.05,-0.25]),1+1.4*m.lvh); dur+=0.015*w*m.lvh; }                  // высокие R V5–V6, глубокие S V1–V2
+  if(m.rvh){ M=sc(M,1-0.55*m.rvh); S.comps.push(G(t0+0.048*w,0.013*w,sc([-0.55,0.30,0.85],1.5*m.rvh))); }  // высокий R V1, ось вправо, S в V5–V6
+  if(m.pe){ E=add(E,[0.05,-0.50*m.pe,0]); S.comps.push(G(t0+0.078*w,0.014*w,sc([-0.75,-0.05,0.45],0.65*m.pe))); dur+=0.02*w*m.pe; } // S1 Q3, r′ в V1
+  if(m.mi&&m.stg>=1&&WALL[m.mi]){ const wv=WALL[m.mi], qa=[0,0.5,0.6,0.6][m.stg];          // некроз: начальный вектор QRS уходит от зоны (патологический Q)
+    S.comps.push(G(t0+0.022*w,0.012*w,sc(wv,-qa))); M=add(M,sc(wv,-0.35*qa)); }
+  if(bbb==='lbbb'){
+    S.comps.push(G(t0+dt+0.035*w,0.02*w,sc([0.55,0.15,-0.45],0.6*amp*k)));
+    S.comps.push(G(t0+dt+0.085*w,0.025*w,sc([0.85,0.45,-0.85],1.3*amp*k)));
+    dur=0.15*w; tv=sc(norm([-0.6,-0.1,0.7]),0.42);
+  } else {
+    S.comps.push(G(t0+dt+0.012*w,0.0075*w,sc(E,amp*k)));
+    S.comps.push(G(t0+dt+0.037*w,0.0105*w,sc(M,amp*k)));
+    S.comps.push(G(t0+dt+0.062*w,0.0100*w,sc(Sd,amp*k)));
+    if(bbb==='rbbb'){ S.comps.push(G(t0+dt+0.100*w,0.020*w,sc([-0.55,0.05,0.80],0.75*amp*k))); dur=0.135*w;
+      tv=add(DIP.T,[0.12,0.02,-0.35]); }
+  }
+  if(f>0){ dur=Math.max(dur,0.085*w+0.07*f*w); tv=add(sc(tv,1-0.7*f),sc([-0.3,-0.3,-0.4],0.5*f)); }
+  return {dur,tv,mv:bbb==='lbbb'?[0.85,0.45,-0.85]:M};
+}
+/* желудочковый (эктопический/выскальзывающий/ЖТ) комплекс: два медленных фронта, T дискордантна */
+function addQRSv(S,t0,D,dir,ampK){
+  const w=D.wQ, v=norm(dir), a=(ampK||1)*Math.pow(w,-0.5);
+  S.comps.push(G(t0+0.045*w,0.024*w,sc(v,1.55*a)));
+  S.comps.push(G(t0+0.100*w,0.028*w,sc(norm(add(v,[0.25,-0.2,0.2])),1.1*a)));
+  return {dur:0.155*w,tv:sc(v,-0.45)};
+}
+
+/* ---- состояние модели ---- */
+function create(seed,tStart){
+  return {r:rng(seed||12345),comps:[],t:tStart,t0:tStart,log:[],escHold:-1e9,lastQTc:0.4,
+    sNext:tStart+0.3, aNext:tStart+0.3, fl:null,
+    nodeLast:-1e9, hpLast:-1e9, accLast:-1e9, lastV:-1e9, lastQT:0.36, lastRR:0.8, lastJ:-1e9,
+    pend:[], pvcAt:null, sinusCnt:0, vtNext:null, tdp:null, vfFrom:null, svtNext:null,
+    lastP:-1e9, pp:0.8, flTimes:[], dissoc:0, mode:null, lastConducted:-1e9};
+}
+function prune(S,tMin){ if(S.comps.length>400) S.comps=S.comps.filter(c=>c.b>tMin);
+  if(S.log.length>200) S.log=S.log.filter(x=>x.t>tMin-12); }
+
+/* АВ-проведение одного предсердного импульса, приходящего к АВ-узлу в момент arr (a — начало P) */
+function conduct(S,P,D,a,arr,src){
+  let V=null, H=null, pr=null;
+  const RP=arr-S.nodeLast, erpN=D.nodeERP*(0.82+0.18*clamp(S.lastRR/0.8,0,1));   /* укорочение ЭРП при частом ритме */
+  if(RP<erpN){
+    if(isFinite(erpN)&&RP>0.55*erpN) S.nodeLast=Math.max(S.nodeLast,arr-0.75*erpN); /* скрытое проведение */
+  } else {
+    H=arr+D.AHmin+D.beta*Math.exp(-(RP-erpN)/D.tau);
+    S.nodeLast=H;
+    const rph=H-S.hpLast, erph=D.hpERP*Math.sqrt(clamp(S.lastRR,0.4,2)/0.8)*(1+0.05*(S.r()-0.5));
+    if(rph>=erph&&!(D.pDrop&&S.lastCond&&S.r()<D.pDrop)){ V=H+D.hvT; S.hpLast=H; S.lastCond=true; } else S.lastCond=false;
+  }
+  /* WPW: дополнительный путь (ЭРП 0,27 с) — Кушаковский гл. 4 */
+  let Vd=null;
+  if(P.wpw){ const dArr=a+D.pa+0.055*Math.sqrt(D.wQ); if(dArr-S.accLast>=0.27&&dArr-S.lastV>=0.85*S.lastQT){ Vd=dArr; S.accLast=dArr; } }
+  let onset=null, f=0;
+  if(Vd!=null&&V!=null){ f=clamp((V-Vd)/0.09,0,1); onset=Math.min(V,Vd); }
+  else if(Vd!=null){ f=1; onset=Vd; }
+  else if(V!=null){ onset=V; }
+  if(onset==null) return false;
+  if(onset-S.lastV<0.88*S.lastQT) return false;               // желудочки в рефрактерном периоде
+  S.pend.push({t:onset,kind:'n',f,pr:src==='sinus'?onset-a:null,src});
+  return true;
+}
+
+function vBeat(S,P,D,t,kind,extra){
+  const rr=t-S.lastV;
+  if(rr<0.85*S.lastQT&&kind!=='tdp'&&kind!=='vt') return false;
+  let q;
+  if(kind==='n'||kind==='j'){
+    const bbbOn=!P.bbbThr||(rr>0&&rr<3&&60/rr>=P.bbbThr);       // тахизависимая блокада ножки (фаза 3): появляется выше пороговой ЧСС
+    q=addQRSn(S,t,D,{f:extra&&extra.f,bbb:bbbOn?P.bbb:'none'});
+  } else if(kind==='tdp'){
+    const v=extra.v; q=addQRSv(S,t,D,v,extra.amp);
+  } else {
+    q=addQRSv(S,t,D,extra.dir,extra.amp);
+  }
+  const rrUse=rr>0&&rr<3?rr:S.lastRR;
+  const rp=kind==='tdp'?{qt:0.2,tEnd:t+0.2}:repol(S,t,q.dur,D,rrUse,q.tv,kind==='n'||kind==='j'?1:0.6,q.mv);
+  if(kind==='tdp') S.comps.push(G(t+0.18,0.04,sc(q.tv,0.6)));
+  S.log.push({t,kind,rr:rr<3?rr:null,qrs:q.dur,qt:rp.qt,pr:extra&&extra.pr,f:extra&&extra.f||0,src:extra&&extra.src});
+  S.lastKind=kind; S.lastRR=rr>0&&rr<3?rr:S.lastRR; S.lastV=t; S.lastQT=rp.qt; S.lastQTc=rp.qt/Math.sqrt(clamp(S.lastRR,0.3,2.5));
+  if(kind!=='n'){ /* ретроградное скрытое проведение в АВ-узел (компенсаторная пауза, удлинение PQ — рис. 168–173) */
+    S.hpLast=t+0.02; if(t-S.nodeLast>0.6*(isFinite(D.nodeERP)?D.nodeERP:0.3)) S.nodeLast=Math.max(S.nodeLast,t+0.06); }
+  return true;
+}
+
+/* ---- основной цикл: обработать все события до tEnd ---- */
+function advance(S,P,D,tEnd){
+  const r=S.r;
+  if(S.mode!==P.rhythm){ /* смена ритма */
+    S.mode=P.rhythm; S.pend=[]; S.pvcAt=null; S.tdp=null; S.vfFrom=null;
+    S.vtNext=P.rhythm==='vt'?S.t+0.15:null; S.svtNext=P.rhythm==='avnrt'?S.t+0.15:null; S.jNext=P.rhythm==='junc'?S.t+0.15:null;
+    if(P.rhythm==='vf') S.vfFrom=S.t;
+    if(P.rhythm==='tdp') S.tdp={start:S.t+0.2,end:S.t+0.2+4.5+2*r(),n:0,next:S.t+0.2};
+    S.aNext=Math.max(S.aNext,S.t+0.05);
+  }
+  let guard=0;
+  while(guard++<2000){
+    const atrialOn=P.rhythm==='sinus'||P.rhythm==='af'||P.rhythm==='afl'||P.rhythm==='vt'||P.rhythm==='tdp';
+    const cand=[];
+    if(atrialOn) cand.push(['a',S.aNext]);
+    for(const p of S.pend) cand.push(['p',p.t,p]);
+    if(S.pvcAt) cand.push(['pvc',S.pvcAt.t]);
+    if(S.vtNext!=null) cand.push(['vt',S.vtNext]);
+    if(S.svtNext!=null) cand.push(['svt',S.svtNext]);
+    if(S.jNext!=null) cand.push(['junc',S.jNext]);
+    if(S.tdp&&S.tdp.next!=null) cand.push(['tdp',S.tdp.next]);
+    if((P.rhythm==='sinus'||P.rhythm==='af'||P.rhythm==='afl')&&!S.tdp){
+      const infra=P.avLevel==='infra'&&D.dInfra>0.25;
+      const esc=infra?D.escV:D.escJ;
+      const base=Math.max(S.lastV,S.escHold||-1e9,S.t0);
+      /* подавление частой импульсацией: после проведённого комплекса интервал выскальзывания длиннее (Кушаковский гл. 2) */
+      cand.push(['esc',base+esc*(S.lastKind==='n'?1.15:1),infra?'v':'j']);
+    }
+    if(!cand.length){ S.t=tEnd; break; }
+    cand.sort((x,y)=>x[1]-y[1]);
+    const c=cand[0]; if(c[1]>tEnd){ S.t=tEnd; break; }
+    const t=c[1]; S.t=t;
+    if(c[0]==='a'){
+      /* СА-блокада II ст. (правка 8.04): каждый N-й синусовый импульс не выходит из узла — нет ни P, ни QRS, пауза = 2 P–P (Кушаковский рис. 255, 265) */
+      if(P.rhythm==='sinus'&&P.sab>1&&(S.sabN=(S.sabN||0)+1)%P.sab===0){
+        S.log.push({t,kind:'Sx'});
+        S.aNext=t+60/clamp(P.hr,20,250);
+        continue;
+      }
+      if(P.rhythm==='sinus'||P.rhythm==='vt'||P.rhythm==='tdp'){
+        addP(S,t,D); S.log.push({t,kind:'P'}); S.lastP=t;
+        const ok=(P.rhythm==='sinus'||P.rhythm==='vt'||(P.rhythm==='tdp'&&!(S.tdp&&t>=S.tdp.start&&t<S.tdp.end)))?conduct(S,P,D,t,t+D.pa,'sinus'):false;
+        S.dissoc=ok?0:S.dissoc+1;
+        let pp=60/clamp(P.hr,20,250);
+        pp*=1+0.03*Math.sin(2*Math.PI*t/4.5)*(P.hr<95?1:0.3);       // дыхательная синусовая аритмия
+        if(S.dissoc>=2&&S.lastV>t-0.1) pp*=0.95;                      // вентрикулофазная аритмия (рис. 321, 341)
+        S.aNext=t+pp;
+      } else if(P.rhythm==='af'){
+        conduct(S,P,D,t,t+0.03,'af');
+        S.aNext=t+0.10+0.07*r();                                   // 350–600/мин
+      } else if(P.rhythm==='afl'){
+        S.comps.push({k:'saw',t,cl:D.flCL,v:DIP.F,a:t,b:t+D.flCL}); S.log.push({t,kind:'F'});
+        conduct(S,P,D,t,t+0.04,'afl');
+        S.aNext=t+D.flCL;
+      }
+    } else if(c[0]==='p'){
+      S.pend.splice(S.pend.indexOf(c[2]),1);
+      const p=c[2];
+      if(vBeat(S,P,D,t,'n',p)){
+        S.lastConducted=t;
+        if(P.rhythm==='vt'&&S.vtNext!=null) S.vtNext=t+60/clamp(P.vtRate,100,260)*(1+0.3*D.pr);   // захват сбрасывает ЖТ
+        /* экстрасистолы после синусового/проведённого комплекса */
+        S.sinusCnt++;
+        let want=false, coup=0.44, dir=FOCI.rvot.v, poly=false;
+        if(P.ectopy==='bigem') want=true;
+        else if(P.ectopy==='trigem') want=S.sinusCnt%2===0;
+        else if(P.ectopy==='single') want=r()<0.12;
+        if(!want&&D.autoEct>0&&r()<D.autoEct){ want=true; poly=true; }
+        if(want&&(P.rhythm==='sinus'||P.rhythm==='af'||P.rhythm==='afl')){
+          if(D.gtox>0.55){ coup=0.42; S.pvcAlt=!S.pvcAlt; dir=S.pvcAlt?FOCI.lvap.v:FOCI.rvot.v; }   // дигиталис: полиморфные, сцепление постоянное (рис. 161, 421)
+          else if(poly){ coup=0.38+0.17*r(); const ks=Object.keys(FOCI); dir=FOCI[ks[Math.floor(r()*ks.length)]].v; } // гипокалиемия: полифокусные
+          S.pvcAt={t:t+coup,dir};
+        }
+      }
+    } else if(c[0]==='pvc'){
+      const pv=S.pvcAt; S.pvcAt=null;
+      const idx=(t-S.lastV)/Math.max(S.lastQT,0.2);
+      if(vBeat(S,P,D,t,'v',{dir:pv.dir,src:'pvc'})){
+        S.log[S.log.length-1].idx=idx; S.sinusCnt=0;
+        /* R на T при удлинённом QT → пароксизм пируэтной ЖТ (Кушаковский стр. 124: гипокалиемия, QT > 0,60 с) */
+        const qtc=S.lastQTc||0;
+        if(idx<0.85&&qtc>0.50&&r()<0.45) S.tdp={start:t+0.25,end:t+3+4*r(),n:0,next:t+0.25,auto:true};
+      }
+    } else if(c[0]==='esc'){
+      if(S.pend.some(p=>p.t<t+0.06)) { S.escHold=t; continue; }
+      if(c[2]==='j') vBeat(S,P,D,t,'j',{src:'esc'}); else vBeat(S,P,D,t,'v',{dir:FOCI.esc.v,src:'esc'});
+      if(c[2]==='j') S.nodeLast=Math.max(S.nodeLast,t);         // ретроградно в АВ-узел
+    } else if(c[0]==='vt'){
+      vBeat(S,P,D,t,'vt',{dir:FOCI.lvap.v,src:'vt'});
+      S.vtNext=t+60/clamp(P.vtRate,100,260)*(1+0.3*D.pr)*(1+0.01*(r()-0.5));
+    } else if(c[0]==='junc'){
+      /* ритм АВ-соединения (правка 8.05): P′ отрицательный во II, III, aVF — до, внутри или после QRS в зависимости
+         от соотношения антеградного и ретроградного проведения (Кушаковский рис. 56; R–P′ 0,06–0,24 с) */
+      vBeat(S,P,D,t,'j',{src:'junc'}); const off={before:-0.09,in:-0.01,after:0.12}[P.jP||'before'];
+      addP(S,t+off-0.035,D,true); S.log.push({t:t+off,kind:'P'}); S.nodeLast=t;
+      S.jNext=t+60/clamp(P.jRate||50,30,140);
+    } else if(c[0]==='svt'){
+      vBeat(S,P,D,t,'n',{src:'svt'}); addP(S,t+0.03,D,true);      // ретроградный P′ сразу за QRS, R–P′ ≈ 0,06 (рис. 189)
+      S.nodeLast=t;
+      S.svtNext=t+60/clamp(P.svtRate,120,260)*(1+0.25*D.pr)*(1+0.12*D.g);
+    } else if(c[0]==='tdp'){
+      const T=S.tdp;
+      if(t>=T.end){ /* конец пароксизма */
+        const auto=T.auto; S.tdp=null;
+        if(P.rhythm==='tdp'){ S.tdp={start:t+3.5,end:t+3.5+4+3*r(),n:0,next:t+3.5}; }
+        S.aNext=Math.max(S.aNext,t+0.35); S.lastV=t;
+        continue;
+      }
+      const n=T.n++, th=n*2*Math.PI/9, env=0.55+0.45*Math.abs(Math.sin(n*Math.PI/9));
+      const v=[0.45*Math.cos(th),0.9*Math.sin(th)*0.9+0.1,0.5*Math.cos(th+1)];
+      vBeat(S,P,D,t,'tdp',{v,amp:1.25*env,src:'tdp'});
+      T.next=t+0.23+0.05*r();
+    }
+  }
+}
+
+/* ---- вектор сердца в момент t ---- */
+function vecAt(S,P,D,t,out){
+  let x=0,y=0,z=0;
+  const C=S.comps;
+  for(let i=0;i<C.length;i++){ const c=C[i]; if(c.L||t<c.a||t>c.b) continue;
+    let k=0;
+    if(c.k==='g'){ const d=t-c.t, s=d<0?c.s:c.s2; k=Math.exp(-d*d/(2*s*s)); }
+    else if(c.k==='w'){ k=1/(1+Math.exp(-(t-c.t1)/c.e))-1/(1+Math.exp(-(t-c.t2)/c.e)); }
+    else if(c.k==='saw'){ const ph=(t-c.t)/c.cl; k=ph<0.72?(0.5-ph/0.72):(-0.5+(ph-0.72)/0.28); }
+    x+=k*c.v[0]; y+=k*c.v[1]; z+=k*c.v[2]; }
+  /* фибрилляция предсердий: волны f (сумма гармоник с «плывущей» фазой) */
+  if(P.rhythm==='af'){ const A=D.fAmp, s=Math.sin(2*Math.PI*6.3*t+1.7*Math.sin(0.7*t))+0.7*Math.sin(2*Math.PI*8.1*t+2.1*Math.sin(0.43*t+1))+0.5*Math.sin(2*Math.PI*5.2*t+1.3*Math.sin(0.31*t+2));
+    x+=A*0.35*s; y+=A*0.6*s; z+=A*0.9*s; }
+  /* фибрилляция желудочков: хаотичные волны 4–7 Гц с меняющейся осью (~250–400/мин) */
+  if(S.vfFrom!=null&&t>=S.vfFrom){ const s1=Math.sin(2*Math.PI*4.6*t+2.4*Math.sin(0.9*t)), s2=Math.sin(2*Math.PI*6.1*t+1.9*Math.sin(1.3*t+1)), env=0.45+0.25*Math.sin(0.8*t)+0.15*Math.sin(2.3*t+1);
+    x+=env*(0.6*s1+0.3*s2); y+=env*(0.5*s2-0.7*s1*Math.cos(0.5*t)); z+=env*(0.6*s1*Math.sin(0.37*t)+0.3*s2); }
+  out[0]=x; out[1]=y; out[2]=z; return out;
+}
+/* местные (не дипольные) компоненты: вклад только в перечисленные отведения */
+function localAt(S,t,name,list){ let s=0; const C=list||S.comps;   // list — заранее отобранные местные компоненты (быстрее)
+  for(let i=0;i<C.length;i++){ const c=C[i]; if(!c.L||!c.L[name]||t<c.a||t>c.b) continue;
+    let k; if(c.k==='g'){ const d=t-c.t, sg=d<0?c.s:c.s2; k=Math.exp(-d*d/(2*sg*sg)); } else k=1/(1+Math.exp(-(t-c.t1)/c.e))-1/(1+Math.exp(-(t-c.t2)/c.e));
+    s+=k*c.amp*c.L[name]; }
+  return s; }
+function lead(name,v){ const L=LV[name]; return L[0]*v[0]+L[1]*v[1]+L[2]*v[2]; }
+
+/* ---- измерения по журналу модели ---- */
+function measure(S,now){
+  const L=S.log.filter(x=>x.t<=now&&x.t>now-8);
+  const V=L.filter(x=>x.kind!=='P'&&x.kind!=='F'), Ps=L.filter(x=>x.kind==='P'), Fs=L.filter(x=>x.kind==='F');
+  const rrs=V.map(x=>x.rr).filter(x=>x>0).slice(-6);
+  const vr=rrs.length?60/(rrs.reduce((a,b)=>a+b,0)/rrs.length):null;
+  let ar=null; const A=Ps.length>=2?Ps:Fs; if(A.length>=2) ar=60/((A[A.length-1].t-A[0].t)/(A.length-1));
+  const last=V[V.length-1]||null, lastN=[...V].reverse().find(x=>x.kind==='n'&&x.src==='sinus')||null;
+  const prs=V.filter(x=>x.pr!=null).map(x=>x.pr);
+  return {vr,ar,last,lastN,prs,nP:Ps.length,nV:V.length,nVcond:V.filter(x=>x.src==='sinus').length,V,Ps,
+    qtc:last&&last.rr?last.qt/Math.sqrt(clamp(last.rr,0.3,2.5)):null};
+}
+
+return {derive,create,advance,vecAt,lead,localAt,measure,prune,LEADS,LV,nodeD};
+})();
+
+/* ---------- Живая лента ЭКГ в карточке атласа (правка 2026-10, 8.04–8.05) ----------
+   Заменяет отдельные анимации ритма и шторку «Симулятор»: в шторке карточки — бегущая лента (canvas) с моделью ECGSIM
+   и 1–2 ползунками, нужными именно этому паттерну. Запуск — по кнопке; на паузе изменение ползунка перестраивает ленту
+   сразу. Внешних ресурсов нет. */
+(function(){
+const SIM=ECGSIM;
+const BASE={rhythm:'sinus',hr:75,vtRate:170,svtRate:180,K:4.2,Ca:2.35,avLevel:'node',avDeg:0,wpw:false,bbb:'none',ectopy:'none',proc:0,dig:0,sab:0,
+  bbbThr:0,axis:'',lvh:0,rvh:0,pe:0,isch:0,tinv:false,miWall:'none',miStage:0,peri:0,er:0,brug:0,dewinter:false,wellens:'',clc:false,jRate:50,jP:'before'};
+const KT=[[2,'2'],[3.5,'3,5'],[5.5,'5,5',1],[6.5,'6,5',1],[7.5,'7,5',1],[8.5,'8,5',1]];
+const AVT=[[0,'норма'],[40,'I ст.'],[62,'II'],[80,'2:1'],[100,'III']];
+const S_HR={t:'sl',k:'hr',l:'ЧСС синусового узла',min:30,max:180,step:1,f:v=>Math.round(v)+'/мин',big:5};
+const S_K=(min,max)=>({t:'sl',k:'K',l:'K⁺',min,max,step:0.1,f:v=>fmt(v,1)+' ммоль/л',ticks:KT.filter(x=>x[0]>=min&&x[0]<=max),badge:'k'});
+const S_AV={t:'sl',k:'avDeg',l:'Нарушение проведения',min:0,max:100,step:1,f:v=>Math.round(v)+' %',ticks:AVT,big:5};
+const C_LVL={t:'ch',k:'avLevel',l:'Уровень блока',o:[['node','АВ-узел',{bbb:'none'}],['infra','Ниже пучка Гиса',{bbb:'rbbb'}]]};
+const S_DIG={t:'sl',k:'dig',l:'Сердечные гликозиды (выраженность эффекта)',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',ticks:[[0,'0'],[40,'насыщение'],[80,'интоксик.']],big:5};
+const S_PROC={t:'sl',k:'proc',l:'Новокаинамид (выраженность эффекта)',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',ticks:[[0,'0'],[40,'терапевт.'],[90,'токсич.']],big:5};
+const C_WALL={t:'ch',k:'miWall',l:'Зона инфаркта',o:[['inf','нижний'],['ant','передний'],['lat','боковой'],['post','задний'],['rv','ПЖ']]};
+const C_STG={t:'ch',k:'miStage',l:'Стадия',o:[[0,'острейшая'],[1,'острая'],[2,'подострая'],[3,'рубцовая']]};
+const ELEC_NOTE='⚠ Ступени K⁺ 5,5 / 6,5 / 7,5 / 8,5 — из карточки «Гиперкалиемия» (клинические рекомендации; у Горячева стадии без цифр); пороги гипокалиемии и влияние Ca²⁺ — модельные. У пациента ЭКГ при том же уровне может отличаться.';
+/* карточка атласа → параметры модели и её ползунки */
+const LIVE={
+ sinus:{p:{},c:[S_HR],sp:25},
+ sablock:{p:{sab:3},c:[{t:'ch',k:'sab',l:'Выпадает каждый',o:[[0,'нет'],[4,'4-й'],[3,'3-й'],[2,'2-й']]},S_HR],sp:12.5},
+ av1:{p:{avDeg:45},c:[C_LVL,S_AV,S_HR],sp:25},
+ wenckebach:{p:{avDeg:62},c:[C_LVL,S_AV,S_HR],sp:12.5},
+ mobitz2:{p:{avLevel:'infra',avDeg:55,bbb:'rbbb'},c:[C_LVL,S_AV,S_HR],sp:12.5},
+ av3:{p:{avDeg:100},c:[C_LVL,S_AV,S_HR],sp:12.5},
+ wpw:{p:{wpw:true},c:[{t:'ch',k:'rhythm',l:'Ритм',o:[['sinus','Синус'],['af','ФП']]},{t:'sl',k:'avDeg',l:'Задержка в АВ-узле',min:0,max:60,step:1,f:v=>Math.round(v)+' %',big:5}],sp:25},
+ psvt:{p:{rhythm:'avnrt'},c:[{t:'sl',k:'svtRate',l:'Частота тахикардии',min:140,max:250,step:1,f:v=>Math.round(v)+'/мин',big:5}],sp:25},
+ afib:{p:{rhythm:'af'},c:[S_DIG,{t:'ch',k:'wpw',l:'Синдром WPW',o:[[false,'нет'],[true,'есть']]}],sp:25},
+ aflutter:{p:{rhythm:'afl'},c:[S_PROC,S_DIG],sp:25},
+ vt:{p:{rhythm:'vt'},c:[{t:'sl',k:'vtRate',l:'Частота ЖТ',min:100,max:250,step:1,f:v=>Math.round(v)+'/мин',big:5}],sp:25},
+ vf:{p:{rhythm:'vf'},c:[],sp:25},
+ extra:{p:{ectopy:'bigem'},c:[{t:'ch',k:'ectopy',l:'Экстрасистолы',o:[['single','единичные'],['bigem','бигеминия'],['trigem','тригеминия']]},S_HR],sp:25},
+ hyperk:{p:{K:6.5},c:[S_K(4,9),{t:'ch',k:'Ca',l:'Ca²⁺ (модель защиты мембраны)',o:[[2.35,'норма'],[3.1,'повышен']]}],sp:25,v12:true,note:ELEC_NOTE},
+ hypok:{p:{K:3.0},c:[S_K(2,5)],sp:25,v12:true,note:ELEC_NOTE},
+ digoxin:{p:{dig:45},c:[S_DIG,S_K(2.5,5)],sp:25,v12:true},
+/* правка 8.05: морфология — 12 отведений по умолчанию; формы ST–T заданы векторами по описаниям Мурашко, Волковой, Горячева */
+ clc:{p:{clc:true},c:[S_HR],sp:25},
+ ajr:{p:{rhythm:'junc',jRate:50,jP:'before'},c:[{t:'ch',k:'jP',l:'Зубец P′ (ретроградный)',o:[['before','перед QRS'],['in','внутри QRS'],['after','после QRS']]},{t:'sl',k:'jRate',l:'Частота ритма АВ-соединения',min:35,max:130,step:1,f:v=>Math.round(v)+'/мин'+(v>60?' — ускоренный':''),ticks:[[40,'40'],[60,'60'],[100,'100']],big:5}],sp:25},
+ rbbb:{p:{bbb:'rbbb'},c:[{t:'ch',k:'bbbThr',l:'Блокада',o:[[0,'постоянная'],[90,'тахизависимая, ≥ 90/мин']]},S_HR],sp:25,view:'12',st:true},
+ lbbb:{p:{bbb:'lbbb'},c:[{t:'ch',k:'bbbThr',l:'Блокада',o:[[0,'постоянная'],[65,'тахизависимая, ≥ 65/мин']]},S_HR],sp:25,view:'12',st:true},
+ lafb:{p:{axis:'lafb'},c:[{t:'ch',k:'axis',l:'Сравнить',o:[['','норма'],['lafb','блокада передней ветви']]}],sp:25,view:'12',st:true},
+ lpfb:{p:{axis:'lpfb'},c:[{t:'ch',k:'axis',l:'Сравнить',o:[['','норма'],['lpfb','блокада задней ветви']]}],sp:25,view:'12',st:true},
+ lvh:{p:{lvh:70},c:[{t:'sl',k:'lvh',l:'Гипертрофия ЛЖ',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',ticks:[[0,'норма'],[45,'перегрузка']],big:5}],sp:25,view:'12',st:true},
+ rvh:{p:{rvh:70},c:[{t:'sl',k:'rvh',l:'Гипертрофия ПЖ',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',big:5}],sp:25,view:'12',st:true},
+ angina:{p:{isch:80,hr:100},c:[{t:'sl',k:'isch',l:'Выраженность ишемии',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',big:5},S_HR],sp:25,view:'12',st:true},
+ mi:{p:{miWall:'ant',miStage:0},c:[C_WALL,C_STG],sp:25,view:'12',st:true,note:'Ток повреждения направлен к зоне инфаркта: подъём ST над ней и реципрокная депрессия в противоположных отведениях получаются сами (проекция вектора).'},
+ nstemi:{p:{isch:60,tinv:true},c:[{t:'sl',k:'isch',l:'Депрессия ST (ишемия)',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',big:5},{t:'ch',k:'tinv',l:'Отрицательные T в V2–V4',o:[[false,'нет'],[true,'есть']]}],sp:25,view:'12',st:true},
+ sgarbossa:{p:{bbb:'lbbb',miWall:'lat',miStage:0},c:[{t:'ch',k:'miWall',l:'На фоне БЛНПГ',o:[['none','без ИМ (дискордантно)'],['lat','ИМ: конкордантный подъём ST']]}],sp:25,view:'12',st:true},
+ pericarditis:{p:{peri:1},c:[{t:'ch',k:'peri',l:'Стадия',o:[[1,'I: подъём ST'],[2,'II: ST к изолинии'],[3,'III: T отрицательный'],[4,'IV: норма']]}],sp:25,view:'12',st:true},
+ er:{p:{er:80,hr:60},c:[{t:'sl',k:'er',l:'Выраженность ранней реполяризации',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',big:5},S_HR],sp:25,view:'12',st:true,note:'Модель: при учащении ЧСС признаки ранней реполяризации уменьшаются.'},
+ g_inf:{p:{miWall:'inf',miStage:0},c:[{t:'ch',k:'miWall',l:'Зона',o:[['inf','нижний'],['infrv','нижний + ПЖ']]},C_STG],sp:25,view:'12',st:true},
+ g_dw:{p:{dewinter:true},c:[{t:'ch',k:'dewinter',l:'Сравнить',o:[[false,'норма'],[true,'паттерн де Винтера']]}],sp:25,view:'12',st:true},
+ g_wel:{p:{wellens:'A'},c:[{t:'ch',k:'wellens',l:'Тип',o:[['','норма'],['A','A: двухфазный T'],['B','B: глубокий T']]}],sp:25,view:'12',st:true},
+ g_brug:{p:{brug:1},c:[{t:'ch',k:'brug',l:'Тип',o:[[0,'норма'],[1,'тип 1 (coved)'],[2,'тип 2 (седло)']]},S_PROC],sp:25,view:'12',st:true,note:'Изменения только в V1–V2 (местный феномен выносящего тракта ПЖ). Блокаторы Na-каналов (новокаинамид) усиливают паттерн.'},
+ g_pe:{p:{pe:80,hr:110},c:[{t:'sl',k:'pe',l:'Острая перегрузка ПЖ',min:0,max:100,step:1,f:v=>v?Math.round(v)+' %':'нет',big:5},S_HR],sp:25,view:'12',st:true},
+ longqt:{p:{K:2.8,proc:40},c:[S_K(2,4.5),S_PROC],sp:25,note:'Модель: ранняя ЖЭ («R на T», индекс < 0,85) при QTc > 0,50 может запустить пируэтную ЖТ (Кушаковский, стр. 124) — это вероятностная учебная модель.'}
+};
+const ECG2_LIVE={hyperkalemia2:'hyperk',vtach2:'vt',stemi_inf2:'g_inf',omi_dewinter:'g_dw',omi_wellens2:'g_wel',omi_sgarbossa2:'sgarbossa',brugada_syn2:'g_brug',tela_pattern2:'g_pe'};
+const fmt=(v,d)=>v==null||!isFinite(v)?'—':v.toFixed(d).replace('.',',');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+let st=null;
+function stop(){ if(st){ st.playing=false; if(st.ro)st.ro.disconnect(); if(st.mo)st.mo.disconnect(); st=null; } }
+const prevStop=window.eaStop; window.eaStop=function(){ stop(); if(prevStop)prevStop(); };
+
+function kStage(K){
+  if(K<2.5) return ['ban','выраженная гипокалиемия ⚠']; if(K<3.0) return ['warn','гипокалиемия ⚠']; if(K<3.5) return ['warn','лёгкая гипокалиемия ⚠'];
+  if(K<=5.0) return ['ok','норма']; if(K<5.5) return ['ok','выше нормы, ЭКГ обычно без изменений'];
+  if(K<6.5) return ['warn','ранняя гиперкалиемия ⚠']; if(K<7.5) return ['warn','умеренная гиперкалиемия ⚠'];
+  if(K<8.5) return ['ban','тяжёлая гиперкалиемия ⚠']; return ['ban','синусоида — угроза ФЖ/асистолии ⚠'];
+}
+
+/* ---- отрисовка ---- */
+function colors(){ return {bg:css('--ecgBg2')||'#fff', g:css('--ecgLine2')||'#e5b0bb', ink:css('--ink')||'#111', muted:css('--muted')||'#777', fs:parseFloat(css('--fs-scale'))||1}; }
+function drawGrid(ctx,x0,y0,w,h,pxmm,tNow,sp,C){
+  ctx.fillStyle=C.bg; ctx.fillRect(x0,y0,w,h);
+  const mmOff=((tNow*sp)%1+1)%1, big=((tNow*sp)%5+5)%5;     // бумага движется вместе со временем
+  ctx.save(); ctx.beginPath(); ctx.rect(x0,y0,w,h); ctx.clip();
+  ctx.strokeStyle=C.g; ctx.globalAlpha=0.38; ctx.lineWidth=0.6; ctx.beginPath();
+  for(let x=x0+w-mmOff*pxmm;x>=x0;x-=pxmm){ ctx.moveTo(Math.round(x)+0.5,y0); ctx.lineTo(Math.round(x)+0.5,y0+h); }
+  for(let y=y0;y<=y0+h;y+=pxmm){ ctx.moveTo(x0,Math.round(y)+0.5); ctx.lineTo(x0+w,Math.round(y)+0.5); }
+  ctx.stroke(); ctx.globalAlpha=1; ctx.lineWidth=1; ctx.beginPath();
+  for(let x=x0+w-big*pxmm;x>=x0;x-=5*pxmm){ ctx.moveTo(Math.round(x)+0.5,y0); ctx.lineTo(Math.round(x)+0.5,y0+h); }
+  for(let y=y0;y<=y0+h;y+=5*pxmm){ ctx.moveTo(x0,Math.round(y)+0.5); ctx.lineTo(x0+w,Math.round(y)+0.5); }
+  ctx.stroke(); ctx.restore();
+}
+function draw(){
+  const s=st; if(!s||!s.S||!s.W||!s.C) return;
+  const ctx=s.ctx, W=s.W, H=s.H, C=s.C, sp=s.speed, pxmm=s.pxmm, now=s.S.t;
+  ctx.setTransform(s.dpr,0,0,s.dpr,0,0); ctx.clearRect(0,0,W,H);
+  const v=[0,0,0], loc=s.P.brug?s.S.comps.filter(c=>c.L):null;   // местные компоненты (Бругада) — отбираются один раз за кадр
+  const lab=(t,x,y)=>{ ctx.fillStyle=C.muted; ctx.font='700 '+Math.round(11*C.fs)+'px system-ui,sans-serif'; ctx.fillText(t,x,y); };
+  const trace=(x0,w,leads)=>{
+    const k=3, n=Math.ceil(w*k), pts=leads.map(()=>new Float32Array(n+1));   // 3 отсчёта на пиксель: вершина узкого QRS не теряется
+    for(let i=0;i<=n;i++){ const t=now-(w-i/k)/(sp*pxmm); SIM.vecAt(s.S,s.P,s.D,t,v);
+      for(let j=0;j<leads.length;j++) pts[j][i]=leads[j].y-(SIM.lead(leads[j].name,v)+(loc?SIM.localAt(s.S,t,leads[j].name,loc):0))*10*pxmm; }
+    ctx.strokeStyle=C.ink; ctx.lineWidth=Math.max(1.3,pxmm*0.42); ctx.lineJoin='round';
+    for(let j=0;j<leads.length;j++){ const L=leads[j];
+      ctx.save(); ctx.beginPath(); ctx.rect(x0,L.top,w,L.h); ctx.clip(); ctx.beginPath();
+      for(let i=0;i<=n;i++){ const x=x0+i/k; i?ctx.lineTo(x,pts[j][i]):ctx.moveTo(x,pts[j][i]); } ctx.stroke(); ctx.restore(); }
+  };
+  if(s.view==='ii'){
+    drawGrid(ctx,0,0,W,H,pxmm,now,sp,C);
+    const y=Math.round(H*0.6), cx=6;
+    ctx.strokeStyle=C.ink; ctx.lineWidth=1.4; ctx.beginPath();      // калибровка 1 мВ = 10 мм
+    ctx.moveTo(cx,y); ctx.lineTo(cx+2*pxmm,y); ctx.lineTo(cx+2*pxmm,y-10*pxmm); ctx.lineTo(cx+5*pxmm,y-10*pxmm); ctx.lineTo(cx+5*pxmm,y); ctx.lineTo(cx+7*pxmm,y); ctx.stroke();
+    const x0=cx+8*pxmm; trace(x0,W-x0,[{name:'II',y,top:0,h:H}]); lab('II',x0+4,13*C.fs);
+  } else {
+    const cols=s.cols, rows=12/cols, cw=W/cols, rh=s.cellH, order=cols===4?[0,3,6,9,1,4,7,10,2,5,8,11]:[0,6,1,7,2,8,3,9,4,10,5,11];
+    for(let c=0;c<cols;c++) drawGrid(ctx,c*cw,0,cw,rows*rh,pxmm,now,sp,C);
+    for(let c=0;c<cols;c++){ const L=[];
+      for(let r=0;r<rows;r++){ const name=SIM.LEADS[order[r*cols+c]], top=r*rh; L.push({name,y:top+rh*0.6,top,h:rh}); }
+      ctx.save(); ctx.translate(c*cw,0); trace(0,cw,L); ctx.restore();
+      L.forEach(l=>lab(l.name,c*cw+4,l.top+12*C.fs));
+      if(c){ ctx.strokeStyle=C.muted; ctx.globalAlpha=0.5; ctx.beginPath(); ctx.moveTo(c*cw+0.5,0); ctx.lineTo(c*cw+0.5,rows*rh); ctx.stroke(); ctx.globalAlpha=1; }
+    }
+    const top=rows*rh+4, h=H-top;
+    drawGrid(ctx,0,top,W,h,pxmm,now,sp,C); trace(0,W,[{name:'II',y:top+h*0.6,top,h}]); lab('II',4,top+12*C.fs);
+  }
+}
+function layout(){
+  const s=st; if(!s) return;
+  const W=Math.max(240,s.box.clientWidth), dpr=Math.min(2,window.devicePixelRatio||1);
+  s.pxmm=W/(s.speed===50?66:100);                   // окно: 8 с при 12,5 мм/с, 4 с при 25, ~1,3 с при 50
+  if(s.view==='ii') s.H=Math.round(Math.max(130,38*s.pxmm));
+  else { s.cols=W>=560?4:2; s.cellH=Math.round(Math.max(64,22*s.pxmm*(s.cols===4?1.15:1))); s.H=s.cellH*(12/s.cols)+4+Math.round(Math.max(90,26*s.pxmm)); }
+  s.W=W; s.dpr=dpr; s.cv.width=Math.round(W*dpr); s.cv.height=Math.round(s.H*dpr); s.cv.style.height=s.H+'px';
+  s.C=colors(); draw();
+}
+
+/* ---- модель ---- */
+function rebuild(){ const s=st; s.D=SIM.derive(s.P); s.S=SIM.create(20261023,s.tNow-12); SIM.advance(s.S,s.P,s.D,s.tNow); }
+function changed(){ const s=st; if(!s) return; s.D=SIM.derive(s.P); if(!s.playing) rebuild(); sync(); draw(); info(); }
+function tick(ts){ const s=st; if(!s||!s.playing||!s.cv.isConnected||!$('sheet').classList.contains('on')){ if(s)s.playing=false; return; }
+  if(s.last){ s.tNow+=Math.min((ts-s.last)/1000,0.1)*s.rate;   /* правка 8.06: темп воспроизведения (замедление) */ SIM.advance(s.S,s.P,s.D,s.tNow); SIM.prune(s.S,s.tNow-8); }
+  s.last=ts; draw(); if(ts-(s.lastInfo||0)>500){ s.lastInfo=ts; info(); }
+  requestAnimationFrame(tick); }
+function play(on){ const s=st; s.playing=on; s.last=0; s.root.querySelector('.el-play').innerHTML=on?'<i class="ei i-pause"></i> Пауза':'<i class="ei i-play"></i> Запуск';
+  if(on) requestAnimationFrame(tick); else s.tNow=s.S.t; }
+
+/* ---- измерения и заключение по журналу модели ---- */
+function info(){
+  const s=st; if(!s) return; const P=s.P, D=s.D, m=SIM.measure(s.S,s.S.t), V=m.V, N=m.lastN, q=k=>s.root.querySelector('[data-m="'+k+'"]');
+  q('vr').textContent=P.rhythm==='vf'?'нет':fmt(m.vr,0);
+  q('ar').textContent=P.rhythm==='af'?'f':P.rhythm==='vf'||P.rhythm==='avnrt'||(D.pAmp<0.12&&P.rhythm!=='afl')?'—':fmt(m.ar,0);
+  q('pr').textContent=D.pAmp<0.12&&P.rhythm==='sinus'?'P нет':N&&N.pr!=null?fmt(N.pr,2):'—';
+  const last=N||m.last; q('qrs').textContent=last&&P.rhythm!=='vf'?fmt(last.qrs,2):'—';
+  const qq=N||[...V].reverse().find(x=>x.kind==='n'||x.kind==='j'||(x.kind==='v'&&x.src==='esc'))||null;
+  const qtc=qq&&qq.rr?qq.qt/Math.sqrt(Math.min(2.5,Math.max(0.3,qq.rr))):null;
+  q('qt').textContent=qtc!=null?fmt(qtc,2):'—'; q('qtl').textContent=qq?'QTc · QT '+fmt(qq.qt,2):'QTc';
+  q('qtb').classList.toggle('es-bad',qtc!=null&&qtc>=0.48);
+  const L=[], cond=V.filter(x=>x.src==='sinus'), prs=cond.map(x=>x.pr).filter(x=>x!=null);
+  const esc=V.filter(x=>x.src==='esc'), pvc=V.filter(x=>x.src==='pvc'), nP=Math.max(0,m.nP-pvc.length), rate=m.vr?Math.round(m.vr):null;
+  if(P.rhythm==='sinus'){
+    const hr=Math.round(P.hr), sin=hr<60?'Синусовая брадикардия':hr>90?'Синусовая тахикардия':'Синусовый ритм';
+    if(D.pAmp<0.12&&cond.length) L.push('Зубцов P не видно, QRS с частотой синусового узла ('+hr+'/мин): синовентрикулярный ритм — предсердия невозбудимы, импульс идёт к желудочкам по межузловым трактам (Кушаковский, стр. 156, рис. 268).');
+    else if(!cond.length&&esc.length) L.push('Полная АВ-блокада: P ('+hr+'/мин) и QRS независимы; замещающий ритм '+(esc[0].kind==='j'?'из АВ-соединения, QRS узкие':'идиовентрикулярный, QRS широкие')+(rate?', '+rate+'/мин.':'.'));
+    else {
+      const prMin=prs.length?Math.min(...prs):0, prMax=prs.length?Math.max(...prs):0; let av='';
+      if(nP>=3&&cond.length&&nP/cond.length>1.8&&prMax-prMin<0.02) av='АВ-блокада II ст. 2:1 (проводится каждый второй P)';
+      else if(nP-cond.length>=1&&cond.length&&prMax-prMin>=0.03) av='АВ-блокада II ст., Мобитц I (Венкебах): PQ '+fmt(prMin,2)+' → '+fmt(prMax,2)+' с, затем выпадение QRS';
+      else if(nP-cond.length>=1&&cond.length&&!pvc.length&&P.avDeg>0) av='АВ-блокада II ст., Мобитц II: PQ постоянный ('+fmt(prMax,2)+' с), выпадения внезапные';
+      else if(prMax>0.205) av='АВ-блокада I ст. (PQ '+fmt(prMax,2)+' с > 0,20)';
+      if(P.sab>1) av=(av?av+'; ':'')+'СА-блокада II ст.: выпадает весь комплекс PQRST, пауза = 2 P–P';
+      if(P.wpw&&cond.some(x=>x.f>0.05)) av=(av?av+'; п':'П')+'редвозбуждение (WPW): PQ '+fmt(prMin,2)+' с, дельта-волна';
+      L.push(sin+' '+hr+'/мин'+(av?'. '+av:'')+'.');
+      if(esc.length&&cond.length) L.push('Есть выскальзывающие комплексы в паузах.');
+    }
+  } else if(P.rhythm==='af') L.push('Фибрилляция предсердий: P нет, R–R неправильные, ЧСЖ ~'+(rate||'—')+'/мин.'+(P.wpw?' Широкие комплексы разной формы — проведение по дополнительному пути (рис. 246, 247).':''));
+  else if(P.rhythm==='afl'){ const ar=m.ar?Math.round(m.ar):null; L.push('Трепетание предсердий: F ~'+(ar||'—')+'/мин, ЧСЖ ~'+(rate||'—')+'/мин'+(ar&&rate?' (проведение ≈ '+Math.round(ar/rate)+':1)':'')+'.'); }
+  else if(P.rhythm==='junc'){ const jr=Math.round(P.jRate); L.push('Ритм АВ-соединения '+(rate||jr)+'/мин'+(jr>60?' — ускоренный (> 60/мин)':' — замещающий (40–60/мин)')+'. P′ отрицательный во II, III, aVF '+({before:'перед QRS, P′–R < 0,12 с',in:'скрыт в QRS',after:'после QRS, на сегменте ST'})[P.jP||'before']+' (Кушаковский, рис. 56).'); }
+  else if(P.rhythm==='avnrt') L.push('Реципрокная АВ-узловая тахикардия ~'+(rate||'—')+'/мин: узкие QRS, P′ сразу за QRS (рис. 189, 207).');
+  else if(P.rhythm==='vt') L.push('Желудочковая тахикардия ~'+(rate||'—')+'/мин: широкие QRS, P независимы (АВ-диссоциация).');
+  else if(P.rhythm==='vf') L.push('Фибрилляция желудочков: хаотичные волны, QRS нет.');
+  if(pvc.length){ const ix=pvc[pvc.length-1].idx; L.push('Желудочковые экстрасистолы'+(ix!=null?', индекс преждевременности '+fmt(ix,2)+(ix<0.85?' — «R на T»':''):'')+'.'); }
+  if(V.some(x=>x.kind==='tdp')) L.push('Пароксизм пируэтной ЖТ на фоне удлинённого QT.');
+  if(s.cfg.c.some(c=>c.k==='K')||D.K!==4.2){ const ks=kStage(D.K); L.push('K⁺ '+fmt(D.K,1)+' ммоль/л — '+ks[1]+(D.Ca>2.6?'; Ca²⁺ повышен: QRS у́же, калий не снижается':'')+'.'); }
+  if(D.pr>0) L.push('Новокаинамид (эффект '+Math.round(D.pr*100)+' %): QRS и QT удлиняются'+(P.rhythm==='afl'?', частота F снижается':'')+'.');
+  if(D.g>0) L.push('Гликозиды (эффект '+Math.round(D.g*100)+' %)'+(D.gtox>0.55?': интоксикация — эктопия'+(D.hypo>0?', усилена гипокалиемией':''):': ST «корытом», QT короче, PQ длиннее')+'.');
+  if(qtc!=null&&qtc>=0.50) L.push('QTc ≥ 0,50 — опасный уровень, риск пируэтной ЖТ.'); else if(qtc!=null&&qtc>=0.48) L.push('QTc > 0,48 — удлинён.');
+  if(s.cfg.st&&qq) L.push(...stLines(s,qq));
+  s.root.querySelector('.es-dx').textContent=L.join('\n');
+  const kb=s.root.querySelector('[data-badge="k"]'); if(kb){ const ks=kStage(D.K); kb.textContent=ks[1]; kb.className='es-badge es-'+ks[0]; }
+}
+
+/* смещение ST в точке J+60 мс относительно изолинии T–P и ЭОС по площади QRS в I и aVF — измеряются по модели */
+function stLines(s,b){
+  const v=[0,0,0], loc=!!s.P.brug, val=(t,n)=>{ SIM.vecAt(s.S,s.P,s.D,t,v); return SIM.lead(n,v)+(loc?SIM.localAt(s.S,t,n):0); };
+  const tb=b.t-((b.pr||0.16)+0.04), tj=b.t+b.qrs+0.06, up=[], dn=[];
+  SIM.LEADS.forEach(n=>{ const d=(val(tj,n)-val(tb,n))*10; if(d>=1) up.push(n+' '+fmt(d,1)); else if(d<=-0.5) dn.push(n+' '+fmt(d,1)); });
+  let I=0,F=0; for(let t=b.t;t<b.t+Math.min(b.qrs,0.09);t+=0.002){ I+=val(t,'I')-val(tb,'I'); F+=val(t,'aVF')-val(tb,'aVF'); }
+  const ax=Math.round(Math.atan2(F,I)*180/Math.PI);
+  return ['ЭОС ≈ '+(ax>0?'+':'')+ax+'°'+(ax<-30?' (отклонение влево)':ax>90?' (отклонение вправо)':'')+'.',
+    'Подъём ST ≥ 1 мм (в точке J+60 мс): '+(up.length?up.join(', '):'нет')+'.', 'Депрессия ST ≥ 0,5 мм: '+(dn.length?dn.join(', '):'нет')+'.'];
+}
+
+/* ---- разметка ---- */
+function ctlHtml(c,i){
+  if(c.t==='sl') return `<div class="es-sl" data-i="${i}"><div class="es-slh"><span>${c.l}</span><b data-val></b>${c.badge?`<span class="es-badge" data-badge="${c.badge}"></span>`:''}</div>
+    <div class="es-slr"><button type="button" class="ea-btn" data-step="-1" aria-label="${c.l}: меньше">−</button>
+    <input type="range" min="${c.min}" max="${c.max}" step="${c.step}" aria-label="${c.l}">
+    <button type="button" class="ea-btn" data-step="1" aria-label="${c.l}: больше">+</button></div>
+    ${c.ticks?`<div class="es-ticks" aria-hidden="true">${c.ticks.map(([v,t,w])=>`<span style="left:${(v-c.min)/(c.max-c.min)*100}%"${w?' class="w"':''}>${t}</span>`).join('')}</div>`:''}</div>`;
+  return `<div class="es-row" data-i="${i}"><span class="es-lbl">${c.l}</span><div class="ea-chips es-chips" role="group" aria-label="${c.l}">${c.o.map(([v,t],j)=>`<button type="button" class="ea-chip" data-j="${j}">${t}</button>`).join('')}</div></div>`;
+}
+function sync(){
+  const s=st; s.cfg.c.forEach((c,i)=>{ const el=s.root.querySelector('[data-i="'+i+'"]');
+    if(c.t==='sl'){ const inp=el.querySelector('input'); if(document.activeElement!==inp) inp.value=s.P[c.k]; el.querySelector('[data-val]').textContent=c.f(s.P[c.k]); }
+    else el.querySelectorAll('[data-j]').forEach(b=>b.setAttribute('aria-pressed',String(String(c.o[+b.dataset.j][0])===String(s.P[c.k])))); });
+  s.root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===s.view)));
+  s.root.querySelectorAll('[data-sp]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.sp===s.speed)));
+  s.root.querySelectorAll('[data-rate]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.rate===s.rate)));
+}
+function mount(box,key){
+  const cfg=LIVE[key]; if(!cfg||!box) return false;
+  stop();
+  box.className='el-live'; box.id='elRoot';
+  box.innerHTML=`<div class="ea-strip es-view"><canvas role="img" aria-label="Живая лента ЭКГ, учебная модель"></canvas></div>
+    <div class="es-meas"><div><b data-m="vr">—</b><span>ЧСЖ</span></div><div><b data-m="ar">—</b><span>Предс.</span></div>
+      <div><b data-m="pr">—</b><span>PQ, с</span></div><div><b data-m="qrs">—</b><span>QRS, с</span></div>
+      <div data-m="qtb"><b data-m="qt">—</b><span data-m="qtl">QTc</span></div></div>
+    <div class="ea-ctl es-top"><button type="button" class="ea-btn el-play"><i class="ei i-play"></i> Запуск</button>
+      <div class="es-seg"><button type="button" class="ea-btn" data-view="ii">II</button><button type="button" class="ea-btn" data-view="12">12 отв.</button></div>
+      <div class="es-seg"><button type="button" class="ea-btn" data-sp="12.5">12,5</button><button type="button" class="ea-btn" data-sp="25">25</button><button type="button" class="ea-btn" data-sp="50">50 мм/с</button></div></div>
+    <div class="ea-ctl es-top el-rate"><span class="es-lbl">Темп:</span><div class="es-seg"><button type="button" class="ea-btn" data-rate="0.1">0,1×</button><button type="button" class="ea-btn" data-rate="0.25">0,25×</button><button type="button" class="ea-btn" data-rate="0.5">0,5×</button><button type="button" class="ea-btn" data-rate="1">1×</button></div></div>
+    ${cfg.c.map(ctlHtml).join('')}
+    <div class="ea-desc es-dx" aria-live="polite"></div>
+    ${cfg.note?`<div class="el-note">${cfg.note}</div>`:''}
+    <div class="el-note">Учебная модель, не запись пациента: формы и интервалы рассчитываются (проведение по уровням P–A, A–H, H–V; K⁺ — по Нернсту; QT — по Базетту), опорные числа — Кушаковский М.С., Журавлёва Н.Б., 1981.</div>`;
+  const s=st={key,cfg,root:box,P:Object.assign({},BASE,cfg.p),view:cfg.view||'ii',speed:cfg.sp||25,rate:1,playing:false,last:0,tNow:8,cv:box.querySelector('canvas'),box:box.querySelector('.es-view')};
+  s.ctx=s.cv.getContext('2d');
+  cfg.c.forEach((c,i)=>{ const el=box.querySelector('[data-i="'+i+'"]');
+    if(c.t==='sl'){ const inp=el.querySelector('input'); inp.oninput=()=>{ s.P[c.k]=+inp.value; changed(); };
+      el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{ inp.value=Math.min(c.max,Math.max(c.min,+inp.value+(+b.dataset.step)*(c.big||1)*c.step)); inp.oninput(); }); }
+    else el.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{ const o=c.o[+b.dataset.j]; s.P[c.k]=o[0]; if(o[2]) Object.assign(s.P,o[2]); changed(); }); });
+  box.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{ s.view=b.dataset.view; sync(); layout(); });
+  box.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{ s.speed=+b.dataset.sp; sync(); layout(); });
+  /* темп: замедление «времени» модели — частоты и интервалы на ленте не меняются, лента просто идёт медленнее */
+  box.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{ s.rate=+b.dataset.rate; sync(); if(!s.playing) play(true); });
+  box.querySelector('.el-play').onclick=()=>play(!s.playing);
+  if(window.ResizeObserver){ s.ro=new ResizeObserver(()=>layout()); s.ro.observe(s.box); }
+  s.mo=new MutationObserver(()=>{ if(st){ st.C=colors(); draw(); } }); s.mo.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','style','class']});
+  changed(); layout();
+  return true;
+}
+window.mountEcgLive=mount;
+window.ECG_LIVE_KEYS=LIVE; window.ECG2_LIVE=ECG2_LIVE;
 })();
 
 /* ---------- МКБ-10: отдельный умный поиск (опечатки, формы слов, код) ---------- */
