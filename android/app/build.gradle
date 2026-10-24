@@ -28,6 +28,12 @@ android {
         rustore {
             dimension "dist"
             applicationId "ru.smpspravochnik.app"
+            // своя нумерация для RuStore — из android/rustore.properties
+            def rp = new Properties()
+            def rf = rootProject.file('rustore.properties')
+            if (rf.exists()) { rf.withInputStream { rp.load(it) } }
+            versionCode((rp['versionCode'] ?: '1') as int)
+            versionName(rp['versionName'] ?: '1.00')
         }
     }
     // релизная подпись: ключ и пароли — в android/keystore.properties (в git не попадает)
