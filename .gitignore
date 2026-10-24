@@ -4,3 +4,8 @@ xcuserdata/
 DerivedData/
 *.xcworkspace/xcuserdata/
 __pycache__/
+
+# релизный ключ подписи — только у владельца, в git не хранить
+android/keystore.properties
+*.jks
+*.keystore

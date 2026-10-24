@@ -1,4 +1,4 @@
-# Сборка APK для проверки на телефоне (debug-подпись). Запуск: вкладка Actions → «Android APK» → Run workflow,
+# Сборка APK для проверки на телефоне (debug-подпись): два варианта — personal (личная) и rustore (общая). Запуск: вкладка Actions → «Android APK» → Run workflow,
 # а также автоматически при пуше в ветки claude/** и main. Готовый файл — в разделе Artifacts запуска.
 name: Android APK
 on:
@@ -27,7 +27,9 @@ jobs:
       - name: Имя файла с версией
         run: |
           V=$(grep -o 'versionName "[^"]*"' android/app/build.gradle | cut -d'"' -f2)
-          mkdir -p out && cp android/app/build/outputs/apk/debug/app-debug.apk "out/smp-spravochnik-$V-debug.apk"
+          mkdir -p out
+          cp android/app/build/outputs/apk/personal/debug/app-personal-debug.apk "out/smp-spravochnik-$V-personal-debug.apk"
+          cp android/app/build/outputs/apk/rustore/debug/app-rustore-debug.apk "out/smp-spravochnik-$V-rustore-debug.apk"
       - uses: actions/upload-artifact@v4
         with:
           name: smp-spravochnik-apk

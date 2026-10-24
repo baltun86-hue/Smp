@@ -112,3 +112,27 @@ npx cap open android
 
 Общая версия **не правится вручную**: её собирает `python3 tools/build_public.py` из `www/index.html`
 (скрипт сам вырезает местное и останавливается с ошибкой, если что-то местное осталось). `tools/sync_pages.sh` вызывает сборку автоматически.
+
+## Сборка для RuStore
+
+В Android-проекте два варианта сборки (`android/app/build.gradle`, productFlavors):
+
+| Вариант | Идентификатор | Содержимое |
+|---|---|---|
+| `personal` | `ru.smp.spravochnik` | личная версия (`www/index.html`) — приказы и маршрутизация станции |
+| `rustore` | `ru.smpspravochnik.app` | общая версия без приказов, телефонов и доната (`android/app/src/rustore/assets/public/index.html`) |
+
+Файл для RuStore собирается автоматически: `sh tools/sync_pages.sh` → `tools/build_public.py` → `tools/build_rustore.py`.
+Затем `npx cap sync android` и в Android Studio: Build → Select Build Variant → `rustoreRelease`,
+Build → Generate Signed App Bundle or APK.
+
+Релизная подпись: создать ключ (Build → Generate Signed… → Create new) и файл `android/keystore.properties`:
+
+```
+storeFile=../smp-release.jks
+storePassword=…
+keyAlias=smp
+keyPassword=…
+```
+
+Ключ и пароли в git не попадают (`.gitignore`). Храните их в двух местах: каждое обновление в RuStore должно быть подписано тем же ключом.

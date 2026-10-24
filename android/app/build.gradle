@@ -16,10 +16,42 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // правка 2026-10 (8.08): два варианта сборки.
+    //   personal — личная версия (приказы и маршрутизация станции), прежний идентификатор — ставится обновлением;
+    //   rustore  — общая версия для RuStore (без приказов, телефонов и доната), свой идентификатор навсегда.
+    flavorDimensions += "dist"
+    productFlavors {
+        personal {
+            dimension "dist"
+            applicationId "ru.smp.spravochnik"
+        }
+        rustore {
+            dimension "dist"
+            applicationId "ru.smpspravochnik.app"
+        }
+    }
+    // релизная подпись: ключ и пароли — в android/keystore.properties (в git не попадает)
+    signingConfigs {
+        release {
+            def ksFile = rootProject.file('keystore.properties')
+            if (ksFile.exists()) {
+                def ks = new Properties()
+                ksFile.withInputStream { ks.load(it) }
+                storeFile rootProject.file(ks['storeFile'])
+                storePassword ks['storePassword']
+                keyAlias ks['keyAlias']
+                keyPassword ks['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (rootProject.file('keystore.properties').exists()) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
