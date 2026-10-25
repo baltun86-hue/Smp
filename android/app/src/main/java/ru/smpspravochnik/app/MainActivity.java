@@ -1,5 +1,7 @@
 package ru.smpspravochnik.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -14,6 +16,21 @@ public class MainActivity extends BridgeActivity {
         @JavascriptInterface
         public void exitApp() {
             runOnUiThread(() -> finish());
+        }
+
+        // правка 2026-10 (8.12): внешние ссылки (https, mailto, tel) — только в системных приложениях
+        // (браузер, почта, звонилка), никогда внутри справочника
+        @JavascriptInterface
+        public void openExternal(String url) {
+            runOnUiThread(() -> {
+                try {
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                } catch (Exception e) {
+                    // нет подходящего приложения — молча игнорируем
+                }
+            });
         }
     }
 

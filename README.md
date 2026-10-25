@@ -120,7 +120,7 @@ npx cap open android
 | Вариант | Идентификатор | Содержимое |
 |---|---|---|
 | `personal` | `ru.smp.spravochnik` | личная версия (`www/index.html`) — приказы и маршрутизация станции |
-| `rustore` | `ru.smpspravochnik.app` | общая версия без приказов, телефонов и доната (`android/app/src/rustore/assets/public/index.html`) |
+| `rustore` | `ru.smpspravochnik.app` | общая версия без приказов и телефонов, с кнопкой «Поддержать проект» (`android/app/src/rustore/assets/public/index.html`) |
 
 Файл для RuStore собирается автоматически: `sh tools/sync_pages.sh` → `tools/build_public.py` → `tools/build_rustore.py`.
 Затем `npx cap sync android` и в Android Studio: Build → Select Build Variant → `rustoreRelease`,

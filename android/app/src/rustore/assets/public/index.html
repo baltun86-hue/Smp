@@ -4171,6 +4171,17 @@ function renderDoseCalc(d, w, am, ds, st){
 /* правка 2026-10 (6.90): короткая доза — крупной цифрой, длинный текст — с переносом (см. .big-txt) */
 function bigCls(txt){ return String(txt||'').length>40 ? 'big big-txt' : 'big'; }
 
+/* правка 2026-10 (8.12): в Android-приложении внешние ссылки (сайт, почта, телефон) открываются системными
+   приложениями через мост AndroidExit.openExternal — не внутри справочника. В браузере/PWA — как обычно. */
+document.addEventListener('click',function(e){
+  const a=e.target&&e.target.closest&&e.target.closest('a[href]'); if(!a)return;
+  const ext=window.AndroidExit&&typeof window.AndroidExit.openExternal==='function'; if(!ext)return;
+  let u; try{ u=new URL(a.getAttribute('href'),location.href); }catch(err){ return; }
+  if(!/^(https?|mailto|tel):$/.test(u.protocol))return;
+  if(/^https?:$/.test(u.protocol)&&u.host===location.host)return;
+  e.preventDefault(); e.stopPropagation();
+  try{ window.AndroidExit.openExternal(u.href); }catch(err){}
+},true);
 /* правка 2026-10 (8.11): «Сообщить об ошибке» — обычное письмо (mailto) с разделом, названием и версией; данные не собираются */
 const REPORT_MAIL='smp.spravochnik@mail.ru';
 function reportLink(section,title){
@@ -7192,7 +7203,8 @@ function settingsPanel(){
   h+=`<div class="box b-info"><h4>О программе</h4>
     СМП Справочник, версия ${esc(VERSION)}.<br>
     <b>Данные актуализированы: ${esc((VERSION.match(/\(([^)]+)\)/)||[])[1]||VERSION)}.</b><br><br>
-
+<div style="margin:0 0 18px">Спасибо, что пользуетесь приложением! Если оно оказалось полезным и вы хотите поддержать его дальнейшее развитие — буду благодарен донату:<br>
+    <a class="donate-link" href="https://pay.cloudtips.ru/p/67341e7e" target="_blank" rel="noopener noreferrer">Поддержать проект</a></div>
         Программа носит справочный характер: она помогает быстро свериться с дозировками, алгоритмами и шкалами, но не заменяет клинические рекомендации, инструкции к препаратам и врачебное мышление.<br><br>
     <b>Окончательное решение по диагностике и лечению всегда принимает медицинский работник.</b> Проверяйте дозы и показания перед применением, особенно у детей, беременных и при сочетанной патологии.<br><br>
     Почта: <a href="mailto:smp.spravochnik@mail.ru">smp.spravochnik@mail.ru</a></div>`;
