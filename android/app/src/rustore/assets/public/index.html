@@ -441,6 +441,7 @@ header.compact .tabs{max-height:0;opacity:0;margin:0;pointer-events:none}
 .calc-mode{display:flex;gap:6px;margin:0 0 10px}
 .calc-mode .arr-tab-btn{flex:1;min-height:44px}
 .fld[hidden]{display:none}
+.eq-btn{display:flex;width:100%;justify-content:center;margin:10px 0 4px}
 .eq-svg{display:block;width:100%;max-width:300px;margin:4px auto 10px;color:var(--ink)}
 .eq-tw{overflow-x:auto;margin:6px 0 10px}
 .eq-tbl{width:100%;border-collapse:collapse;font-size:var(--fs-13)}
@@ -2601,6 +2602,17 @@ const EQ_SVG={
     <rect x="106" y="60" width="50" height="22" rx="4" fill="var(--accent)" opacity=".15"/>
     <text x="131" y="76" font-size="13" font-weight="700" text-anchor="middle" fill="currentColor">97 %</text>
     <text x="110" y="20" font-size="10" fill="currentColor">ноготь — вверх, к светодиоду</text></svg>`,
+  pump:`<svg class="eq-svg" viewBox="0 0 230 150" role="img" aria-label="Шприцевой дозатор">
+    <rect x="14" y="56" width="202" height="80" rx="12" fill="none" stroke="currentColor" stroke-width="2"/>
+    <rect x="30" y="26" width="120" height="24" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="150" y1="38" x2="190" y2="38" stroke="currentColor" stroke-width="2"/><rect x="190" y="30" width="10" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+    <line x1="30" y1="38" x2="8" y2="38" stroke="currentColor" stroke-width="2"/>
+    <rect x="40" y="31" width="70" height="14" rx="3" fill="var(--accent)" opacity=".25"/>
+    <rect x="30" y="72" width="96" height="40" rx="6" fill="var(--accent)" opacity=".15"/>
+    <text x="78" y="98" font-size="15" font-weight="700" text-anchor="middle" fill="currentColor">5,0 мл/ч</text>
+    <circle cx="160" cy="92" r="11" fill="none" stroke="currentColor" stroke-width="2"/><text x="160" y="96" font-size="9" text-anchor="middle" fill="currentColor">▶</text>
+    <circle cx="194" cy="92" r="11" fill="none" stroke="currentColor" stroke-width="2"/><text x="194" y="96" font-size="9" text-anchor="middle" fill="currentColor">■</text>
+    <text x="90" y="20" font-size="10" text-anchor="middle" fill="currentColor">шприц 50 мл (Luer-lock)</text></svg>`,
   asp:`<svg class="eq-svg" viewBox="0 0 220 150" role="img" aria-label="Аспиратор">
     <rect x="30" y="60" width="110" height="70" rx="10" fill="none" stroke="currentColor" stroke-width="2"/>
     <circle cx="65" cy="95" r="18" fill="none" stroke="currentColor" stroke-width="2"/><line x1="65" y1="95" x2="74" y2="84" stroke="var(--accent)" stroke-width="2.5"/>
@@ -2655,6 +2667,16 @@ const EQUIP=[
   steps:[['Проверка','Давление по манометру, отсутствие утечки (шипения) при открытом вентиле и закрытом расходомере.'],
    ['Подключение','Открывать вентиль баллона медленно; поток выставить расходомером; мешок-резервуар маски заполнить до надевания.']],
   ban:'Не смазывать вентиль и редуктор маслом и жиром, не касаться жирными руками (возгорание); не курить и не допускать открытого огня рядом.'},
+ {id:'pump',kind:'dev',title:'Шприцевой дозатор',sub:'вазопрессоры и точные инфузии, расчёт мл/ч',src:'Общие правила работы со шприцевыми дозаторами; руководство к аппарату',
+  html:()=>EQ_SVG.pump+`<div class="box b-info">Скорость для дозатора — в <b>мл/час</b>: калькулятор «Инфузии» (мкг/кг/мин → мл/час). Кнопка ниже откроет его в режиме дозатора.</div>
+   <button type="button" class="ea-open ea-primary eq-btn" id="eqInfus"><i class="ei i-syringe"></i> Калькулятор инфузии (мл/час)</button>`,
+  steps:[['1. Шприц','Набрать раствор в шприц (обычно 50 мл, лучше Luer-lock), удалить воздух, подписать: препарат, концентрация, время.'],
+   ['2. Установка','Закрепить шприц фиксатором и толкателем. В меню выбрать марку и объём шприца — от этого зависит точность скорости.'],
+   ['3. Заполнение линии','Заполнить удлинитель раствором (функция заполнения/продувки) до подключения к пациенту.'],
+   ['4. Скорость','Ввести скорость в мл/час, проверить на экране, подключить к катетеру и запустить. Следить за АД и ЧСС.'],
+   ['5. Замена шприца','Вазопрессоры — заранее подготовить второй шприц, менять быстро, чтобы не было перерыва в инфузии.'],
+   ['Сигналы тревоги','Окклюзия (перегиб, закрыт кран, тромбоз катетера), «шприц почти пуст», конец инфузии, разряд батареи.']],
+  ban:'Не вводить вазопрессоры кнопкой «болюс»; перед снятием шприца — пережать линию (риск неконтролируемого поступления); не поднимать дозатор высоко над пациентом (эффект сифона).'},
  {id:'asp',kind:'dev',title:'Аспиратор (отсасыватель)',sub:'санация верхних дыхательных путей',src:'Инструкция к аппарату; ERC 2021',
   html:()=>EQ_SVG.asp,
   steps:[['Проверка','Включить, пережать трубку — стрелка вакуумметра должна отклониться; ёмкость не переполнена.'],
@@ -2723,6 +2745,8 @@ function openEquip(id){
   h+=`<button class="close" id="eqClose2">Закрыть</button></div>`;
   $('sheetIn').innerHTML=h; openSheet();
   $('eqClose').onclick=closeSheet; $('eqClose2').onclick=closeSheet;
+  if(id==='pump'){ $('eqInfus').onclick=()=>{ closeSheet(); setTab('scales'); sclSetScale('infus');
+      setTimeout(()=>{ const d=$('infDrop'); if(d){ d.value=''; infusCalc(); d.closest('.inf-f')?.scrollIntoView({block:'center'}); } },80); }; }
   if(id==='o2'){
     const calc=()=>{ const V=+$('eqV').value, P=+$('eqP').value, F=+$('eqF').value, R=+$('eqR').value;
       const o=$('eqOut'); if(!(V>0&&F>0&&P>R)){ o.textContent='Введите давление выше остатка и поток'; return; }
