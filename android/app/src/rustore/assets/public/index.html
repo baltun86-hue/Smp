@@ -8310,7 +8310,7 @@ const INFUS_PRESETS={
 let infMode='mcg', infDev='drip';
 function infusHTML(){
   const chips=[['nora','Норадреналин'],['dop','Допамин'],['dobut','Добутамин'],['adren','Адреналин'],['adrAna','Адреналин — анафилаксия'],['custom','Свой препарат']];
-  const f=(id,label,unit,attrs)=>`<div class="inf-f"><label for="${id}">${label}</label><div class="inf-in"><input id="${id}" type="number" inputmode="decimal" ${attrs} oninput="infusCalc()"><span>${unit}</span></div></div>`;
+  const f=(id,label,unit,attrs)=>`<div class="inf-f"><label for="${id}">${label}</label><div class="inf-in"><input id="${id}" type="text" inputmode="decimal" autocomplete="off" ${attrs} oninput="infusCalc()"><span>${unit}</span></div></div>`;
   return `<div class="sec">Инфузии · расчёт скорости</div>
 <div class="inf-chips" id="infChips">${chips.map(([k,t])=>`<button type="button" class="inf-chip${k==='nora'?' on':''}" data-k="${k}" onclick="infusPick('${k}')">${t}</button>`).join('')}</div>
 <select id="infDrug" hidden onchange="infusPreset()">${chips.map(([k,t])=>`<option value="${k}">${t}</option>`).join('')}</select>
@@ -8324,7 +8324,7 @@ function infusHTML(){
   <div class="inf-step"><b>2. Пациент</b></div>
   <div class="inf-grid">${f('infW','Масса','кг','step="0.5" min="0" value="" placeholder="кг?"')}</div>
   <div class="inf-step"><b>3. Назначение</b> — в чём указана доза в алгоритме</div>
-  <div class="calc-mode" role="group" aria-label="Единицы назначения"><button type="button" class="arr-tab-btn" id="infMmcg" onclick="infusSetMode('mcg')">мкг/кг/мин</button><button type="button" class="arr-tab-btn" id="infMml" onclick="infusSetMode('mlkgh')">мл/кг/час раствора</button></div>
+  <div class="calc-mode" role="group" aria-label="Единицы назначения"><button type="button" class="arr-tab-btn" id="infMmcg" onclick="infusSetMode('mcg',1)">мкг/кг/мин</button><button type="button" class="arr-tab-btn" id="infMml" onclick="infusSetMode('mlkgh',1)">мл/кг/час раствора</button></div>
   <div class="inf-grid">${f('infDose','Доза','<span id="infDoseU">мкг/кг/мин</span>','step="0.05" min="0" value="0.1"')}</div>
   <div class="inf-step"><b>4. Как вводим</b></div>
   <div class="calc-mode" role="group" aria-label="Способ введения"><button type="button" class="arr-tab-btn" id="infDdrip" onclick="infusSetDev('drip')">Капельница</button><button type="button" class="arr-tab-btn" id="infDpump" onclick="infusSetDev('pump')">Дозатор</button></div>
@@ -8334,7 +8334,16 @@ function infusHTML(){
 <div id="infAlerts"></div>
 <div class="inf-ref">Протокольные диапазоны — справочно, ввод не блокируют: решение остаётся за врачом. Норадреналин 0,05–0,5 мкг/кг/мин (взрослые и дети); допамин 5–15 (дети 4–10); добутамин 2–20; адреналин (титрование) 0,05–0,5 (дети до 1). Адреналин при анафилаксии — по алгоритму «Анафилактический шок»: 1 мг (1 мл) в 100 мл NaCl 0,9%, 0,5–1 мл/кг/час.</div>`;
 }
-function infusSetMode(m){ infMode=m;
+/* правка 2026-10 (8.16): поля — type="text": type="number" в Chromium/WebView выбрасывает запятую («0,2» → «02», доза ×10).
+   Принимаем и запятую, и точку; мусор («1,2,3», буквы) → NaN, расчёт не выводится */
+function infNum(id){const v=String($(id).value).trim().replace(',','.');return /^(\d+\.?\d*|\.\d+)$/.test(v)?parseFloat(v):NaN;}
+function infSet(id,x){$(id).value=String(x).replace('.',',');}
+/* правка 2026-10 (8.16): при ручном переключении единиц доза пересчитывается в новые единицы при той же скорости,
+   иначе «0,1 мкг/кг/мин» молча стало бы «0,1 мл/кг/час» */
+function infusSetMode(m,conv){
+  if(conv&&m!==infMode){const mass=infNum('infMass'),vol=infNum('infVol'),d=infNum('infDose');
+    if(mass>0&&vol>0&&d>0){const c=mass*1000/vol; infSet('infDose',+(m==='mlkgh'?d*60/c:d*c/60).toPrecision(3));}}
+  infMode=m;
   $('infMmcg').classList.toggle('active',m==='mcg'); $('infMml').classList.toggle('active',m==='mlkgh');
   $('infDoseU').textContent=m==='mcg'?'мкг/кг/мин':'мл/кг/час'; infusCalc(); }
 function infusSetDev(d){ infDev=d;
@@ -8349,15 +8358,14 @@ function infusPreset(){
   const k=$('infDrug').value;
   if(k==='custom'){infusCalc();return;}
   const p=INFUS_PRESETS[k];
-  $('infConc').value=p.conc;$('infMass').value=p.mass;$('infVol').value=p.vol;
-  $('infDose').value=p.dose!=null?p.dose:p.adult[0];
+  infSet('infConc',p.conc);infSet('infMass',p.mass);infSet('infVol',p.vol);
+  infSet('infDose',p.dose!=null?p.dose:p.adult[0]);
   infusSetMode(p.mode||'mcg');
 }
 function infusFmt(x,d){return Number(x).toLocaleString('ru-RU',{maximumFractionDigits:d});}
 function infusCalc(){
-  const conc=parseFloat($('infConc').value), mass=parseFloat($('infMass').value),
-        vol=parseFloat($('infVol').value), w=parseFloat($('infW').value),
-        dose=parseFloat($('infDose').value), drop=parseFloat($('infDrop').value), k=$('infDrug').value;
+  const conc=infNum('infConc'), mass=infNum('infMass'), vol=infNum('infVol'), w=infNum('infW'),
+        dose=infNum('infDose'), drop=infNum('infDrop'), k=$('infDrug').value;
   const out=$('infOut'), al=$('infAlerts');
   const dilConc=(mass>0&&vol>0)?mass*1000/vol:0;
   $('infSol').innerHTML=dilConc?`= <b>${infusFmt(dilConc,1)} мкг</b> в 1 мл${conc>0?`<br>набрать из ампулы ${infusFmt(mass/conc,2)} мл`:''}`:'';
@@ -8374,7 +8382,7 @@ function infusCalc(){
     : `<div class="inf-main"><span class="inf-big">${infusFmt(dropsMin,0)}</span><span class="inf-unit">кап/мин</span></div>`;
   const how = infMode==='mcg'
     ? `${infusFmt(dose,3)} мкг/кг/мин × ${infusFmt(w,1)} кг × 60 ÷ ${infusFmt(dilConc,1)} мкг/мл = <b>${infusFmt(mlH,1)} мл/час</b>`
-    : `${infusFmt(dose,2)} мл/кг/час × ${infusFmt(w,1)} кг = <b>${infusFmt(mlH,1)} мл/час</b> (это ≈ ${infusFmt(mcgKgMin,3)} мкг/кг/мин)`;
+    : `${infusFmt(dose,3)} мл/кг/час × ${infusFmt(w,1)} кг = <b>${infusFmt(mlH,1)} мл/час</b> (это ≈ ${infusFmt(mcgKgMin,3)} мкг/кг/мин)`;
   out.innerHTML=main+`<div class="inf-how">Раствор: ${infusFmt(mass,2)} мг в ${infusFmt(vol,0)} мл = ${infusFmt(dilConc,1)} мкг/мл.<br>${how}${pump?'':`<br>${infusFmt(mlH,1)} мл/час ÷ 60 × ${infusFmt(drop,0)} кап/мл = <b>${infusFmt(dropsMin,0)} кап/мин</b> (≈ 1 капля каждые ${infusFmt(60/dropsMin,dropsMin<6?0:1)} с)`}</div>`;
   const child=w<30;
   let a='';
@@ -8385,6 +8393,7 @@ function infusCalc(){
     else if(val>r[1]*1.001) a+=`<div class="box b-ban"><i class="ei i-ban"></i> Выше протокольного диапазона для «${p.name}»: ${infusFmt(val,3)} ${u} при норме до ${infusFmt(r[1],2)} ${u}. Проверьте назначение и единицы (мкг/кг/мин или мл/кг/час).</div>`;
     else a+=`<div class="box b-ok"><i class="ei i-okc"></i> В пределах протокольного диапазона (${infusFmt(r[0],2)}–${infusFmt(r[1],2)} ${u}).</div>`;
   }
+  if(w<0.5||w>250) a+=`<div class="box b-warn"><i class="ei i-alert"></i> Проверьте массу: ${infusFmt(w,1)} кг.</div>`; /* правка 2026-10 (8.16) */
   if(!pump&&mlH>200) a+=`<div class="box b-ban"><i class="ei i-ban"></i> ${infusFmt(mlH,0)} мл/час — очень быстро для капельного введения. Проверьте дозу, единицы и разведение.</div>`;
   if(!pump&&dropsMin<3) a+=`<div class="box b-warn"><i class="ei i-alert"></i> Меньше 3 капель в минуту — капельницей такую скорость точно не выдержать. Разведите в меньшем объёме или используйте дозатор.</div>`;
   al.innerHTML=a;
