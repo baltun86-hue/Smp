@@ -2042,6 +2042,27 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
   .doses-table td:nth-child(5)::before{content:'Расчёт на пациента';display:block;font-size:var(--fs-11);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 }
 /* таймер СЛР */
+/* правка 2026-10 (8.27): кольцо цикла, точка в такт метронома, статистика */
+.cpr-ringwrap{display:grid;place-items:center;margin:2px 0 10px}
+.cpr-ring{position:relative;width:min(220px,62vw);aspect-ratio:1}
+.cpr-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.cpr-ring .trk{fill:none;stroke:var(--line);stroke-width:12}
+.cpr-ring .bar{fill:none;stroke:var(--ban);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset .25s linear,stroke .3s}
+.cpr-ring .bar.due{stroke:var(--warn)}
+.cpr-ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cpr-ring-c b{font-size:48px;font-weight:300;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.03em}
+.cpr-ring-c b.due{color:var(--warn);font-weight:700;font-size:34px}
+.cpr-ring-c small{font-size:var(--fs-13);color:var(--muted);max-width:70%;text-align:center}
+.cpr-pulse{width:14px;height:14px;border-radius:50%;background:var(--ban);margin-bottom:8px;opacity:.35;transition:transform .09s ease-out,opacity .09s}
+.cpr-pulse.on{transform:scale(1.7);opacity:1;transition:none}
+.cpr-stats{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+.cpr-stats>div{padding:10px 8px;text-align:center}.cpr-stats>div+div{border-left:1px solid var(--line)}
+.cpr-stats b{display:block;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}.cpr-stats small{font-size:var(--fs-12);color:var(--muted)}
+.cpr-wide{width:100%;margin-bottom:10px}
+.cpr-b:disabled{opacity:.45}
+.cpr-hint{font-size:var(--fs-12-5);color:var(--muted);margin:10px 2px}
+.cpr-mini.due{background:var(--warn);border-color:var(--warn);color:#fff}
+@media (prefers-reduced-motion:reduce){.cpr-pulse,.cpr-ring .bar{transition:none}}
 .cpr-total{text-align:center;margin:4px 0 10px}.cpr-total span{display:block;font-size:56px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.05}
 .cpr-total small{color:var(--muted);font-size:var(--fs-12)}
 .cpr-cyc{padding:12px 14px;border-radius:14px;background:var(--info);border:1px solid var(--infoLine);margin-bottom:10px}
@@ -4687,62 +4708,104 @@ function fsSet(v){document.documentElement.style.setProperty('--fs-scale',v);try
 (function(){try{const v=parseFloat(localStorage.getItem(FS_KEY));if(FS_STEPS.includes(v))document.documentElement.style.setProperty('--fs-scale',v);}catch(e){}})();
 
 /* ── Таймер СЛР: циклы 2 мин, адреналин каждые 3–5 мин (по алгоритму СЛР справочника),
-      метроном 110/мин (диапазон компрессий 100–120), журнал событий. Работает офлайн. ── */
-const CPR={run:false,t0:0,acc:0,cyc0:0,adr:[],shock:0,log:[],met:false,iv:null,ac:null,mt:null,lastCyc:0,wl:null};
-function cprNow(){return CPR.acc+(CPR.run?Date.now()-CPR.t0:0);}
+      метроном 110/мин (диапазон компрессий 100–120), журнал событий. Работает офлайн.
+   правка 2026-10 (8.27) — по образцу «ДентаСпас»:
+   • сеанс идёт, пока не нажат «Сброс» (двойное нажатие); время НЕ ставится на паузу — пауза выключает только звук метронома;
+   • кольцо 2-минутного цикла заполняется к оценке ритма; по истечении — «Оценка ритма» и сигнал каждые 20 с,
+     пока не нажато «Разряд» или «Ритм оценён»;
+   • звук громче: общий выход через компрессор, щелчок 1600 Гц, сигнал цикла 3 × 2400 Гц; мигающая точка в такт. ── */
+const CPR={t0:0,cyc0:0,adr:[],shock:0,checks:0,log:[],met:false,mt:null,iv:null,ac:null,out:null,lastCue:0,resetArm:0,wl:null};
+const CPR_CYC=120000, CPR_CIRC=2*Math.PI*54;
+function cprNow(){return CPR.t0?Date.now()-CPR.t0:0;}
 function cprFmt(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
-/* правка 2026-10 (8.26): громче — прямоугольная волна (слышнее синуса на динамике телефона) и усиление 0,9 вместо 0,25;
-   итоговая громкость — кнопками громкости телефона (поток «Медиа») */
-function cprBeep(f,d,n){try{CPR.ac=CPR.ac||new (window.AudioContext||window.webkitAudioContext)();if(CPR.ac.state==='suspended')CPR.ac.resume();for(let i=0;i<(n||1);i++){const o=CPR.ac.createOscillator(),g=CPR.ac.createGain();
-  o.type='square';o.frequency.value=f;o.connect(g);g.connect(CPR.ac.destination);const t=CPR.ac.currentTime+i*(d+0.08);g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d);}}catch(e){}}
+function cprAudio(){
+  if(CPR.ac)return CPR.ac;
+  try{ CPR.ac=new (window.AudioContext||window.webkitAudioContext)();
+    const c=CPR.ac.createDynamicsCompressor(); c.threshold.value=-6;c.knee.value=6;c.ratio.value=8;c.attack.value=.001;c.release.value=.05;
+    CPR.out=CPR.ac.createGain(); CPR.out.gain.value=1.6; CPR.out.connect(c).connect(CPR.ac.destination);
+  }catch(e){CPR.ac=null;}
+  return CPR.ac;
+}
+function cprTone(f,at,dur,vol){
+  const o=CPR.ac.createOscillator(),g=CPR.ac.createGain(); o.type='square'; o.frequency.value=f;
+  g.gain.setValueAtTime(0,at); g.gain.linearRampToValueAtTime(vol,at+.004); g.gain.setValueAtTime(vol,at+dur*.6); g.gain.exponentialRampToValueAtTime(.001,at+dur);
+  o.connect(g).connect(CPR.out); o.start(at); o.stop(at+dur+.01);
+}
+function cprClick(){
+  try{ if(cprAudio()){ if(CPR.ac.state==='suspended')CPR.ac.resume(); cprTone(1600,CPR.ac.currentTime,.07,.9); } }catch(e){}
+  const p=$('cprPulse'); if(p){p.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>p.classList.remove('on')));}
+}
+function cprCue(){
+  try{ if(cprAudio()){ const t=CPR.ac.currentTime; [0,.2,.4].forEach(d=>cprTone(2400,t+d,.14,1)); } }catch(e){}
+  try{ navigator.vibrate&&navigator.vibrate([300,150,300,150,300]); }catch(e){}
+}
 function cprLog(txt){CPR.log.unshift(cprFmt(cprNow())+' — '+txt);}
-function cprStart(){if(CPR.run)return;CPR.run=true;CPR.t0=Date.now();if(!CPR.log.length){CPR.cyc0=0;cprLog('Начало СЛР');}
+function cprStart(){ if(CPR.t0)return;
+  CPR.t0=Date.now(); CPR.cyc0=CPR.t0; CPR.lastCue=0; cprLog('Начало СЛР');
+  cprAudio(); try{CPR.ac&&CPR.ac.state==='suspended'&&CPR.ac.resume();}catch(e){}
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>CPR.wl=l).catch(()=>{});}catch(e){}
-  try{window.AndroidExit&&AndroidExit.keepScreenOn&&AndroidExit.keepScreenOn(true);}catch(e){} /* правка 8.26: Android — экран не гаснет */
-  if(!CPR.iv)CPR.iv=setInterval(cprTick,250);cprTick();}
-function cprPause(){if(!CPR.run)return;CPR.acc=cprNow();CPR.run=false;cprLog('Пауза');cprTick();}
-function cprReset(){CPR.run=false;CPR.acc=0;CPR.cyc0=0;CPR.adr=[];CPR.shock=0;CPR.log=[];CPR.lastCyc=0;cprMet(false);
-  clearInterval(CPR.iv);CPR.iv=null;try{CPR.wl&&CPR.wl.release();}catch(e){}
-  try{window.AndroidExit&&AndroidExit.keepScreenOn&&AndroidExit.keepScreenOn(false);}catch(e){}cprTick();}
-function cprAdr(){if(!CPR.run&&!CPR.acc)cprStart();CPR.adr.push(cprNow());cprLog('Адреналин №'+CPR.adr.length);cprTick();}
-function cprShock(){if(!CPR.run&&!CPR.acc)cprStart();CPR.shock++;cprLog('Разряд №'+CPR.shock);CPR.cyc0=cprNow();CPR.lastCyc=0;cprTick();}
-function cprMet(on){CPR.met=on===undefined?!CPR.met:on;clearInterval(CPR.mt);CPR.mt=null;
-  if(CPR.met)CPR.mt=setInterval(()=>cprBeep(1000,0.06),60000/110);const b=$('cprMetB');if(b)b.classList.toggle('on',CPR.met);}
+  try{window.AndroidExit&&AndroidExit.keepScreenOn&&AndroidExit.keepScreenOn(true);}catch(e){} /* Android — экран не гаснет */
+  if(!CPR.iv)CPR.iv=setInterval(cprTick,250); cprTick(); }
+function cprReset(){
+  clearInterval(CPR.iv); clearInterval(CPR.mt);
+  Object.assign(CPR,{t0:0,cyc0:0,adr:[],shock:0,checks:0,log:[],met:false,mt:null,iv:null,lastCue:0,resetArm:0});
+  try{CPR.wl&&CPR.wl.release();}catch(e){} CPR.wl=null;
+  try{window.AndroidExit&&AndroidExit.keepScreenOn&&AndroidExit.keepScreenOn(false);}catch(e){}
+  cprTick(); }
+/* сброс — только повторным нажатием в течение 3 с, чтобы не потерять время случайно */
+function cprAskReset(){ if(!CPR.t0)return;
+  if(Date.now()-CPR.resetArm<3000){ cprReset(); return; }
+  CPR.resetArm=Date.now(); const b=$('cprResetB'); if(b)b.textContent='Нажмите ещё раз — сброс';
+  setTimeout(()=>{const x=$('cprResetB'); if(x&&CPR.t0)x.textContent='Сброс';},3000); }
+function cprNewCycle(txt){ CPR.cyc0=Date.now(); CPR.lastCue=0; cprLog(txt); cprTick(); }
+function cprAdr(){ cprStart(); CPR.adr.push(cprNow()); cprLog('Адреналин №'+CPR.adr.length); cprTick(); }
+function cprShock(){ cprStart(); CPR.shock++; cprNewCycle('Разряд №'+CPR.shock+' — новый цикл'); }
+function cprCheck(){ if(!CPR.t0)return; CPR.checks++; cprNewCycle('Ритм оценён, без разряда — новый цикл'); }
+function cprMet(on){ CPR.met=on===undefined?!CPR.met:on; clearInterval(CPR.mt); CPR.mt=null;
+  if(CPR.met){ cprStart(); cprClick(); CPR.mt=setInterval(cprClick,60000/110); }
+  cprTick(); }
 function cprTick(){
-  const now=cprNow(), cyc=(now-CPR.cyc0)%120000, left=120000-cyc, n=Math.floor((now-CPR.cyc0)/120000);
-  if(CPR.run&&n>CPR.lastCyc){CPR.lastCyc=n;cprBeep(660,0.18,3);try{navigator.vibrate&&navigator.vibrate([300,150,300]);}catch(e){}cprLog('Конец цикла '+n+': оценка ритма, смена');}
-  const mini=$('cprMini');if(mini){mini.hidden=!(CPR.run||CPR.acc)||$('sheet').classList.contains('on')&&!!$('cprBox');$('cprMiniT').textContent=cprFmt(now);}
-  const box=$('cprBox');if(!box)return;
+  const now=cprNow(), el=CPR.t0?Date.now()-CPR.cyc0:0, due=CPR.t0&&el>=CPR_CYC;
+  if(due&&Date.now()-CPR.lastCue>=20000){ CPR.lastCue=Date.now(); cprCue(); if(!CPR.log[0]||!/Оценка ритма/.test(CPR.log[0]))cprLog('2 мин — оценка ритма, смена компрессий'); }
+  const mini=$('cprMini'); if(mini){mini.hidden=!CPR.t0||($('sheet').classList.contains('on')&&!!$('cprBox')); $('cprMiniT').textContent=cprFmt(now); mini.classList.toggle('due',!!due);}
+  const box=$('cprBox'); if(!box)return;
   const la=CPR.adr.length?now-CPR.adr[CPR.adr.length-1]:null;
-  const adrSt=la==null?(now>0?'Адреналин ещё не вводили':'—'):la>=300000?'5 мин — ввести адреналин':la>=180000?'3 мин — можно вводить':'введён '+cprFmt(la)+' назад';
-  const adrCls=la==null?'':la>=300000?'ban':la>=180000?'warn':'ok';
+  const adrSt=la==null?(CPR.t0?'Адреналин ещё не вводили':'—'):la>=300000?'5 мин — ввести адреналин':la>=180000?'3 мин — можно вводить':'введён '+cprFmt(la)+' назад';
+  $('cprAdrS').textContent=adrSt; $('cprAdrS').className='cpr-adr-s '+(la==null?'':la>=300000?'ban':la>=180000?'warn':'ok');
   $('cprT').textContent=cprFmt(now);
-  $('cprCyc').textContent=cprFmt(left);$('cprBar').style.width=(cyc/1200)+'%';
-  $('cprCycN').textContent='Цикл '+(n+1)+' · до оценки ритма';
-  $('cprAdrS').textContent=adrSt;$('cprAdrS').className='cpr-adr-s '+adrCls;
-  $('cprAdrN').textContent=CPR.adr.length;$('cprShN').textContent=CPR.shock;
-  $('cprGo').innerHTML=CPR.run?'<i class="ei i-pause"></i> Пауза':(now?'<i class="ei i-play"></i> Продолжить':'<i class="ei i-play"></i> Старт');
+  const bar=$('cprRingBar'); bar.style.strokeDashoffset=CPR_CIRC*(1-Math.min(el,CPR_CYC)/CPR_CYC); bar.classList.toggle('due',!!due);
+  $('cprCyc').textContent=!CPR.t0?'02:00':due?'Оценка':cprFmt(CPR_CYC-el+999); $('cprCyc').classList.toggle('due',!!due);
+  $('cprCycL').textContent=!CPR.t0?'цикл 2 мин':due?'ритма · смена компрессий':'до оценки ритма';
+  $('cprAdrN').textContent=CPR.adr.length; $('cprShN').textContent=CPR.shock;
+  $('cprMetB').innerHTML=CPR.met?'<i class="ei i-pause"></i> Метроном — пауза<small>время идёт</small>':(CPR.t0?'<i class="ei i-metro"></i> Включить метроном<small>110/мин</small>':'<i class="ei i-play"></i> Начать СЛР<small>метроном 110/мин</small>');
+  $('cprMetB').classList.toggle('on',CPR.met);
+  const rb=$('cprResetB'); if(rb){rb.disabled=!CPR.t0; if(Date.now()-CPR.resetArm>=3000)rb.textContent='Сброс';}
+  $('cprCheckB').disabled=!CPR.t0;
   $('cprLog').innerHTML=CPR.log.slice(0,12).map(x=>`<li>${esc(x)}</li>`).join('');
 }
 function cprOpen(){
   const h=`<div class="sh-head"><div class="grab"></div><button type="button" class="sh-close" id="shClose" aria-label="Закрыть"><i class="ei i-x"></i></button>
     <h2><i class="ei i-timer"></i> Таймер СЛР</h2><span class="lat">Цикл 2 мин · адреналин 1 мг каждые 3–5 мин · компрессии 100–120/мин</span></div>
     <div class="sh-body" id="cprBox">
-      <div class="cpr-total"><span id="cprT">00:00</span><small>от начала СЛР</small></div>
-      <div class="cpr-cyc"><div class="cpr-cyc-h"><span id="cprCycN">Цикл 1</span><b id="cprCyc">02:00</b></div><div class="cpr-track"><div class="cpr-bar" id="cprBar"></div></div></div>
+      <div class="cpr-ringwrap"><div class="cpr-ring">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="54"/><circle class="bar" id="cprRingBar" cx="60" cy="60" r="54" stroke-dasharray="${CPR_CIRC}" stroke-dashoffset="${CPR_CIRC}"/></svg>
+        <div class="cpr-ring-c"><div class="cpr-pulse" id="cprPulse"></div><b id="cprCyc">02:00</b><small id="cprCycL">цикл 2 мин</small></div>
+      </div></div>
+      <div class="cpr-stats"><div><b id="cprT">00:00</b><small>от начала СЛР</small></div><div><b id="cprShN">0</b><small>разрядов</small></div><div><b id="cprAdrN">0</b><small>адреналин</small></div></div>
       <div class="cpr-adr"><div class="cpr-adr-s" id="cprAdrS">—</div></div>
+      <button type="button" class="cpr-b cpr-b-go cpr-wide" id="cprMetB" onclick="cprMet()"><i class="ei i-play"></i> Начать СЛР</button>
       <div class="cpr-grid">
-        <button type="button" class="cpr-b cpr-b-adr" onclick="cprAdr()"><i class="ei i-syringe"></i> Адреналин<small>введено: <b id="cprAdrN">0</b></small></button>
-        <button type="button" class="cpr-b cpr-b-sh" onclick="cprShock()"><i class="ei i-bolt"></i> Разряд<small>всего: <b id="cprShN">0</b></small></button>
-        <button type="button" class="cpr-b cpr-b-go" id="cprGo" onclick="CPR.run?cprPause():cprStart()"><i class="ei i-play"></i> Старт</button>
-        <button type="button" class="cpr-b" id="cprMetB" onclick="cprMet()"><i class="ei i-metro"></i> Метроном 110</button>
+        <button type="button" class="cpr-b cpr-b-adr" onclick="cprAdr()"><i class="ei i-syringe"></i> Адреналин<small>отметить введение</small></button>
+        <button type="button" class="cpr-b cpr-b-sh" onclick="cprShock()"><i class="ei i-bolt"></i> Разряд<small>новый цикл</small></button>
+        <button type="button" class="cpr-b" id="cprCheckB" onclick="cprCheck()"><i class="ei i-okc"></i> Ритм оценён<small>без разряда, новый цикл</small></button>
+        <button type="button" class="cpr-b" id="cprResetB" onclick="cprAskReset()">Сброс</button>
       </div>
+      <p class="cpr-hint">Громкость — кнопками телефона. Пауза метронома выключает только звук, время идёт. Через 2 мин — сигнал каждые 20 с, пока не нажато «Разряд» или «Ритм оценён».</p>
       <div class="sec">Журнал</div><ul class="cpr-log" id="cprLog"></ul>
-      <button type="button" class="close" onclick="if(confirm('Сбросить таймер и журнал?'))cprReset()">Сбросить</button>
       <div class="box b-warn" style="font-size:var(--fs-12-5)">Таймер — напоминание. Тактику, дозы и разряды определяет алгоритм СЛР и врач/фельдшер.</div>
     </div>`;
   $('sheetIn').innerHTML=h;openSheet();$('sheet').scrollTop=0;
-  $('shClose').onclick=closeSheet;const b=$('cprMetB');if(b)b.classList.toggle('on',CPR.met);cprTick();
+  $('shClose').onclick=closeSheet; cprTick();
 }
 
 function openDrug(name){
@@ -7453,7 +7516,7 @@ window.addEventListener('popstate',function(){
   }
   lastBackPopTs=now;
   if(window.handleAndroidBack())armBackGuard();
-  else if(CPR.run||CPR.acc){
+  else if(CPR.t0){
     /* правка 2026-10 (8.26): идёт таймер СЛР — выход «Назад» не закрывает приложение (таймер и журнал потерялись бы) */
     armBackGuard(); showExitToast('Идёт таймер СЛР — выход отключён. Чтобы выйти, сбросьте таймер.');
   }
@@ -7482,7 +7545,7 @@ $('gear').onclick=()=>{settingsPanel();};
 /* правка 2026-10 (7.01): нижняя панель, мини-таймер */
 try{localStorage.removeItem('smp_patient');}catch(e){} /* «пациент вызова» убран в 7.02 — чистим сохранённое */
 document.querySelectorAll('#bnav button').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='home'){$('brandHome').click();}else{const t=$(b.dataset.tab);if(t)t.click();}window.scrollTo(0,0);});
-$('cprMini').onclick=cprOpen; setInterval(()=>{if(CPR.run)cprTick();},1000);
+$('cprMini').onclick=cprOpen; setInterval(()=>{if(CPR.t0)cprTick();},1000);
 $('themeToggle').onclick=cycleTheme;
 function settingsPanel(){
   let h=`<div class="sh-head"><div class="grab"></div><h2>О программе</h2></div><div class="sh-body">`;
