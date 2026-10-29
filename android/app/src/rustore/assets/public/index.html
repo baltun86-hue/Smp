@@ -1997,7 +1997,14 @@ body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .std-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .std-actions .btn-mini{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .dose-sum .ds-note{font-size:calc(13px * var(--fs-scale));color:var(--muted);margin:2px 0 6px}
-.nora-grp{border-top:1px solid var(--line);padding:4px 0}.nora-grp summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
+/* правка 2026-10 (8.25): группы раскрываются — шеврон и счётчик «N алгоритмов», чтобы было видно, что список разворачивается */
+.nora-grp{border-top:1px solid var(--line);padding:4px 0}
+.nora-grp summary{min-height:44px;display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none}
+.nora-grp summary::-webkit-details-marker{display:none}
+.nora-grp .nora-chev{flex:none;transition:transform .2s;color:var(--accent)}
+.nora-grp[open] .nora-chev{transform:rotate(90deg)}
+.nora-grp .nora-cnt{margin-left:auto;flex:none;font-size:calc(12px * var(--fs-scale));color:var(--accent);border:1px solid var(--accent);border-radius:var(--r-pill);padding:2px 8px;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.nora-grp .nora-chev{transition:none}}
 .dose-sum .nora-al{display:block;width:100%;text-align:left;justify-content:flex-start;margin:0;background:transparent;border:0;border-radius:0;color:var(--accent);font-weight:600;min-height:44px;padding:6px 4px}
 .inf-link{display:inline-flex;align-items:center;margin-top:4px;min-height:44px;padding:0 8px;border:1px solid var(--infoLine);border-radius:var(--r-pill);
   background:var(--info);color:var(--accent);font-size:var(--fs-11);font-weight:700;cursor:pointer;white-space:nowrap}
@@ -4557,13 +4564,15 @@ function openDrugRef(name){
    Только из существующих полей карточки (fixedAdult, fixed, a45txt, a45note, dose, det, minAge),
    новых цифр не добавляет. Возрастное ограничение — строкой «Возраст» из det/minAge, чтобы оно
    было видно даже если в a45note написано иначе. */
+/* «алгоритм/алгоритма/алгоритмов» — счётчик в группах карточки (8.25) */
+function plAlg(n){const a=n%10,b=n%100;return a===1&&b!==11?'алгоритм':a>=2&&a<=4&&(b<12||b>14)?'алгоритма':'алгоритмов';}
 function doseSummaryHTML(d){
   if(d.byAlgo){ /* правка 2026-10 (8.23): доза только по алгоритму состояния */
     const L=noraAlgoList(VASO_BY_DRUG[d.n]||'nora'), grp={}, f=x=>String(x).replace('.',',');
     L.forEach(a=>{const k=(a.ch?'Дети':'Взрослые')+': '+f(a.lo)+'–'+f(a.hi)+' мкг/кг/мин'; (grp[k]=grp[k]||[]).push(a);});
     const keys=Object.keys(grp).sort((a,b)=>a.localeCompare(b,'ru'));
     return `<div class="dose-sum"><h4>Доза — по алгоритму состояния</h4><div class="ds-note">Единой дозы нет: у каждого состояния свой диапазон по МОССМП 2026. Откройте алгоритм — в шаге с препаратом кнопка «кап/мин» сразу считает скорость в этом диапазоне.</div>
-      ${keys.map(k=>`<details class="nora-grp"><summary><b>${esc(k)}</b> · ${grp[k].length}</summary>${grp[k].map(a=>`<button type="button" class="algo-link nora-al" data-g="${esc(a.g)}" data-t="${esc(a.t)}">${esc(a.t)}</button>`).join('')}</details>`).join('')}</div>`;
+      ${keys.map(k=>`<details class="nora-grp"><summary><i class="ei i-chev-r nora-chev"></i><b>${esc(k)}</b><span class="nora-cnt">${grp[k].length} ${plAlg(grp[k].length)}</span></summary>${grp[k].map(a=>`<button type="button" class="algo-link nora-al" data-g="${esc(a.g)}" data-t="${esc(a.t)}">${esc(a.t)}</button>`).join('')}</details>`).join('')}</div>`;
   }
   const rows=[], det0=String(d.det||'').split(';')[0].trim();
   const nc=x=>String(x).replace('.',',');
