@@ -3,6 +3,7 @@ package ru.smpspravochnik.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import androidx.activity.OnBackPressedCallback;
@@ -30,6 +31,16 @@ public class MainActivity extends BridgeActivity {
                 } catch (Exception e) {
                     // нет подходящего приложения — молча игнорируем
                 }
+            });
+        }
+
+        // правка 2026-10 (8.26): пока идёт таймер СЛР — экран не гаснет (Wake Lock API в WebView нет;
+        // при погасшем экране WebView засыпает и метроном замолкает)
+        @JavascriptInterface
+        public void keepScreenOn(boolean on) {
+            runOnUiThread(() -> {
+                if (on) getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             });
         }
     }

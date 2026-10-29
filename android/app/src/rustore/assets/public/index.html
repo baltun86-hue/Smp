@@ -4691,19 +4691,23 @@ function fsSet(v){document.documentElement.style.setProperty('--fs-scale',v);try
 const CPR={run:false,t0:0,acc:0,cyc0:0,adr:[],shock:0,log:[],met:false,iv:null,ac:null,mt:null,lastCyc:0,wl:null};
 function cprNow(){return CPR.acc+(CPR.run?Date.now()-CPR.t0:0);}
 function cprFmt(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
-function cprBeep(f,d,n){try{CPR.ac=CPR.ac||new (window.AudioContext||window.webkitAudioContext)();for(let i=0;i<(n||1);i++){const o=CPR.ac.createOscillator(),g=CPR.ac.createGain();
-  o.frequency.value=f;o.connect(g);g.connect(CPR.ac.destination);const t=CPR.ac.currentTime+i*(d+0.08);g.gain.setValueAtTime(0.25,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d);}}catch(e){}}
+/* правка 2026-10 (8.26): громче — прямоугольная волна (слышнее синуса на динамике телефона) и усиление 0,9 вместо 0,25;
+   итоговая громкость — кнопками громкости телефона (поток «Медиа») */
+function cprBeep(f,d,n){try{CPR.ac=CPR.ac||new (window.AudioContext||window.webkitAudioContext)();if(CPR.ac.state==='suspended')CPR.ac.resume();for(let i=0;i<(n||1);i++){const o=CPR.ac.createOscillator(),g=CPR.ac.createGain();
+  o.type='square';o.frequency.value=f;o.connect(g);g.connect(CPR.ac.destination);const t=CPR.ac.currentTime+i*(d+0.08);g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d);}}catch(e){}}
 function cprLog(txt){CPR.log.unshift(cprFmt(cprNow())+' — '+txt);}
 function cprStart(){if(CPR.run)return;CPR.run=true;CPR.t0=Date.now();if(!CPR.log.length){CPR.cyc0=0;cprLog('Начало СЛР');}
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>CPR.wl=l).catch(()=>{});}catch(e){}
+  try{window.AndroidExit&&AndroidExit.keepScreenOn&&AndroidExit.keepScreenOn(true);}catch(e){} /* правка 8.26: Android — экран не гаснет */
   if(!CPR.iv)CPR.iv=setInterval(cprTick,250);cprTick();}
 function cprPause(){if(!CPR.run)return;CPR.acc=cprNow();CPR.run=false;cprLog('Пауза');cprTick();}
 function cprReset(){CPR.run=false;CPR.acc=0;CPR.cyc0=0;CPR.adr=[];CPR.shock=0;CPR.log=[];CPR.lastCyc=0;cprMet(false);
-  clearInterval(CPR.iv);CPR.iv=null;try{CPR.wl&&CPR.wl.release();}catch(e){}cprTick();}
+  clearInterval(CPR.iv);CPR.iv=null;try{CPR.wl&&CPR.wl.release();}catch(e){}
+  try{window.AndroidExit&&AndroidExit.keepScreenOn&&AndroidExit.keepScreenOn(false);}catch(e){}cprTick();}
 function cprAdr(){if(!CPR.run&&!CPR.acc)cprStart();CPR.adr.push(cprNow());cprLog('Адреналин №'+CPR.adr.length);cprTick();}
 function cprShock(){if(!CPR.run&&!CPR.acc)cprStart();CPR.shock++;cprLog('Разряд №'+CPR.shock);CPR.cyc0=cprNow();CPR.lastCyc=0;cprTick();}
 function cprMet(on){CPR.met=on===undefined?!CPR.met:on;clearInterval(CPR.mt);CPR.mt=null;
-  if(CPR.met)CPR.mt=setInterval(()=>cprBeep(880,0.05),60000/110);const b=$('cprMetB');if(b)b.classList.toggle('on',CPR.met);}
+  if(CPR.met)CPR.mt=setInterval(()=>cprBeep(1000,0.06),60000/110);const b=$('cprMetB');if(b)b.classList.toggle('on',CPR.met);}
 function cprTick(){
   const now=cprNow(), cyc=(now-CPR.cyc0)%120000, left=120000-cyc, n=Math.floor((now-CPR.cyc0)/120000);
   if(CPR.run&&n>CPR.lastCyc){CPR.lastCyc=n;cprBeep(660,0.18,3);try{navigator.vibrate&&navigator.vibrate([300,150,300]);}catch(e){}cprLog('Конец цикла '+n+': оценка ритма, смена');}
@@ -7424,7 +7428,7 @@ const BOUNCE_GUARD_MS=60;
    главном экране снова только предупредит. */
 let exitArmedTs=0;
 const EXIT_CONFIRM_MS=2000;
-function showExitToast(){
+function showExitToast(msg){
   let el=document.getElementById('exitToast');
   if(!el){
     el=document.createElement('div');
@@ -7433,6 +7437,7 @@ function showExitToast(){
     el.textContent='Нажмите «Назад» ещё раз, чтобы выйти';
     document.body.appendChild(el);
   }
+  el.textContent=msg||'Нажмите «Назад» ещё раз, чтобы выйти';
   el.classList.add('show');
   clearTimeout(el._t);
   el._t=setTimeout(()=>el.classList.remove('show'),EXIT_CONFIRM_MS);
@@ -7448,6 +7453,10 @@ window.addEventListener('popstate',function(){
   }
   lastBackPopTs=now;
   if(window.handleAndroidBack())armBackGuard();
+  else if(CPR.run||CPR.acc){
+    /* правка 2026-10 (8.26): идёт таймер СЛР — выход «Назад» не закрывает приложение (таймер и журнал потерялись бы) */
+    armBackGuard(); showExitToast('Идёт таймер СЛР — выход отключён. Чтобы выйти, сбросьте таймер.');
+  }
   else if(now-exitArmedTs<EXIT_CONFIRM_MS){
     // второе «Назад» на главном экране за отведённое время — подтверждённый
     // выход. Предохранитель НЕ восстанавливаем — но одного этого мало (см.
