@@ -12,6 +12,8 @@ try { pw = require('playwright'); } catch {
   try { pw = require(execSync('npm root -g').toString().trim() + '/playwright'); } catch { process.exit(3); }
 }
 
+// правка 2026-10: setEncoding — иначе русская буква на стыке кусков stdin портится («Де��ская…») и проверка падает случайно
+process.stdin.setEncoding('utf8');
 let input = '';
 for await (const ch of process.stdin) input += ch;
 const { cases, tactics = [] } = JSON.parse(input);
