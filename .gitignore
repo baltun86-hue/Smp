@@ -9,3 +9,6 @@ __pycache__/
 android/keystore.properties
 *.jks
 *.keystore
+
+# тестовые скриншоты в корне не коммитить
+/*.png
