@@ -11,6 +11,9 @@ const CORE = [PAGE, "manifest.webmanifest", "icons/icon-192.png", "icons/icon-51
 const SLOW_MS = 2500;
 
 const pageKey = () => new URL(PAGE, self.registration.scope).href;
+/* правка 2026-10 (8.30): страница кэшируется по папке ЗАПРОСА, а не по области SW. Иначе SW корня (/smp/, личная версия)
+   перехватывал /smp/public/ и /smp/rustore/ и мог отдать личную страницу с телефонами вместо общей (или наоборот). */
+const navKey = u => new URL(PAGE, u.href.replace(/[?#].*$/, "").replace(/[^/]*$/, "")).href;
 
 self.addEventListener("install", e => {
   e.waitUntil(
@@ -35,7 +38,7 @@ self.addEventListener("fetch", e => {
   if (url.origin !== self.location.origin) return;
 
   const nav = req.mode === "navigate";
-  const key = nav ? pageKey() : req;
+  const key = nav ? navKey(url) : req;
   const fromCache = () => caches.match(key, { ignoreSearch: true });
 
   const net = fetch(req).then(r => {

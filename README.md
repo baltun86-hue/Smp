@@ -123,6 +123,7 @@ npx cap open android
 | `rustore` | `ru.smpspravochnik.app` | общая версия без приказов и телефонов, с кнопкой «Поддержать проект» (`android/app/src/rustore/assets/public/index.html`) |
 
 Файл для RuStore собирается автоматически: `sh tools/sync_pages.sh` → `tools/build_public.py` → `tools/build_rustore.py`.
+Эта же версия публикуется на GitHub Pages отдельной папкой `rustore/` (…/smp/rustore/) — для установки на iPhone через Safari → «На экран «Домой»».
 Затем `npx cap sync android` и в Android Studio: Build → Select Build Variant → `rustoreRelease`,
 Build → Generate Signed App Bundle or APK.
 
